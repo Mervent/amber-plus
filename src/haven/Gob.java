@@ -73,7 +73,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
         OTHER(0), DFRAME(1), TREE(2), BUSH(3), BOULDER(4), PLAYER(5), SIEGE_MACHINE(6), MAMMOTH(7), BAT(8), OLDTRUNK(9),
         GARDENPOT(10), MUSSEL(11), LOC_RESOURCE(12), FU_YE_CURIO(13), SEAL(14), EAGLE(15), PLANT(16),
         MULTISTAGE_PLANT(17), PLANT_FALLOW(18), MOB(32), WOLF(33), BEAR(34), LYNX(35), TROLL(38), WALRUS(39),
-        WOODEN_SUPPORT(64), STONE_SUPPORT(65), METAL_SUPPORT(66), TROUGH(67), BEEHIVE(68);
+        WOODEN_SUPPORT(64), STONE_SUPPORT(65), METAL_SUPPORT(66), TROUGH(67), BEEHIVE(68), CUPBOARD(128);
 
         public final int value;
 
@@ -511,6 +511,8 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
             type = Type.MUSSEL;
         else if (name.endsWith("/goldeneagle"))
             type = Type.EAGLE;
+        else if (name.endsWith("/cupboard"))
+            type = Type.CUPBOARD;
         else if (Config.alarmitems.containsKey(name) && Config.alarmitems.get(name).selected)
             type = Type.FU_YE_CURIO;
         else if (Config.locres.contains(name))
@@ -573,7 +575,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
 
         Drawable d = getattr(Drawable.class);
         if (d != null) {
-            if (Config.hidegobs && (type == Type.TREE || type == Type.BUSH)) {
+            if (Config.hidegobs && (type == Type.TREE || type == Type.BUSH || type == Type.CUPBOARD)) {
                 GobHitbox.BBox bbox = GobHitbox.getBBox(this);
                 if (bbox != null) {
                     rl.add(new Overlay(new GobHitbox(this, bbox.a, bbox.b, true)), null);

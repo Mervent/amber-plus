@@ -2473,7 +2473,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         OCache oc = glob.oc;
         synchronized (oc) {
             for (Gob gob : oc) {
-                if (gob.type == Gob.Type.TREE)
+                if (gob.type == Gob.Type.TREE || gob.type == Gob.Type.BUSH || gob.type == Gob.Type.CUPBOARD)
                     oc.changed(gob);
             }
         }
