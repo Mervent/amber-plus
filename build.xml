@@ -11,7 +11,7 @@
     <available property="has-buildinfo" file="build/classes/buildinfo" />
     <available property="unpacked-lib" file="build/classes-lib" />
   </target>
-  
+
   <target name="buildinfo" depends="build-env" unless="has-buildinfo">
     <exec executable="git" outputproperty="gitrev" failifexecutionfails="false">
       <arg line="rev-parse HEAD" />
@@ -55,12 +55,12 @@
       <fileset dir="build/classes-lib" />
       <manifest>
 	<attribute name="Main-Class" value="haven.MainFrame" />
-	<attribute name="Class-Path" value="jogl.jar gluegen-rt.jar amber-res.jar builtin-res.jar hafen-res.jar l10n.jar" />
+	<attribute name="Class-Path" value="jogl.jar gluegen-rt.jar amber-res.jar builtin-res.jar hafen-res.jar l10n.jar client-res.jar" />
       </manifest>
     </jar>
     <chmod file="build/hafen.jar" perm="a+x" />
   </target>
-  
+
   <target name="res-jar" depends="build-env" unless="has-res-jar">
     <get src="http://game.havenandhearth.com/java/old-builtin-res.jar" dest="lib/builtin-res.jar"
 	 usetimestamp="true" />
@@ -73,15 +73,24 @@
       <fileset dir="." includes="l10n/*.properties" excludes="l10n/*_new.properties"/>
     </jar>
   </target>
-  
-  <target name="jars" depends="build-env, jar, res-jar, l10n-jar">
+
+  <target name="client-jar">
+     <copy todir="build/client-res/res">
+        <fileset dir="res/"/>
+    </copy>
+    <jar basedir="build/client-res" destfile="build/client-res.jar"/>
+    <delete dir="build/client-res"/>
+  </target>
+
+  <target name="jars" depends="build-env, jar, res-jar, l10n-jar, client-jar">
     <copy todir="build">
       <fileset dir="lib">
-	<include name="jogl.jar" />
-	<include name="gluegen-rt.jar" />
-	<include name="hafen-res.jar" />
-	<include name="builtin-res.jar" />
-	<include name="amber-res.jar" />
+        <include name="jogl.jar" />
+        <include name="gluegen-rt.jar" />
+        <include name="hafen-res.jar" />
+        <include name="builtin-res.jar" />
+        <include name="amber-res.jar" />
+        <include name="client-res.jar" />
       </fileset>
       <fileset dir="lib/jogl-natives" includes="*.jar">
       </fileset>
@@ -106,7 +115,7 @@
   <target name="run" depends="jars">
     <java jar="build/hafen.jar" fork="true" />
   </target>
-  
+
   <target name="clean">
     <delete dir="build" />
   </target>
@@ -116,7 +125,7 @@
         <fileset dir="custom_res/"/>
     </copy>
   </target>
-  
+
   <target name="profile" depends="jars">
     <nbprofiledirect>
     </nbprofiledirect>
