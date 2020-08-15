@@ -54,6 +54,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public MapView map;
     public Fightview fv;
     private List<Widget> meters = new LinkedList<Widget>();
+    private List<Widget> cmeters = new LinkedList<Widget>();
     private Text lastmsg;
     private double msgtime;
     public Window invwnd, equwnd, makewnd;
@@ -515,6 +516,37 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         return (buf.toString());
     }
 
+    public void addcmeter(Widget meter) {
+        ulpanel.add(meter);
+        cmeters.add(meter);
+        updcmeters();
+    }
+
+    public <T extends Widget> void delcmeter(Class<T> cl) {
+        Widget widget = null;
+        for (Widget meter : cmeters) {
+            if (cl.isAssignableFrom(meter.getClass())) {
+                widget = meter;
+                break;
+            }
+        }
+        if (widget != null) {
+            cmeters.remove(widget);
+            widget.destroy();
+            updcmeters();
+        }
+    }
+
+    private void updcmeters() {
+        int i = 0;
+        for (Widget meter : cmeters) {
+            int x = ((meters.size() + i) % 3) * (IMeter.fsz.x + 5);
+            int y = ((meters.size() + i) / 3) * (IMeter.fsz.y + 2);
+            meter.c = new Coord(portrait.c.x + portrait.sz.x + 10 + x, portrait.c.y + y);
+            i++;
+        }
+    }
+
     public Coord optplacement(Widget child, Coord org) {
         Set<Window> closed = new HashSet<>();
         Set<Coord> open = new HashSet<>();
@@ -663,6 +695,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         } else if (place == "chr") {
             chrwdg = add((CharWnd) child, new Coord(300, 50));
             chrwdg.hide();
+            addcmeter(new HungerMeter(chrwdg.glut));
         } else if (place == "craft") {
             final Widget mkwdg = child;
             makewnd = new Window(Coord.z, "Crafting", true) {
@@ -703,6 +736,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             int y = (meters.size() / 3) * (IMeter.fsz.y + 2);
             ulpanel.add(child, portrait.c.x + portrait.sz.x + 10 + x, portrait.c.y + y);
             meters.add(child);
+            updcmeters();
         } else if (place == "buff") {
             buffs.addchild(child);
         } else if (place == "qq") {
@@ -768,7 +802,9 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         } else if (w == chrwdg) {
             chrwdg = null;
         }
-        meters.remove(w);
+        if (meters.remove(w))
+            updcmeters();
+        cmeters.remove(w);
     }
 
     private static final Resource.Anim progt = Resource.local().loadwait("gfx/hud/prog").layer(Resource.animc);
