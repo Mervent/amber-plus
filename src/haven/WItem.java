@@ -324,7 +324,9 @@ public class WItem extends Widget implements DTarget {
                 item.wdgmsg("take", c);
             return (true);
         } else if (btn == 2) {
-            if (ui.modmeta)
+            if (ui.modmeta && ui.modctrl)
+                wdgmsg("drop-identical-eq", this.item);
+            else if (ui.modmeta)
                 wdgmsg("transfer-identical-eq", this.item);
             return (true);
         } else if (btn == 3) {

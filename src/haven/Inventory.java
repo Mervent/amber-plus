@@ -115,6 +115,9 @@ public class Inventory extends Widget implements DTarget {
         if (msg.equals("drop-identical")) {
             for (WItem item : getIdenticalItems((GItem) args[0], false))
                 item.item.wdgmsg("drop", Coord.z);
+        } else if (msg.equals("drop-identical-eq")) {
+            for (WItem item : getIdenticalItems((GItem) args[0], true))
+                item.item.wdgmsg("drop", Coord.z);
         } else if (msg.startsWith("transfer-identical")) {
             boolean eq = msg.endsWith("eq");
             List<WItem> items = getIdenticalItems((GItem) args[0], eq);
