@@ -1,6 +1,5 @@
 package haven.automation;
 
-
 import haven.*;
 
 import static haven.OCache.posres;
@@ -19,12 +18,9 @@ public class Shoo implements Runnable {
             for (Gob gob : gui.map.glob.oc) {
                 try {
                     Resource res = gob.getres();
-                    if (res != null && (res.name.startsWith("gfx/kritter/horse") ||
-                            res.name.startsWith("gfx/kritter/sheep") ||
-                            res.name.startsWith("gfx/kritter/cattle") ||
-                            res.name.startsWith("gfx/kritter/pig") ||
-                            res.name.startsWith("gfx/kritter/goat")))
-                    {
+                    if (res != null && (res.name.startsWith("gfx/kritter/horse")
+                            || res.name.startsWith("gfx/kritter/sheep") || res.name.startsWith("gfx/kritter/cattle")
+                            || res.name.startsWith("gfx/kritter/pig") || res.name.startsWith("gfx/kritter/goat"))) {
                         Coord2d plc = gui.map.player().rc;
                         if ((animal == null || gob.rc.dist(plc) < animal.rc.dist(plc)) && gob.knocked == false)
                             animal = gob;
@@ -38,6 +34,7 @@ public class Shoo implements Runnable {
             return;
 
         FlowerMenu.setNextSelection("Shoo");
-        gui.map.wdgmsg("click", animal.sc, animal.rc.floor(posres), 3, 0, 0, (int) animal.id, animal.rc.floor(posres), 0, -1);
+        gui.map.wdgmsg("click", animal.sc, animal.rc.floor(posres), 3, 0, 0, (int) animal.id, animal.rc.floor(posres),
+                0, -1);
     }
 }

@@ -218,7 +218,7 @@ public class Session implements Resource.Resolver {
 
         private void gotack(int seq) {
             synchronized (pending) {
-                for (ListIterator<RMessage> i = pending.listIterator(); i.hasNext(); ) {
+                for (ListIterator<RMessage> i = pending.listIterator(); i.hasNext();) {
                     RMessage msg = i.next();
                     if (msg.seq <= seq)
                         i.remove();
@@ -267,7 +267,7 @@ public class Session implements Resource.Resolver {
         }
 
         private void handlerel(PMessage msg) {
-            if(msg.type == RMessage.RMSG_FRAGMENT) {
+            if (msg.type == RMessage.RMSG_FRAGMENT) {
                 int head = msg.uint8();
                 if ((head & 0x80) == 0) {
                     if (fragbuf != null)
@@ -291,8 +291,8 @@ public class Session implements Resource.Resolver {
                         throw (new MessageException("Got invalid fragment type: " + head, msg));
                     }
                 }
-            } else if((msg.type == RMessage.RMSG_NEWWDG) || (msg.type == RMessage.RMSG_WDGMSG) ||
-                    (msg.type == RMessage.RMSG_DSTWDG) || (msg.type == RMessage.RMSG_ADDWDG)) {
+            } else if ((msg.type == RMessage.RMSG_NEWWDG) || (msg.type == RMessage.RMSG_WDGMSG)
+                    || (msg.type == RMessage.RMSG_DSTWDG) || (msg.type == RMessage.RMSG_ADDWDG)) {
                 synchronized (uimsgs) {
                     uimsgs.add(msg);
                 }
@@ -366,7 +366,7 @@ public class Session implements Resource.Resolver {
                     try {
                         sk.receive(p);
                     } catch (java.nio.channels.ClosedByInterruptException e) {
-            /* Except apparently Sun's J2SE doesn't throw this when interrupted :P*/
+                        /* Except apparently Sun's J2SE doesn't throw this when interrupted :P */
                         break;
                     } catch (SocketTimeoutException e) {
                         continue;
@@ -488,15 +488,11 @@ public class Session implements Resource.Resolver {
                         }
                         now = System.currentTimeMillis();
                         boolean beat = true;
-            /*
-              if((closing != -1) && (now - closing > 500)) {
-			  Message cm = new Message(MSG_CLOSE);
-			  sendmsg(cm);
-			  closing = now;
-			  if(++ctries > 5)
-			  getThreadGroup().interrupt();
-			  }
-			*/
+                        /*
+                         * if((closing != -1) && (now - closing > 500)) { Message cm = new
+                         * Message(MSG_CLOSE); sendmsg(cm); closing = now; if(++ctries > 5)
+                         * getThreadGroup().interrupt(); }
+                         */
                         synchronized (pending) {
                             if (pending.size() > 0) {
                                 for (RMessage msg : pending) {
@@ -526,7 +522,7 @@ public class Session implements Resource.Resolver {
                         }
                         synchronized (objacks) {
                             PMessage msg = null;
-                            for (Iterator<ObjAck> i = objacks.values().iterator(); i.hasNext(); ) {
+                            for (Iterator<ObjAck> i = objacks.values().iterator(); i.hasNext();) {
                                 ObjAck a = i.next();
                                 boolean send = false, del = false;
                                 if (now - a.sent > 200)
@@ -555,7 +551,7 @@ public class Session implements Resource.Resolver {
                         }
                         synchronized (this) {
                             if ((acktime > 0) && (now - acktime >= ackthresh)) {
-                                byte[] msg = {MSG_ACK, 0, 0};
+                                byte[] msg = { MSG_ACK, 0, 0 };
                                 Utils.uint16e(ackseq, msg, 1);
                                 sendmsg(msg);
                                 acktime = -1;
@@ -564,7 +560,7 @@ public class Session implements Resource.Resolver {
                         }
                         if (beat) {
                             if (now - last > 5000) {
-                                sendmsg(new byte[]{MSG_BEAT});
+                                sendmsg(new byte[] { MSG_BEAT });
                                 last = now;
                             }
                         }

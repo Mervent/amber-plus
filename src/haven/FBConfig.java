@@ -82,7 +82,8 @@ public class FBConfig {
             if (ms <= 1)
                 depth = Attachment.mk(new TexE(sz, GL2.GL_DEPTH_COMPONENT, GL2.GL_DEPTH_COMPONENT, GL.GL_UNSIGNED_INT));
             else
-                depth = Attachment.mk(new TexMSE(sz, ms, GL2.GL_DEPTH_COMPONENT, GL2.GL_DEPTH_COMPONENT, GL.GL_UNSIGNED_INT));
+                depth = Attachment
+                        .mk(new TexMSE(sz, ms, GL2.GL_DEPTH_COMPONENT, GL2.GL_DEPTH_COMPONENT, GL.GL_UNSIGNED_INT));
         } else {
             depth = Attachment.mk(new GLFrameBuffer.RenderBuffer(sz, GL2.GL_DEPTH_COMPONENT, ms));
         }
@@ -99,9 +100,10 @@ public class FBConfig {
         }
         this.color = color.toArray(new Attachment[0]);
         this.depth = depth;
-    /* XXX: Shaders should be canonized and cached to avoid
-	 * creation of unnecessary identical programs when
-	 * configurations change. */
+        /*
+         * XXX: Shaders should be canonized and cached to avoid creation of unnecessary
+         * identical programs when configurations change.
+         */
         final ShaderMacro shader = ShaderMacro.compose(shb);
         this.fb = new GLFrameBuffer(this.color, this.depth) {
             public ShaderMacro shader() {
@@ -145,8 +147,7 @@ public class FBConfig {
     }
 
     private static <T> boolean hasuo(T[] a, T[] b) {
-        outer:
-        for (T ae : a) {
+        outer: for (T ae : a) {
             for (T be : b) {
                 if (Utils.eq(ae, be))
                     continue outer;
@@ -328,9 +329,12 @@ public class FBConfig {
             prog.fctx.fragcol.mod(new Macro1<Expression>() {
                 public Expression expand(Expression in) {
                     Expression[] texels = new Expression[samples];
-                    for(int i = 0; i < samples; i++)
-                        texels[i] = Cons.texelFetch(ctex.ref(), Cons.ivec2(Cons.floor(Cons.mul(Tex2D.texcoord(prog.fctx).ref(), MiscLib.screensize.ref()))), Cons.l(i));
-                    return(Cons.mul(Cons.add(texels), Cons.l(1.0 / samples)));
+                    for (int i = 0; i < samples; i++)
+                        texels[i] = Cons.texelFetch(ctex.ref(),
+                                Cons.ivec2(Cons
+                                        .floor(Cons.mul(Tex2D.texcoord(prog.fctx).ref(), MiscLib.screensize.ref()))),
+                                Cons.l(i));
+                    return (Cons.mul(Cons.add(texels), Cons.l(1.0 / samples)));
                 }
             }, 0);
         };

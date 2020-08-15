@@ -70,7 +70,8 @@ public class CacheMap<K, V> extends AbstractMap<K, V> {
             public <K, V> Reference<V> mkref(K k, V v, ReferenceQueue<V> cleanq) {
                 return (new SRef<K, V>(k, v, cleanq));
             }
-        }, WEAK {
+        },
+        WEAK {
             public <K, V> Reference<V> mkref(K k, V v, ReferenceQueue<V> cleanq) {
                 return (new WRef<K, V>(k, v, cleanq));
             }

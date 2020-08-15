@@ -33,13 +33,12 @@ import static java.lang.Math.PI;
 public class Coord implements Comparable<Coord>, java.io.Serializable {
     public int x, y;
     public static Coord z = new Coord(0, 0);
-    public static Coord[] uecw = {new Coord(0, -1), new Coord(1, 0), new Coord(0, 1), new Coord(-1, 0)};
-    public static Coord[] uccw = {new Coord(0, 0), new Coord(1, 0), new Coord(1, 1), new Coord(0, 1)};
-    public static Coord[] upcw = {new Coord( 0, -1), new Coord( 1, -1), new Coord( 1,  0), new Coord( 1,  1),
-            new Coord( 0,  1), new Coord(-1,  1), new Coord(-1,  0), new Coord(-1, -1)};
-    public static Coord[] usqc = {new Coord(-1, -1), new Coord( 0, -1), new Coord( 1, -1),
-            new Coord(-1,  0), new Coord( 0,  0), new Coord( 1,  0),
-            new Coord(-1,  1), new Coord( 0,  1), new Coord( 1,  1)};
+    public static Coord[] uecw = { new Coord(0, -1), new Coord(1, 0), new Coord(0, 1), new Coord(-1, 0) };
+    public static Coord[] uccw = { new Coord(0, 0), new Coord(1, 0), new Coord(1, 1), new Coord(0, 1) };
+    public static Coord[] upcw = { new Coord(0, -1), new Coord(1, -1), new Coord(1, 0), new Coord(1, 1),
+            new Coord(0, 1), new Coord(-1, 1), new Coord(-1, 0), new Coord(-1, -1) };
+    public static Coord[] usqc = { new Coord(-1, -1), new Coord(0, -1), new Coord(1, -1), new Coord(-1, 0),
+            new Coord(0, 0), new Coord(1, 0), new Coord(-1, 1), new Coord(0, 1), new Coord(1, 1) };
 
     public Coord(int x, int y) {
         this.x = x;
@@ -86,7 +85,7 @@ public class Coord implements Comparable<Coord>, java.io.Serializable {
     }
 
     public int hashCode() {
-	return(((y & 0xffff) * 31) + (x & 0xffff));
+        return (((y & 0xffff) * 31) + (x & 0xffff));
     }
 
     public Coord add(int ax, int ay) {
@@ -114,7 +113,7 @@ public class Coord implements Comparable<Coord>, java.io.Serializable {
     }
 
     public Coord mul(double f) {
-	return(new Coord((int)Math.round(x * f), (int)Math.round(y * f)));
+        return (new Coord((int) Math.round(x * f), (int) Math.round(y * f)));
     }
 
     public Coord inv() {
@@ -126,7 +125,7 @@ public class Coord implements Comparable<Coord>, java.io.Serializable {
     }
 
     public Coord2d mul(Coord2d f) {
-        return(new Coord2d(x * f.x, y * f.y));
+        return (new Coord2d(x * f.x, y * f.y));
     }
 
     public Coord div(Coord d) {
@@ -138,7 +137,7 @@ public class Coord implements Comparable<Coord>, java.io.Serializable {
     }
 
     public Coord div(double d) {
-        return new Coord((int)(x/d), (int)(y / d));
+        return new Coord((int) (x / d), (int) (y / d));
     }
 
     public Coord mod(Coord d) {
@@ -173,12 +172,12 @@ public class Coord implements Comparable<Coord>, java.io.Serializable {
     }
 
     public double abs() {
-	double x = this.x, y = this.y;
-	return(Math.sqrt((x * x) + (y * y)));
+        double x = this.x, y = this.y;
+        return (Math.sqrt((x * x) + (y * y)));
     }
 
     public Coord norm(double n) {
-	return(mul(n / abs()));
+        return (mul(n / abs()));
     }
 
     public double dist(Coord o) {
@@ -203,22 +202,21 @@ public class Coord implements Comparable<Coord>, java.io.Serializable {
     public Coord rotate(double angle) {
         double cos = Math.cos(angle);
         double sin = Math.sin(angle);
-        return new Coord((int) Math.round(x * cos - y * sin),
-                         (int) Math.round(y * cos + x * sin));
+        return new Coord((int) Math.round(x * cos - y * sin), (int) Math.round(y * cos + x * sin));
     }
 
     public Iterable<Coord> offsets(Coord... list) {
-        return(new Iterable<Coord>() {
+        return (new Iterable<Coord>() {
             public Iterator<Coord> iterator() {
-                return(new Iterator<Coord>() {
+                return (new Iterator<Coord>() {
                     int i = 0;
 
                     public boolean hasNext() {
-                        return(i < list.length);
+                        return (i < list.length);
                     }
 
                     public Coord next() {
-                        return(add(list[i++]));
+                        return (add(list[i++]));
                     }
                 });
             }

@@ -63,7 +63,7 @@ public class PrioQueue<E extends Prioritized> extends LinkedList<E> {
     }
 
     public boolean removeid(E el) {
-        for (Iterator<E> i = iterator(); i.hasNext(); ) {
+        for (Iterator<E> i = iterator(); i.hasNext();) {
             if (i.next() == el) {
                 i.remove();
                 return (true);

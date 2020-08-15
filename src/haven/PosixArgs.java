@@ -51,7 +51,7 @@ public class PosixArgs {
         PosixArgs ret = new PosixArgs();
         List<Character> fl = new ArrayList<Character>(), fla = new ArrayList<Character>();
         List<String> rest = new ArrayList<String>();
-        for (int i = 0; i < desc.length(); ) {
+        for (int i = 0; i < desc.length();) {
             char ch = desc.charAt(i++);
             if ((i < desc.length()) && (desc.charAt(i) == ':')) {
                 i++;
@@ -61,13 +61,13 @@ public class PosixArgs {
             }
         }
         boolean acc = true;
-        for (int i = start; i < argv.length; ) {
+        for (int i = start; i < argv.length;) {
             String arg = argv[i++];
             if (acc && arg.equals("--")) {
                 acc = false;
             }
             if (acc && (arg.charAt(0) == '-')) {
-                for (int o = 1; o < arg.length(); ) {
+                for (int o = 1; o < arg.length();) {
                     char ch = arg.charAt(o++);
                     if (fl.contains(ch)) {
                         ret.parsed.add(new Arg(ch, null));

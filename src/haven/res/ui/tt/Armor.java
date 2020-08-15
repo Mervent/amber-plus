@@ -17,6 +17,7 @@ public class Armor extends Tip {
     }
 
     public BufferedImage tipimg() {
-        return Text.render(String.format(Resource.getLocString(Resource.BUNDLE_LABEL, "Armor class: %,d/%,d"), Integer.valueOf(this.hard), Integer.valueOf(this.soft))).img;
+        return Text.render(String.format(Resource.getLocString(Resource.BUNDLE_LABEL, "Armor class: %,d/%,d"),
+                Integer.valueOf(this.hard), Integer.valueOf(this.soft))).img;
     }
 }

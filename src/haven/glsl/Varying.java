@@ -32,6 +32,7 @@ public class Varying extends Variable.Global {
     }
 
     ;
+
     public Interpol ipol = Interpol.NORMAL;
 
     protected Interpol ipol(Context ctx) {

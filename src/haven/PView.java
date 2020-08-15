@@ -35,11 +35,15 @@ import javax.media.opengl.*;
 
 public abstract class PView extends Widget {
     public RenderList rls;
-    public static final GLState.Slot<RenderContext> ctx = new GLState.Slot<RenderContext>(GLState.Slot.Type.SYS, RenderContext.class);
-    public static final GLState.Slot<RenderState> wnd = new GLState.Slot<RenderState>(GLState.Slot.Type.SYS, RenderState.class, HavenPanel.proj2d, GLFrameBuffer.slot);
-    public static final GLState.Slot<Projection> proj = new GLState.Slot<Projection>(GLState.Slot.Type.SYS, Projection.class, wnd);
+    public static final GLState.Slot<RenderContext> ctx = new GLState.Slot<RenderContext>(GLState.Slot.Type.SYS,
+            RenderContext.class);
+    public static final GLState.Slot<RenderState> wnd = new GLState.Slot<RenderState>(GLState.Slot.Type.SYS,
+            RenderState.class, HavenPanel.proj2d, GLFrameBuffer.slot);
+    public static final GLState.Slot<Projection> proj = new GLState.Slot<Projection>(GLState.Slot.Type.SYS,
+            Projection.class, wnd);
     public static final GLState.Slot<Camera> cam = new GLState.Slot<Camera>(GLState.Slot.Type.SYS, Camera.class, proj);
-    public static final GLState.Slot<Location.Chain> loc = new GLState.Slot<Location.Chain>(GLState.Slot.Type.GEOM, Location.Chain.class, cam).instanced(Location.Chain.instancer);
+    public static final GLState.Slot<Location.Chain> loc = new GLState.Slot<Location.Chain>(GLState.Slot.Type.GEOM,
+            Location.Chain.class, cam).instanced(Location.Chain.instancer);
     public CPUProfile prof = new CPUProfile(300);
     protected Light.Model lm;
     private final WidgetContext cstate = new WidgetContext();
@@ -119,9 +123,10 @@ public abstract class PView extends Widget {
         public void apply(GOut g) {
             BGL gl = g.gl;
             gl.glScissor(g.ul.x, g.root().sz.y - g.ul.y - g.sz.y, g.sz.x, g.sz.y);
-        /* For the viewport, use the renderstate's indicated size
-         * and offset explicitly, so as to not fail on partially
-	     * clipped GOuts. */
+            /*
+             * For the viewport, use the renderstate's indicated size and offset explicitly,
+             * so as to not fail on partially clipped GOuts.
+             */
             Coord ul = ul();
             Coord sz = sz();
             gl.glViewport(ul.x, g.root().sz.y - ul.y - sz.y, sz.x, sz.y);
@@ -252,7 +257,8 @@ public abstract class PView extends Widget {
             if (cc == null) {
                 gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
             } else {
-                gl.glClearColor((float) cc.getRed() / 255f, (float) cc.getGreen() / 255f, (float) cc.getBlue() / 255f, (float) cc.getAlpha() / 255f);
+                gl.glClearColor((float) cc.getRed() / 255f, (float) cc.getGreen() / 255f, (float) cc.getBlue() / 255f,
+                        (float) cc.getAlpha() / 255f);
                 gl.glClear(GL.GL_DEPTH_BUFFER_BIT | GL.GL_COLOR_BUFFER_BIT);
             }
             if (curf != null)
@@ -315,8 +321,10 @@ public abstract class PView extends Widget {
         Camera cam_s = buf.get(cam);
         Location.Chain loc_s = buf.get(loc);
         Matrix4f ret = Matrix4f.id;
-        if (cam_s != null) ret = cam_s.fin(ret);
-        if (loc_s != null) ret = loc_s.fin(ret);
+        if (cam_s != null)
+            ret = cam_s.fin(ret);
+        if (loc_s != null)
+            ret = loc_s.fin(ret);
         return (ret);
     }
 
@@ -328,8 +336,10 @@ public abstract class PView extends Widget {
         Camera cam_s = buf.get(cam);
         Location.Chain loc_s = buf.get(loc);
         Matrix4f ret = g.st.proj;
-        if (cam_s != null) ret = cam_s.fin(ret);
-        if (loc_s != null) ret = loc_s.fin(ret);
+        if (cam_s != null)
+            ret = cam_s.fin(ret);
+        if (loc_s != null)
+            ret = loc_s.fin(ret);
         return (ret);
     }
 

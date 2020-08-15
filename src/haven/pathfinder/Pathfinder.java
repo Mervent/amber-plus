@@ -1,6 +1,5 @@
 package haven.pathfinder;
 
-
 import haven.*;
 
 import java.util.Iterator;
@@ -46,6 +45,7 @@ public class Pathfinder implements Runnable {
     }
 
     private final Set<PFListener> listeners = new CopyOnWriteArraySet<PFListener>();
+
     public final void addListener(final PFListener listener) {
         listeners.add(listener);
     }
@@ -92,7 +92,8 @@ public class Pathfinder implements Runnable {
             }
         }
 
-        // if player is located at a position occupied by a gob (can happen when starting too close to gobs)
+        // if player is located at a position occupied by a gob (can happen when
+        // starting too close to gobs)
         // move it slightly away from it
         if (m.isOriginBlocked()) {
             Pair<Integer, Integer> freeloc = m.getFreeLocation();
@@ -128,7 +129,8 @@ public class Pathfinder implements Runnable {
 
         Iterable<Edge> path = m.main();
         if (Map.DEBUG_TIMINGS)
-            System.out.println("--------------- Total: " + (double) (System.nanoTime() - starttotal) / 1000000.0 + " ms.");
+            System.out.println(
+                    "--------------- Total: " + (double) (System.nanoTime() - starttotal) / 1000000.0 + " ms.");
 
         m.dbgdump();
 
@@ -201,7 +203,7 @@ public class Pathfinder implements Runnable {
 
     static public boolean isInsideBoundBox(Coord gobRc, double gobA, GobHitbox.BBox gobBBox, Coord point) {
         final Coordf relative = new Coordf(point.sub(gobRc)).rotate(-gobA);
-        return relative.x >= gobBBox.a.x && relative.x <= gobBBox.b.x &&
-               relative.y >= gobBBox.a.y && relative.y <= gobBBox.b.y;
+        return relative.x >= gobBBox.a.x && relative.x <= gobBBox.b.x && relative.y >= gobBBox.a.y
+                && relative.y <= gobBBox.b.y;
     }
 }

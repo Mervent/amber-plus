@@ -1,6 +1,5 @@
 package haven.timers;
 
-
 import haven.*;
 import haven.Button;
 import haven.Window;
@@ -20,7 +19,8 @@ public class TimersWnd extends Window {
 
         Button btna = new Button(50, "Add") {
             public void click() {
-                parent.parent.add(new TimerEditWnd("Create New Timer", gui), new Coord(gui.sz.x / 2 - 200, gui.sz.y / 2 - 200));
+                parent.parent.add(new TimerEditWnd("Create New Timer", gui),
+                        new Coord(gui.sz.x / 2 - 200, gui.sz.y / 2 - 200));
             }
         };
         add(btna, new Coord(20, 10));

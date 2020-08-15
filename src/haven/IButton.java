@@ -54,14 +54,15 @@ public class IButton extends SIWidget {
     }
 
     public IButton(String base, String up, String down, String hover) {
-        this(Resource.loadimg(base + up), Resource.loadimg(base + down), Resource.loadimg(base + (hover == null ? up : hover)));
+        this(Resource.loadimg(base + up), Resource.loadimg(base + down),
+                Resource.loadimg(base + (hover == null ? up : hover)));
     }
 
     public void draw(BufferedImage buf) {
         Graphics g = buf.getGraphics();
-        if(a)
+        if (a)
             g.drawImage(down, 0, 0, null);
-        else if(h)
+        else if (h)
             g.drawImage(hover, 0, 0, null);
         else
             g.drawImage(up, 0, 0, null);

@@ -49,7 +49,7 @@ public class LoginScreen extends Widget {
         super(bg.sz());
         setfocustab(true);
         add(new Img(bg), Coord.z);
-        optbtn = adda(new Button(100, "Options"), sz.x-110, 40, 0, 1);
+        optbtn = adda(new Button(100, "Options"), sz.x - 110, 40, 0, 1);
         new UpdateChecker().start();
         add(new LoginList(200, 29), new Coord(10, 10));
         GameUI.swimon = false;
@@ -85,7 +85,7 @@ public class LoginScreen extends Widget {
         }
 
         Object[] data() {
-            return (new Object[]{new AuthClient.NativeCred(user.text, pass.text), false});
+            return (new Object[] { new AuthClient.NativeCred(user.text, pass.text), false });
         }
 
         boolean enter() {
@@ -232,7 +232,7 @@ public class LoginScreen extends Widget {
                     }
                 } else if (c.x < sz.x - 35) {
                     parent.wdgmsg("forget");
-                    parent.wdgmsg("login", new Object[]{new AuthClient.NativeCred(itm.name, itm.pass), false});
+                    parent.wdgmsg("login", new Object[] { new AuthClient.NativeCred(itm.name, itm.pass), false });
                 }
                 super.itemclick(itm, button);
             }
@@ -291,7 +291,7 @@ public class LoginScreen extends Widget {
             if (opts == null) {
                 opts = adda(new OptWnd(false) {
                     public void hide() {
-                /* XXX */
+                        /* XXX */
                         reqdestroy();
                     }
                 }, sz.div(2), 0.5, 0.5);
@@ -351,11 +351,11 @@ public class LoginScreen extends Widget {
     }
 
     public boolean keydown(KeyEvent ev) {
-        if(ev.getKeyChar() == 10) {
+        if (ev.getKeyChar() == 10) {
             if ((cur != null) && cur.enter())
                 wdgmsg("login", cur.data());
             return (true);
         }
-        return(super.keydown(ev));
+        return (super.keydown(ev));
     }
 }

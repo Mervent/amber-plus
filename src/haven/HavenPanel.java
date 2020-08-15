@@ -44,7 +44,7 @@ import java.util.*;
 import javax.media.opengl.*;
 import javax.media.opengl.awt.*;
 
-public class HavenPanel extends GLCanvas implements Runnable, Console.Directory, UI.Context  {
+public class HavenPanel extends GLCanvas implements Runnable, Console.Directory, UI.Context {
     UI ui;
     public static UI lui;
     boolean inited = false;
@@ -62,7 +62,8 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory,
     public CPUProfile uprof = new CPUProfile(300), rprof = new CPUProfile(300);
     public GPUProfile gprof = new GPUProfile(300);
     public static final GLState.Slot<GLState> global = new GLState.Slot<GLState>(GLState.Slot.Type.SYS, GLState.class);
-    public static final GLState.Slot<GLState> proj2d = new GLState.Slot<GLState>(GLState.Slot.Type.SYS, GLState.class, global);
+    public static final GLState.Slot<GLState> proj2d = new GLState.Slot<GLState>(GLState.Slot.Type.SYS, GLState.class,
+            global);
     private GLState gstate, rtstate, ostate;
     private Throwable uncaught = null;
     private GLState.Applier state = null;
@@ -70,7 +71,8 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory,
     public static boolean needtotakescreenshot;
     public static boolean isATI;
     private final boolean gldebug = false;
-    private static final Cursor emptycurs = Toolkit.getDefaultToolkit().createCustomCursor(TexI.mkbuf(new Coord(1, 1)), new java.awt.Point(), "");
+    private static final Cursor emptycurs = Toolkit.getDefaultToolkit().createCustomCursor(TexI.mkbuf(new Coord(1, 1)),
+            new java.awt.Point(), "");
 
     private static GLCapabilities stdcaps() {
         GLProfile prof = GLProfile.getDefault();
@@ -114,7 +116,8 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory,
                     File outputfile = new File(String.format("screenshots/%s.png", curtimestamp));
                     outputfile.getParentFile().mkdirs();
                     Screenshot.writeToFile(outputfile, width, height);
-                    ui.root.findchild(GameUI.class).msg(String.format("Screenshot has been saved as \"%s\"", outputfile.getName()), Color.WHITE);
+                    ui.root.findchild(GameUI.class).msg(
+                            String.format("Screenshot has been saved as \"%s\"", outputfile.getName()), Color.WHITE);
                 } catch (Exception ex) {
                     System.out.println("Unable to take screenshot: " + ex.getMessage());
                 }
@@ -127,14 +130,11 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory,
                 }
 
                 GL2 gl = d.getGL().getGL2();
-            /*
-            if((dump == null) || (dump.getDownstreamGL() != gl))
-			dump = new Debug.DumpGL((GL4bc)gl);
-		    if(Debug.kf2 && !Debug.pk2)
-			dump.dump("/tmp/gldump");
-		    dump.reset();
-		    gl = dump;
-		    */
+                /*
+                 * if((dump == null) || (dump.getDownstreamGL() != gl)) dump = new
+                 * Debug.DumpGL((GL4bc)gl); if(Debug.kf2 && !Debug.pk2)
+                 * dump.dump("/tmp/gldump"); dump.reset(); gl = dump;
+                 */
                 if (inited)
                     redraw(gl);
             }
@@ -145,11 +145,13 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory,
                     if (h != null) {
                         String vendor = gl.glGetString(gl.GL_VENDOR);
                         isATI = vendor.contains("AMD") || vendor.contains("ATI");
-                        h.lsetprop("gpu", vendor + " (" + gl.glGetString(gl.GL_RENDERER) + ") - " + gl.glGetString(gl.GL_VERSION));
+                        h.lsetprop("gpu", vendor + " (" + gl.glGetString(gl.GL_RENDERER) + ") - "
+                                + gl.glGetString(gl.GL_VERSION));
                         // h.lsetprop("gl.vendor", vendor);
                         // h.lsetprop("gl.version", gl.glGetString(gl.GL_VERSION));
                         // h.lsetprop("gl.renderer", gl.glGetString(gl.GL_RENDERER));
-                        // h.lsetprop("gl.exts", Arrays.asList(gl.glGetString(gl.GL_EXTENSIONS).split(" ")));
+                        // h.lsetprop("gl.exts", Arrays.asList(gl.glGetString(gl.GL_EXTENSIONS).split("
+                        // ")));
                         // h.lsetprop("gl.caps", d.getChosenGLCapabilities().toString());
                         // h.lsetprop("gl.conf", glconf);
                     }
@@ -157,7 +159,8 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory,
                     if (gldebug) {
                         if (!d.getContext().isGLDebugMessageEnabled())
                             System.err.println("GL debugging not actually enabled");
-                        ((GL2) gl).glDebugMessageControl(GL.GL_DONT_CARE, GL.GL_DONT_CARE, GL.GL_DONT_CARE, 0, null, true);
+                        ((GL2) gl).glDebugMessageControl(GL.GL_DONT_CARE, GL.GL_DONT_CARE, GL.GL_DONT_CARE, 0, null,
+                                true);
                     }
                     glconf.pref = GLSettings.load(glconf, true);
                     ui.cons.add(glconf);
@@ -168,15 +171,15 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory,
                             gl.glPointSize(4);
                             gl.joglSetSwapInterval((aswap = iswap) ? 1 : 0);
                             gl.glEnable(GL.GL_BLEND);
-                            //gl.glEnable(GL.GL_LINE_SMOOTH);
+                            // gl.glEnable(GL.GL_LINE_SMOOTH);
                             gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
                             if (g.gc.glmajver >= 2)
                                 gl.glBlendEquationSeparate(GL.GL_FUNC_ADD, GL2.GL_MAX);
                             if (g.gc.havefsaa()) {
-                    /* Apparently, having sample
-                     * buffers in the config enables
-					 * multisampling by default on
-					 * some systems. */
+                                /*
+                                 * Apparently, having sample buffers in the config enables multisampling by
+                                 * default on some systems.
+                                 */
                                 g.gl.glDisable(GL.GL_MULTISAMPLE);
                             }
                             GOut.checkerr(gl);
@@ -355,10 +358,12 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory,
 
         if (Config.dbtext) {
             int y = h - 190;
-            FastText.aprintf(g, new Coord(10, y -= 15), 0, 1, "FPS: %d (%d%%, %d%% idle)", fps, (int) (uidle * 100.0), (int) (ridle * 100.0));
+            FastText.aprintf(g, new Coord(10, y -= 15), 0, 1, "FPS: %d (%d%%, %d%% idle)", fps, (int) (uidle * 100.0),
+                    (int) (ridle * 100.0));
             Runtime rt = Runtime.getRuntime();
             long free = rt.freeMemory(), total = rt.totalMemory();
-            FastText.aprintf(g, new Coord(10, y -= 15), 0, 1, "Mem: %,011d/%,011d/%,011d/%,011d", free, total - free, total, rt.maxMemory());
+            FastText.aprintf(g, new Coord(10, y -= 15), 0, 1, "Mem: %,011d/%,011d/%,011d/%,011d", free, total - free,
+                    total, rt.maxMemory());
             FastText.aprintf(g, new Coord(10, y -= 15), 0, 1, "Tex-current: %d", TexGL.num());
             FastText.aprintf(g, new Coord(10, y -= 15), 0, 1, "GL progs: %d", g.st.numprogs());
             FastText.aprintf(g, new Coord(10, y -= 15), 0, 1, "Stats slots: %d", GLState.Slot.num());
@@ -369,10 +374,13 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory,
                 } catch (Loading e) {
                 }
                 if (gi.map.rls != null)
-                    FastText.aprintf(g, new Coord(10, y -= 15), 0, 1, "Rendered: %,d+%,d(%,d), cached %,d/%,d+%,d(%,d)", gi.map.rls.drawn, gi.map.rls.instanced, gi.map.rls.instancified, gi.map.rls.cacheroots, gi.map.rls.cached, gi.map.rls.cacheinst, gi.map.rls.cacheinstn);
+                    FastText.aprintf(g, new Coord(10, y -= 15), 0, 1, "Rendered: %,d+%,d(%,d), cached %,d/%,d+%,d(%,d)",
+                            gi.map.rls.drawn, gi.map.rls.instanced, gi.map.rls.instancified, gi.map.rls.cacheroots,
+                            gi.map.rls.cached, gi.map.rls.cacheinst, gi.map.rls.cacheinstn);
             }
             if (Resource.remote().qdepth() > 0)
-                FastText.aprintf(g, new Coord(10, y -= 15), 0, 1, "RQ depth: %d (%d)", Resource.remote().qdepth(), Resource.remote().numloaded());
+                FastText.aprintf(g, new Coord(10, y -= 15), 0, 1, "RQ depth: %d (%d)", Resource.remote().qdepth(),
+                        Resource.remote().numloaded());
         }
         Object tooltip;
         try {
@@ -414,7 +422,7 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory,
         }
         ui.lasttip = tooltip;
         Resource curs;
-        synchronized(ui) {
+        synchronized (ui) {
             curs = ui.getcurs(mousepos);
         }
         if (cursmode == "awt") {
@@ -458,7 +466,7 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory,
         }
     }
 
-    private Frame[] curdraw = {null};
+    private Frame[] curdraw = { null };
 
     void redraw(GL2 gl) {
         if (uncaught != null)
@@ -493,11 +501,12 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory,
             f.doneat = System.currentTimeMillis();
         }
 
-        if(iswap != aswap)
+        if (iswap != aswap)
             gl.setSwapInterval((aswap = iswap) ? 1 : 0);
     }
 
     private KeyEvent lastpress = null;
+
     void dispatch() {
         synchronized (events) {
             if (mousemv != null) {
@@ -520,14 +529,14 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory,
                     KeyEvent ke = (KeyEvent) e;
                     if (ke.getID() == KeyEvent.KEY_PRESSED) {
                         InputEvent ne = events.peek();
-                        if(ne instanceof KeyEvent) {
-                            /* This is an extension of the below hack
-                             * to handle dead keys (on Windows). It's
-                             * extremely ugly and error-prone and
-                             * should be dealt with, but I've no idea
-                             * what the alternative would be.*/
-                            KeyEvent nke = (KeyEvent)ne;
-                            if((nke.getID() == KeyEvent.KEY_TYPED) && (nke.getWhen() == ke.getWhen())) {
+                        if (ne instanceof KeyEvent) {
+                            /*
+                             * This is an extension of the below hack to handle dead keys (on Windows). It's
+                             * extremely ugly and error-prone and should be dealt with, but I've no idea
+                             * what the alternative would be.
+                             */
+                            KeyEvent nke = (KeyEvent) ne;
+                            if ((nke.getID() == KeyEvent.KEY_TYPED) && (nke.getWhen() == ke.getWhen())) {
                                 ke.setKeyChar(nke.getKeyChar());
                                 events.remove();
                             }
@@ -538,15 +547,13 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory,
                         ui.keyup(ke);
                     } else if (ke.getID() == KeyEvent.KEY_TYPED) {
                         KeyEvent lp = lastpress;
-                        if((lp != null) && (lp.getKeyChar() == ke.getKeyChar())) {
-                            /* Squelch this event. It certainly is an
-                             * ugly hack, but I just haven't found any
-                             * other way to disambiguate these
-                             * duplicate events. Also, apparently
-                             * getWhen() cannot be completely trusted
-                             * to have the same value for a
-                             * KEY_PRESSED and corresponding KEY_TYPED
-                             * event.*/
+                        if ((lp != null) && (lp.getKeyChar() == ke.getKeyChar())) {
+                            /*
+                             * Squelch this event. It certainly is an ugly hack, but I just haven't found
+                             * any other way to disambiguate these duplicate events. Also, apparently
+                             * getWhen() cannot be completely trusted to have the same value for a
+                             * KEY_PRESSED and corresponding KEY_TYPED event.
+                             */
                         } else {
                             ui.keydown(ke);
                         }
@@ -674,14 +681,14 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory,
                     waited[framep] = fwaited;
                     {
                         int i = 0, ckf = framep, twait = 0;
-                        for(; i < frames.length - 1; i++) {
+                        for (; i < frames.length - 1; i++) {
                             ckf = (ckf - 1 + frames.length) % frames.length;
                             twait += waited[ckf];
-                            if(now - frames[ckf] > 1000)
+                            if (now - frames[ckf] > 1000)
                                 break;
                         }
                         fps = (i * 1000) / (now - frames[ckf]);
-                        uidle = ((double)twait) / ((double)(now - frames[ckf]));
+                        uidle = ((double) twait) / ((double) (now - frames[ckf]));
                     }
                     framep = (framep + 1) % frames.length;
 
@@ -707,12 +714,13 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory,
     }
 
     private Robot awtrobot;
+
     public void setmousepos(Coord c) {
         java.awt.EventQueue.invokeLater(() -> {
-            if(awtrobot == null) {
+            if (awtrobot == null) {
                 try {
                     awtrobot = new Robot(getGraphicsConfiguration().getDevice());
-                } catch(java.awt.AWTException e) {
+                } catch (java.awt.AWTException e) {
                     return;
                 }
             }

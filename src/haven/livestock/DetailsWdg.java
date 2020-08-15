@@ -1,6 +1,5 @@
 package haven.livestock;
 
-
 import haven.*;
 import haven.Label;
 
@@ -31,11 +30,11 @@ public class DetailsWdg extends Widget {
             Column col = animal.getColumns().get(key);
 
             String valStr = val.toString();
-            if (key.equals(Resource.getLocString(Resource.BUNDLE_LABEL, "Meat quality:")) ||
-                key.equals(Resource.getLocString(Resource.BUNDLE_LABEL, "Milk quality:")) ||
-                key.equals(Resource.getLocString(Resource.BUNDLE_LABEL, "Hide quality:")) ||
-                key.equals(Resource.getLocString(Resource.BUNDLE_LABEL, "Wool quality:")) ||
-                key.equals(Resource.getLocString(Resource.BUNDLE_LABEL, "Endurance:")))
+            if (key.equals(Resource.getLocString(Resource.BUNDLE_LABEL, "Meat quality:"))
+                    || key.equals(Resource.getLocString(Resource.BUNDLE_LABEL, "Milk quality:"))
+                    || key.equals(Resource.getLocString(Resource.BUNDLE_LABEL, "Hide quality:"))
+                    || key.equals(Resource.getLocString(Resource.BUNDLE_LABEL, "Wool quality:"))
+                    || key.equals(Resource.getLocString(Resource.BUNDLE_LABEL, "Endurance:")))
                 valStr += "%";
 
             Label lbl = new Label(valStr, Text.labelFnd);
@@ -75,7 +74,8 @@ public class DetailsWdg extends Widget {
             gob.delattr(GobHighlight.class);
             gob.setattr(new GobHighlight(gob));
             if (button == 3)
-                gameui().map.wdgmsg("click", gob.sc, gob.rc.floor(posres), 3, 0, 0, (int) gob.id, gob.rc.floor(posres), 0, -1);
+                gameui().map.wdgmsg("click", gob.sc, gob.rc.floor(posres), 3, 0, 0, (int) gob.id, gob.rc.floor(posres),
+                        0, -1);
         }
         return super.mousedown(c, button);
     }
@@ -94,7 +94,7 @@ public class DetailsWdg extends Widget {
                 child.c.y -= HEIGHT;
         }
 
-        ((LivestockManager.Panel)parent.parent.parent).delete(animal);
+        ((LivestockManager.Panel) parent.parent.parent).delete(animal);
 
         ((Scrollport.Scrollcont) parent).update();
     }

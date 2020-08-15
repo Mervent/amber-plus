@@ -3,7 +3,6 @@ package haven.pathfinder;
 import java.util.*;
 import java.util.Map;
 
-
 public class AStar {
 
     public Iterable<Edge> route(Vertex start, Vertex end) {

@@ -87,6 +87,6 @@ public class AnimSprite extends Sprite {
     }
 
     public Object staticp() {
-        return((anims.length == 0)?CONSTANS:null);
+        return ((anims.length == 0) ? CONSTANS : null);
     }
 }

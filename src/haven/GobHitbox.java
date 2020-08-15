@@ -14,10 +14,10 @@ public class GobHitbox extends Sprite {
         super(gob, null);
 
         if (fill) {
-            mode =  GL2.GL_QUADS;
+            mode = GL2.GL_QUADS;
             clrstate = fillclrstate;
         } else {
-            mode =  GL2.GL_LINE_LOOP;
+            mode = GL2.GL_LINE_LOOP;
             clrstate = bbclrstate;
         }
 
@@ -29,7 +29,7 @@ public class GobHitbox extends Sprite {
 
     public boolean setup(RenderList rl) {
         rl.prepo(clrstate);
-        if (mode ==  GL2.GL_LINE_LOOP)
+        if (mode == GL2.GL_LINE_LOOP)
             rl.prepo(States.xray);
         return true;
     }
@@ -37,7 +37,7 @@ public class GobHitbox extends Sprite {
     public void draw(GOut g) {
         g.apply();
         BGL gl = g.gl;
-        if (mode ==  GL2.GL_LINE_LOOP) {
+        if (mode == GL2.GL_LINE_LOOP) {
             gl.glLineWidth(2.0F);
             gl.glBegin(mode);
             gl.glVertex3f(a.x, a.y, 1);
@@ -68,7 +68,7 @@ public class GobHitbox extends Sprite {
     private static final BBox bboxLamb = new BBox(new Coord(-6, -2), new Coord(6, 2));
     private static final BBox bboxGoat = new BBox(new Coord(-6, -2), new Coord(6, 2));
     private static final BBox bboxPig = new BBox(new Coord(-6, -3), new Coord(6, 3));
-    private static final BBox bboxCattle  = new BBox(new Coord(-12, -4), new Coord(12, 4));
+    private static final BBox bboxCattle = new BBox(new Coord(-12, -4), new Coord(12, 4));
     private static final BBox bboxHorse = new BBox(new Coord(-8, -4), new Coord(8, 4));
     private static final BBox bboxSmelter = new BBox(new Coord(-12, -12), new Coord(12, 20));
     private static final BBox bboxWallseg = new BBox(new Coord(-5, -6), new Coord(6, 5));
@@ -102,14 +102,14 @@ public class GobHitbox extends Sprite {
         // dual state gobs
         if (name.endsWith("gate") && name.startsWith("gfx/terobjs/arch")) {
             GAttrib rd = gob.getattr(ResDrawable.class);
-            if (rd == null)     // shouldn't happen
+            if (rd == null) // shouldn't happen
                 return null;
             int state = ((ResDrawable) rd).sdt.peekrbuf(0);
-            if (state == 1)     // open gate
+            if (state == 1) // open gate
                 return null;
         } else if (name.endsWith("/pow")) {
             GAttrib rd = gob.getattr(ResDrawable.class);
-            if (rd == null)     // shouldn't happen
+            if (rd == null) // shouldn't happen
                 return null;
             int state = ((ResDrawable) rd).sdt.peekrbuf(0);
             if (state == 17 || state == 33) // hf
@@ -120,9 +120,8 @@ public class GobHitbox extends Sprite {
         // or some negs simply have wrong Y dimensions. in either case this fixes it
         if (name.endsWith("/smelter"))
             return bboxSmelter;
-        else if (name.endsWith("brickwallseg") || name.endsWith("brickwallcp") ||
-                name.endsWith("palisadeseg") || name.endsWith("palisadecp") ||
-                name.endsWith("poleseg") || name.endsWith("polecp"))
+        else if (name.endsWith("brickwallseg") || name.endsWith("brickwallcp") || name.endsWith("palisadeseg")
+                || name.endsWith("palisadecp") || name.endsWith("poleseg") || name.endsWith("polecp"))
             return bboxWallseg;
         else if (name.endsWith("/hwall"))
             return bboxHwall;

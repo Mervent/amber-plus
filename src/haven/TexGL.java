@@ -49,7 +49,7 @@ public abstract class TexGL extends Tex {
 
         public TexOb(GOut g) {
             super(g);
-	        g.gl.bglCreate(this);
+            g.gl.bglCreate(this);
         }
 
         public void create(GL2 gl) {
@@ -59,7 +59,7 @@ public abstract class TexGL extends Tex {
         }
 
         protected void delete(BGL gl) {
-            BGL.ID[] buf = {this};
+            BGL.ID[] buf = { this };
             gl.glDeleteTextures(1, buf, 0);
         }
 
@@ -117,7 +117,7 @@ public abstract class TexGL extends Tex {
         }
 
         public ShaderMacro shader() {
-        /* XXX: This combinatorial stuff does not seem quite right. */
+            /* XXX: This combinatorial stuff does not seem quite right. */
             if (tex.centroid)
                 return (cshaders);
             else
@@ -158,7 +158,8 @@ public abstract class TexGL extends Tex {
     }
 
     public static class TexClip extends GLState {
-        public static final Slot<TexClip> slot = new Slot<TexClip>(Slot.Type.GEOM, TexClip.class, HavenPanel.global, TexDraw.slot);
+        public static final Slot<TexClip> slot = new Slot<TexClip>(Slot.Type.GEOM, TexClip.class, HavenPanel.global,
+                TexDraw.slot);
         private static final ShaderMacro shader = Tex2D.clip;
         public final TexGL tex;
         private TexUnit sampler;
@@ -173,7 +174,8 @@ public abstract class TexGL extends Tex {
                 sampler = lbind(g, tex);
             } else {
                 if (draw.tex != this.tex)
-                    throw(new RuntimeException(String.format("TexGL does not support different clip (%s) and draw (%s) textures.", this.tex, draw.tex)));
+                    throw (new RuntimeException(String.format(
+                            "TexGL does not support different clip (%s) and draw (%s) textures.", this.tex, draw.tex)));
             }
             if (g.gc.pref.alphacov.val) {
                 g.gl.glEnable(GL2.GL_SAMPLE_ALPHA_TO_COVERAGE);
@@ -265,7 +267,8 @@ public abstract class TexGL extends Tex {
         gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, minfilter);
         gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, magfilter);
         if ((minfilter == GL.GL_LINEAR_MIPMAP_LINEAR) && (g.gc.pref.anisotex.val >= 1))
-            gl.glTexParameterf(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAX_ANISOTROPY_EXT, Math.max(g.gc.pref.anisotex.val, 1.0f));
+            gl.glTexParameterf(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAX_ANISOTROPY_EXT,
+                    Math.max(g.gc.pref.anisotex.val, 1.0f));
         gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, wrapmode);
         gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, wrapmode);
     }
@@ -376,89 +379,75 @@ public abstract class TexGL extends Tex {
     }
 
     /*
-    public BufferedImage get(GOut g, boolean invert) {
-	BGL gl = g.gl;
-	g.state2d();
-	g.apply();
-	GLState.TexUnit s = g.st.texalloc();
-	s.act(g);
-	gl.glBindTexture(GL.GL_TEXTURE_2D, glid(g));
-	byte[] buf = new byte[tdim.x * tdim.y * 4];
-	gl.glGetTexImage(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, ByteBuffer.wrap(buf));
-	s.free();
-	GOut.checkerr(gl);
-	if(invert) {
-	    for(int y = 0; y < tdim.y / 2; y++) {
-		int to = y * tdim.x * 4, bo = (tdim.y - y - 1) * tdim.x * 4;
-		for(int o = 0; o < tdim.x * 4; o++, to++, bo++) {
-		    byte t = buf[to];
-		    buf[to] = buf[bo];
-		    buf[bo] = t;
-		}
-	    }
-	}
-	WritableRaster raster = Raster.createInterleavedRaster(new DataBufferByte(buf, buf.length), tdim.x, tdim.y, 4 * tdim.x, 4, new int[] {0, 1, 2, 3}, null);
-	return(new BufferedImage(TexI.glcm, raster, false, null));
-    }
-
-    public BufferedImage get(GOut g) {
-	return(get(g, true));
-    }
-    */
+     * public BufferedImage get(GOut g, boolean invert) { BGL gl = g.gl;
+     * g.state2d(); g.apply(); GLState.TexUnit s = g.st.texalloc(); s.act(g);
+     * gl.glBindTexture(GL.GL_TEXTURE_2D, glid(g)); byte[] buf = new byte[tdim.x *
+     * tdim.y * 4]; gl.glGetTexImage(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA,
+     * GL.GL_UNSIGNED_BYTE, ByteBuffer.wrap(buf)); s.free(); GOut.checkerr(gl);
+     * if(invert) { for(int y = 0; y < tdim.y / 2; y++) { int to = y * tdim.x * 4,
+     * bo = (tdim.y - y - 1) * tdim.x * 4; for(int o = 0; o < tdim.x * 4; o++, to++,
+     * bo++) { byte t = buf[to]; buf[to] = buf[bo]; buf[bo] = t; } } }
+     * WritableRaster raster = Raster.createInterleavedRaster(new
+     * DataBufferByte(buf, buf.length), tdim.x, tdim.y, 4 * tdim.x, 4, new int[] {0,
+     * 1, 2, 3}, null); return(new BufferedImage(TexI.glcm, raster, false, null)); }
+     *
+     * public BufferedImage get(GOut g) { return(get(g, true)); }
+     */
 
     @Material.ResName("tex")
     public static class $tex implements Material.ResCons2 {
-	public static final boolean defclip = true;
+        public static final boolean defclip = true;
 
-	public Material.Res.Resolver cons(final Resource res, Object... args) {
-	    final Indir<Resource> tres;
-	    final int tid;
-	    int a = 0;
-	    if(args[a] instanceof String) {
-		tres = res.pool.load((String)args[a], (Integer)args[a + 1]);
-		tid = (Integer)args[a + 2];
-		a += 3;
-	    } else {
-		tres = res.indir();
-		tid = (Integer)args[a];
-		a += 1;
-	    }
-	    boolean tclip = defclip;
-	    while(a < args.length) {
-		String f = (String)args[a++];
-		if(f.equals("a"))
-		    tclip = false;
-		else if(f.equals("c"))
-		    tclip = true;
-	    }
-	    final boolean clip = tclip; /* ¦] */
-	    return(new Material.Res.Resolver() {
-		    public void resolve(Collection<GLState> buf) {
-			Tex tex;
-			TexR rt = tres.get().layer(TexR.class, tid);
-			if(rt != null) {
-			    tex = rt.tex();
-			} else {
-			    Resource.Image img = tres.get().layer(Resource.imgc, tid);
-			    if(img != null) {
-				tex = img.tex();
-			    } else {
-				throw(new RuntimeException(String.format("Specified texture %d for %s not found in %s", tid, res, tres)));
-			    }
-			}
-			buf.add(tex.draw());
-			if(clip)
-			    buf.add(tex.clip());
-		    }
-		});
-	}
+        public Material.Res.Resolver cons(final Resource res, Object... args) {
+            final Indir<Resource> tres;
+            final int tid;
+            int a = 0;
+            if (args[a] instanceof String) {
+                tres = res.pool.load((String) args[a], (Integer) args[a + 1]);
+                tid = (Integer) args[a + 2];
+                a += 3;
+            } else {
+                tres = res.indir();
+                tid = (Integer) args[a];
+                a += 1;
+            }
+            boolean tclip = defclip;
+            while (a < args.length) {
+                String f = (String) args[a++];
+                if (f.equals("a"))
+                    tclip = false;
+                else if (f.equals("c"))
+                    tclip = true;
+            }
+            final boolean clip = tclip; /* ¦] */
+            return (new Material.Res.Resolver() {
+                public void resolve(Collection<GLState> buf) {
+                    Tex tex;
+                    TexR rt = tres.get().layer(TexR.class, tid);
+                    if (rt != null) {
+                        tex = rt.tex();
+                    } else {
+                        Resource.Image img = tres.get().layer(Resource.imgc, tid);
+                        if (img != null) {
+                            tex = img.tex();
+                        } else {
+                            throw (new RuntimeException(
+                                    String.format("Specified texture %d for %s not found in %s", tid, res, tres)));
+                        }
+                    }
+                    buf.add(tex.draw());
+                    if (clip)
+                        buf.add(tex.clip());
+                }
+            });
+        }
     }
-	
+
     static {
-	Console.setscmd("texdis", new Console.Command() {
-		public void run(Console cons, String[] args) {
-		    disableall = (Integer.parseInt(args[1]) != 0);
-		}
-	    });
+        Console.setscmd("texdis", new Console.Command() {
+            public void run(Console cons, String[] args) {
+                disableall = (Integer.parseInt(args[1]) != 0);
+            }
+        });
     }
 }

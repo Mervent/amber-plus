@@ -51,7 +51,8 @@ public class AvaRender {
         }
     }
 
-    public static BufferedImage render(Coord sz, Indir<Resource> base, String camnm, List<MD> mod, List<ED> equ) throws InterruptedException {
+    public static BufferedImage render(Coord sz, Indir<Resource> base, String camnm, List<MD> mod, List<ED> equ)
+            throws InterruptedException {
         Composited tcomp;
         Camera tcam;
         while (true) {
@@ -69,7 +70,7 @@ public class AvaRender {
         final Composited comp = tcomp; /* ¦] */
         final Camera cam = tcam;
         final GBuffer buf = new GBuffer(sz);
-        final BufferedImage[] ret = {null};
+        final BufferedImage[] ret = { null };
         try {
             buf.render(new Drawn() {
                 public void draw(GOut g) {
@@ -89,7 +90,8 @@ public class AvaRender {
 
                                 public boolean setup(RenderList rl) {
                                     rl.add(comp, null);
-                                    rl.add(new DirLight(Color.WHITE, Color.WHITE, Color.WHITE, new Coord3f(1, 1, 1).norm()), null);
+                                    rl.add(new DirLight(Color.WHITE, Color.WHITE, Color.WHITE,
+                                            new Coord3f(1, 1, 1).norm()), null);
                                     return (false);
                                 }
                             }, g);
@@ -128,13 +130,13 @@ public class AvaRender {
             for (int i = 0; i < amod.length; i += 2) {
                 Indir<Resource> mr = Resource.local().load((String) amod[i]);
                 Object[] atex = (Object[]) amod[i + 1];
-		    List<ResData> tex = new LinkedList<ResData>();
+                List<ResData> tex = new LinkedList<ResData>();
                 for (int o = 0; o < atex.length; o++)
-			tex.add(new ResData(Resource.local().load((String)atex[o]), Message.nil));
+                    tex.add(new ResData(Resource.local().load((String) atex[o]), Message.nil));
                 mod.add(new MD(mr, tex));
             }
             List<ED> equ = new LinkedList<ED>();
-            for (int i = 0; i < aequ.length; ) {
+            for (int i = 0; i < aequ.length;) {
                 if (aequ[i] instanceof Object[]) {
                     Object[] cequ = (Object[]) aequ[i];
                     int t = (Integer) cequ[0];
@@ -159,14 +161,15 @@ public class AvaRender {
             } catch (IOException e) {
                 throw (new Error(e));
             }
-            return (new Object[]{"ok", buf.toByteArray()});
+            return (new Object[] { "ok", buf.toByteArray() });
         }
     };
 
     @SuppressWarnings("unchecked")
     public static void main(String[] args) throws Exception {
         Indir<Resource> base = Resource.local().load("gfx/borka/body");
-	List<MD> mod = Arrays.asList(new MD(Resource.local().load("gfx/borka/male"), ResData.wrap(Arrays.asList(Resource.local().load("gfx/borka/male")))));
+        List<MD> mod = Arrays.asList(new MD(Resource.local().load("gfx/borka/male"),
+                ResData.wrap(Arrays.asList(Resource.local().load("gfx/borka/male")))));
         List<ED> equ = new LinkedList<ED>();
         BufferedImage img = render(new Coord(512, 512), base, "avacam", mod, equ);
         img = PUtils.convolvedown(img, new Coord(128, 128), new PUtils.Lanczos(2));

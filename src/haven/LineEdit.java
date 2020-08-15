@@ -239,7 +239,8 @@ public class LineEdit {
                 mode("transpose");
                 if ((line.length() >= 2) && (point > 0)) {
                     if (point < line.length()) {
-                        line = line.substring(0, point - 1) + line.charAt(point) + line.charAt(point - 1) + line.substring(point + 1);
+                        line = line.substring(0, point - 1) + line.charAt(point) + line.charAt(point - 1)
+                                + line.substring(point + 1);
                         point++;
                     } else {
                         line = line.substring(0, point - 2) + line.charAt(point - 1) + line.charAt(point - 2);
@@ -342,25 +343,27 @@ public class LineEdit {
 
     public boolean key(KeyEvent ev) {
         int mod = 0;
-        if ((ev.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) mod |= C;
-        if ((ev.getModifiersEx() & (InputEvent.META_DOWN_MASK | InputEvent.ALT_DOWN_MASK)) != 0) mod |= M;
+        if ((ev.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)
+            mod |= C;
+        if ((ev.getModifiersEx() & (InputEvent.META_DOWN_MASK | InputEvent.ALT_DOWN_MASK)) != 0)
+            mod |= M;
         char c = ev.getKeyChar();
-        if(c == KeyEvent.CHAR_UNDEFINED)
+        if (c == KeyEvent.CHAR_UNDEFINED)
             c = '\0';
-        if(((mod & C) != 0) && (c < 32)) {
+        if (((mod & C) != 0) && (c < 32)) {
             /* Undo Java's TTY Control-code mangling */
-            if(ev.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-            } else if(ev.getKeyCode() == KeyEvent.VK_ENTER) {
-            } else if(ev.getKeyCode() == KeyEvent.VK_TAB) {
-            } else if(ev.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            if (ev.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+            } else if (ev.getKeyCode() == KeyEvent.VK_ENTER) {
+            } else if (ev.getKeyCode() == KeyEvent.VK_TAB) {
+            } else if (ev.getKeyCode() == KeyEvent.VK_ESCAPE) {
             } else {
-                if((ev.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) != 0)
-                    c = (char)(c + 'A' - 1);
+                if ((ev.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) != 0)
+                    c = (char) (c + 'A' - 1);
                 else
-                    c = (char)(c + 'a' - 1);
+                    c = (char) (c + 'a' - 1);
             }
         }
-        return(key(c, ev.getKeyCode(), mod));
+        return (key(c, ev.getKeyCode(), mod));
     }
 
     private static boolean wordchar(char c) {
@@ -368,14 +371,18 @@ public class LineEdit {
     }
 
     private int wordstart(int from) {
-        while ((from > 0) && !wordchar(line.charAt(from - 1))) from--;
-        while ((from > 0) && wordchar(line.charAt(from - 1))) from--;
+        while ((from > 0) && !wordchar(line.charAt(from - 1)))
+            from--;
+        while ((from > 0) && wordchar(line.charAt(from - 1)))
+            from--;
         return (from);
     }
 
     private int wordend(int from) {
-        while ((from < line.length()) && !wordchar(line.charAt(from))) from++;
-        while ((from < line.length()) && wordchar(line.charAt(from))) from++;
+        while ((from < line.length()) && !wordchar(line.charAt(from)))
+            from++;
+        while ((from < line.length()) && wordchar(line.charAt(from)))
+            from++;
         return (from);
     }
 

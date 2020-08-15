@@ -17,9 +17,7 @@ public class PlayerPosStreamer implements Runnable {
         try {
             File f = new File(Config.playerposfile);
 
-            channel = FileChannel.open(f.toPath(),
-                    StandardOpenOption.READ,
-                    StandardOpenOption.WRITE,
+            channel = FileChannel.open(f.toPath(), StandardOpenOption.READ, StandardOpenOption.WRITE,
                     StandardOpenOption.CREATE);
 
             MappedByteBuffer b = channel.map(FileChannel.MapMode.READ_WRITE, 0, 8);

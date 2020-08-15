@@ -32,7 +32,6 @@ import java.io.*;
 import java.util.*;
 import java.lang.reflect.*;
 
-
 public class MainFrame extends java.awt.Frame implements Runnable, Console.Directory {
     HavenPanel p;
     private final ThreadGroup g;
@@ -44,11 +43,15 @@ public class MainFrame extends java.awt.Frame implements Runnable, Console.Direc
         try {
             javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
 
-            // Since H&H IPs aren't likely to change (at least mid client run), and the client constantly needs to fetch
-            // resources from the server, we enable "cache forever" policy so to overcome sporadic UnknownHostException
-            // due to flaky DNS. Bad practice, but still better than forcing the user to modify hosts file.
-            // NOTE: this needs to be done early as possible before InetAddressCachePolicy is initialized.
-            java.security.Security.setProperty("networkaddress.cache.ttl" , "-1");
+            // Since H&H IPs aren't likely to change (at least mid client run), and the
+            // client constantly needs to fetch
+            // resources from the server, we enable "cache forever" policy so to overcome
+            // sporadic UnknownHostException
+            // due to flaky DNS. Bad practice, but still better than forcing the user to
+            // modify hosts file.
+            // NOTE: this needs to be done early as possible before InetAddressCachePolicy
+            // is initialized.
+            java.security.Security.setProperty("networkaddress.cache.ttl", "-1");
         } catch (Exception e) {
         }
     }
@@ -60,8 +63,10 @@ public class MainFrame extends java.awt.Frame implements Runnable, Console.Direc
         DisplayMode b = null;
         for (DisplayMode m : dev.getDisplayModes()) {
             int d = m.getBitDepth();
-            if ((m.getWidth() == w) && (m.getHeight() == h) && ((d == 24) || (d == 32) || (d == DisplayMode.BIT_DEPTH_MULTI))) {
-                if ((b == null) || (d > b.getBitDepth()) || ((d == b.getBitDepth()) && (m.getRefreshRate() > b.getRefreshRate())))
+            if ((m.getWidth() == w) && (m.getHeight() == h)
+                    && ((d == 24) || (d == 32) || (d == DisplayMode.BIT_DEPTH_MULTI))) {
+                if ((b == null) || (d > b.getBitDepth())
+                        || ((d == b.getBitDepth()) && (m.getRefreshRate() > b.getRefreshRate())))
                     b = m;
             }
         }
@@ -113,8 +118,7 @@ public class MainFrame extends java.awt.Frame implements Runnable, Console.Direc
         cmdmap.put("sz", new Console.Command() {
             public void run(Console cons, String[] args) {
                 if (args.length == 3) {
-                    int w = Integer.parseInt(args[1]),
-                            h = Integer.parseInt(args[2]);
+                    int w = Integer.parseInt(args[1]), h = Integer.parseInt(args[2]);
                     p.setSize(w, h);
                     pack();
                     Utils.setprefc("wndsz", new Coord(w, h));
@@ -184,8 +188,10 @@ public class MainFrame extends java.awt.Frame implements Runnable, Console.Direc
         Coord sz;
         if (isz == null) {
             sz = Utils.getprefc("wndsz", new Coord(800, 600));
-            if (sz.x < 640) sz.x = 640;
-            if (sz.y < 480) sz.y = 480;
+            if (sz.x < 640)
+                sz.x = 640;
+            if (sz.y < 480)
+                sz.y = 480;
         } else {
             sz = isz;
         }
@@ -230,12 +236,12 @@ public class MainFrame extends java.awt.Frame implements Runnable, Console.Direc
     private void savewndstate() {
         if (prefs == null) {
             if (getExtendedState() == NORMAL)
-        /* Apparent, getSize attempts to return the "outer
-         * size" of the window, including WM decorations, even
-		 * though setSize sets the "inner size" of the
-		 * window. Therefore, use the Panel's size instead; it
-		 * ought to correspond to the inner size at all
-		 * times. */ {
+            /*
+             * Apparent, getSize attempts to return the "outer size" of the window,
+             * including WM decorations, even though setSize sets the "inner size" of the
+             * window. Therefore, use the Panel's size instead; it ought to correspond to
+             * the inner size at all times.
+             */ {
                 Dimension dim = p.getSize();
                 Utils.setprefc("wndsz", new Coord(dim.width, dim.height));
             }
@@ -307,7 +313,7 @@ public class MainFrame extends java.awt.Frame implements Runnable, Console.Direc
     }
 
     private static void javabughack() throws InterruptedException {
-	    /* Work around a stupid deadlock bug in AWT. */
+        /* Work around a stupid deadlock bug in AWT. */
         try {
             javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
                 public void run() {
@@ -317,7 +323,7 @@ public class MainFrame extends java.awt.Frame implements Runnable, Console.Direc
                 }
             });
         } catch (java.lang.reflect.InvocationTargetException e) {
-	        /* Oh, how I love Swing! */
+            /* Oh, how I love Swing! */
             throw (new Error(e));
         }
     }
@@ -361,7 +367,7 @@ public class MainFrame extends java.awt.Frame implements Runnable, Console.Direc
     }
 
     public static void main(final String[] args) {
-	    /* Set up the error handler as early as humanly possible. */
+        /* Set up the error handler as early as humanly possible. */
         final haven.error.ErrorHandler hg = new haven.error.ErrorHandler();
         hg.sethandler(new haven.error.ErrorGui(null) {
             public void errorsent() {

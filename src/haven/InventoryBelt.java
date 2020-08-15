@@ -1,6 +1,5 @@
 package haven;
 
-
 import java.util.*;
 
 public class InventoryBelt extends Widget implements DTarget {
@@ -65,7 +64,7 @@ public class InventoryBelt extends Widget implements DTarget {
             dc.x = dc.x % isz.x;
         }
         wdgmsg("drop", dc);
-        return(true);
+        return (true);
     }
 
     @Override
@@ -78,8 +77,8 @@ public class InventoryBelt extends Widget implements DTarget {
         if (msg == "sz") {
             isz = (Coord) args[0];
             resize(invsq.sz().add(new Coord(-1, -1)).mul(isz).add(new Coord(1, 1)));
-        } else if(msg == "mode") {
-            dropul = (((Integer)args[0]) == 0);
+        } else if (msg == "mode") {
+            dropul = (((Integer) args[0]) == 0);
         } else {
             super.uimsg(msg, args);
         }
@@ -87,19 +86,20 @@ public class InventoryBelt extends Widget implements DTarget {
 
     @Override
     public void wdgmsg(Widget sender, String msg, Object... args) {
-        if(!msg.endsWith("-identical"))
+        if (!msg.endsWith("-identical"))
             super.wdgmsg(sender, msg, args);
     }
 
-    /* Following getItem* methods do partial matching of the name *on purpose*.
-       Because when localization is turned on, original English name will be in the brackets
-       next to the translation
-    */
+    /*
+     * Following getItem* methods do partial matching of the name *on purpose*.
+     * Because when localization is turned on, original English name will be in the
+     * brackets next to the translation
+     */
     public List<WItem> getItemsPartial(String... names) {
         List<WItem> items = new ArrayList<WItem>();
         for (Widget wdg = child; wdg != null; wdg = wdg.next) {
             if (wdg instanceof WItem) {
-                String wdgname = ((WItem)wdg).item.getname();
+                String wdgname = ((WItem) wdg).item.getname();
                 for (String name : names) {
                     if (wdgname.contains(name)) {
                         items.add((WItem) wdg);
@@ -114,7 +114,7 @@ public class InventoryBelt extends Widget implements DTarget {
     public WItem getItemPartial(String name) {
         for (Widget wdg = child; wdg != null; wdg = wdg.next) {
             if (wdg instanceof WItem) {
-                String wdgname = ((WItem)wdg).item.getname();
+                String wdgname = ((WItem) wdg).item.getname();
                 if (wdgname.contains(name))
                     return (WItem) wdg;
             }

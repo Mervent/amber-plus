@@ -1,6 +1,5 @@
 package haven.pathfinder;
 
-
 import haven.*;
 
 import java.awt.*;
@@ -65,18 +64,16 @@ public class Map {
                     continue;
 
                 String name = res.name;
-                if (!name.equals("gfx/tiles/deep") &&
-                        !name.equals("gfx/tiles/cave") &&
-                        !name.equals("gfx/tiles/nil") &&
-                        !name.startsWith("gfx/tiles/rocks/"))
+                if (!name.equals("gfx/tiles/deep") && !name.equals("gfx/tiles/cave") && !name.equals("gfx/tiles/nil")
+                        && !name.startsWith("gfx/tiles/rocks/"))
                     continue;
 
                 int gcx = origin - (x * 11) - dx;
                 int gcy = origin - (y * 11) - dy;
 
                 // exclude destination tile
-                if (endc.x < gcx + tbbax + plbbox && endc.x > gcx + tbbax - plbbox &&
-                     endc.y < gcy + tbbby + plbbox && endc.y > gcy + tbbay - plbbox)   {
+                if (endc.x < gcx + tbbax + plbbox && endc.x > gcx + tbbax - plbbox && endc.y < gcy + tbbby + plbbox
+                        && endc.y > gcy + tbbay - plbbox) {
                     continue;
                 }
 
@@ -96,11 +93,12 @@ public class Map {
                 int wdx = cd.x - 1;
                 int wdy = cd.y + 1;
 
-                // exclude tiles near map edges so we won't need to do bounds checks all over the place
-                if (wax - mapborder < 0 || way - mapborder < 0 || wax + mapborder >= sz || way + mapborder >= sz ||
-                        wbx - mapborder < 0 || wby - mapborder < 0 || wbx + mapborder >= sz || wby + mapborder >= sz ||
-                        wcx - mapborder < 0 || wcy - mapborder < 0 || wcx + mapborder >= sz || wcy + mapborder >= sz ||
-                        wdx - mapborder < 0 || wdy - mapborder < 0 || wdx + mapborder >= sz || wdy + mapborder >= sz)
+                // exclude tiles near map edges so we won't need to do bounds checks all over
+                // the place
+                if (wax - mapborder < 0 || way - mapborder < 0 || wax + mapborder >= sz || way + mapborder >= sz
+                        || wbx - mapborder < 0 || wby - mapborder < 0 || wbx + mapborder >= sz || wby + mapborder >= sz
+                        || wcx - mapborder < 0 || wcy - mapborder < 0 || wcx + mapborder >= sz || wcy + mapborder >= sz
+                        || wdx - mapborder < 0 || wdy - mapborder < 0 || wdx + mapborder >= sz || wdy + mapborder >= sz)
                     continue;
 
                 // plot bounding box
@@ -145,7 +143,8 @@ public class Map {
         int gcx = origin - (plc.x - gob.rc.floor().x);
         int gcy = origin - (plc.y - gob.rc.floor().y);
 
-        // since non 90 degrees incremental rotation is wonky we slightly increase the bounding box for such gobs
+        // since non 90 degrees incremental rotation is wonky we slightly increase the
+        // bounding box for such gobs
         // FIXME: but really should rotate around pixel's center
         int rotadj = 0;
         if (gob.a != 0 && gob.a != Math.PI && gob.a != Math.PI / 2.0 && gob.a != (3 * Math.PI) / 2) {
@@ -154,7 +153,8 @@ public class Map {
         Coord ca, cb, cc, cd, wa, wb, wc, wd, clra, clrb, clrc, clrd;
 
         // do not rotate square gobs
-        // FIXME: rotating rasters realiably to mach actual bounding boxes is very tricky. need better way...
+        // FIXME: rotating rasters realiably to mach actual bounding boxes is very
+        // tricky. need better way...
         if (Math.abs(bboxa.x) + Math.abs(bboxb.x) == Math.abs(bboxa.y) + Math.abs(bboxb.y) && rotadj == 0) {
             // bounding box
             ca = new Coord(gcx + bboxa.x - plbbox, gcy + bboxa.y - plbbox);
@@ -196,11 +196,12 @@ public class Map {
             clrd = Utils.rotate(gcx + bboxa.x - clr - rotadj, gcy + bboxb.y + clr + rotadj, gcx, gcy, cos, sin);
         }
 
-        // exclude gobs near map edges so we won't need to do bounds checks all over the place
-        if (wa.x - mapborder < 0 || wa.y - mapborder < 0 || wa.x + mapborder >= sz || wa.y + mapborder >= sz ||
-                wb.x - mapborder < 0 || wb.y - mapborder < 0 || wb.x + mapborder >= sz || wb.y + mapborder >= sz ||
-                wc.x - mapborder < 0 || wc.y - mapborder < 0 || wc.x + mapborder >= sz || wc.y + mapborder >= sz ||
-                wd.x - mapborder < 0 || wd.y - mapborder < 0 || wd.x + mapborder >= sz || wd.y + mapborder >= sz)
+        // exclude gobs near map edges so we won't need to do bounds checks all over the
+        // place
+        if (wa.x - mapborder < 0 || wa.y - mapborder < 0 || wa.x + mapborder >= sz || wa.y + mapborder >= sz
+                || wb.x - mapborder < 0 || wb.y - mapborder < 0 || wb.x + mapborder >= sz || wb.y + mapborder >= sz
+                || wc.x - mapborder < 0 || wc.y - mapborder < 0 || wc.x + mapborder >= sz || wc.y + mapborder >= sz
+                || wd.x - mapborder < 0 || wd.y - mapborder < 0 || wd.x + mapborder >= sz || wd.y + mapborder >= sz)
             return;
 
         if (map[wa.x][wa.y] == CELL_FREE)
@@ -243,11 +244,12 @@ public class Map {
         Coord cc = Utils.rotate(gcx + bboxb.x + plbbox, gcy + bboxb.y + plbbox, gcx, gcy, cos, sin);
         Coord cd = Utils.rotate(gcx + bboxa.x - plbbox, gcy + bboxb.y + plbbox, gcx, gcy, cos, sin);
 
-        // exclude the gob if it's near map edges so we won't need to do bounds checks all later on
-        if (ca.x - mapborder < 0 || ca.y - mapborder < 0 || ca.x + mapborder >= sz || ca.y + mapborder >= sz ||
-                cb.x - mapborder < 0 || cb.y - mapborder < 0 || cb.x + mapborder >= sz || cb.y + mapborder >= sz ||
-                cc.x - mapborder < 0 || cc.y - mapborder < 0 || cc.x + mapborder >= sz || cc.y + mapborder >= sz ||
-                cd.x - mapborder < 0 || cd.y - mapborder < 0 || cd.x + mapborder >= sz || cd.y + mapborder >= sz)
+        // exclude the gob if it's near map edges so we won't need to do bounds checks
+        // all later on
+        if (ca.x - mapborder < 0 || ca.y - mapborder < 0 || ca.x + mapborder >= sz || ca.y + mapborder >= sz
+                || cb.x - mapborder < 0 || cb.y - mapborder < 0 || cb.x + mapborder >= sz || cb.y + mapborder >= sz
+                || cc.x - mapborder < 0 || cc.y - mapborder < 0 || cc.x + mapborder >= sz || cc.y + mapborder >= sz
+                || cd.x - mapborder < 0 || cd.y - mapborder < 0 || cd.x + mapborder >= sz || cd.y + mapborder >= sz)
             return;
 
         Utils.plotRect(map, ca, cb, cc, cd, CELL_FREE);
@@ -262,73 +264,53 @@ public class Map {
 
                 // remove concave and blocked vertices
                 // FIXME: slightly misbehaves with rotated rectangles
-                if ((map[i + concaveclr][j] & (CELL_BLK | CELL_TO)) != 0 ||
-                        (map[i - concaveclr][j] & (CELL_BLK | CELL_TO)) != 0 ||
-                        (map[i][j + concaveclr] & (CELL_BLK | CELL_TO)) != 0 ||
-                        (map[i][j - concaveclr] & (CELL_BLK | CELL_TO)) != 0) {
+                if ((map[i + concaveclr][j] & (CELL_BLK | CELL_TO)) != 0
+                        || (map[i - concaveclr][j] & (CELL_BLK | CELL_TO)) != 0
+                        || (map[i][j + concaveclr] & (CELL_BLK | CELL_TO)) != 0
+                        || (map[i][j - concaveclr] & (CELL_BLK | CELL_TO)) != 0) {
                     map[i][j] = CELL_FREE;
                     continue;
                 }
                 dbg.dot(i, j, Color.RED);
             }
 
-        /*for (int i = 0; i < sz - 2*plbbox; ) {
-            for (int j = 0; j < sz - 2*plbbox; ) {
-                int cx =  0;
-                int cy =  0;
-                int cnt = 0;
-                for (int x = 0; x < 2*plbbox; x++) {
-                    for (int y = 0; y < 2*plbbox; y++) {
-                        if (map[i+x][j+y] == CELL_WP) {
-                            cx += i + x;
-                            cy += j + y;
-                            cnt++;
-                        }
-                    }
-                }
-
-                if (cnt == 0) {
-                    j++;
-                    continue;
-                }
-
-                cx /= cnt;
-                cy /= cnt;
-
-                if (doesCollide(cx, cy)) {
-                    // find another wp closes to geocenter
-                    System.out.println("Geo center collision");
-                    break;
-
-                }
-
-                for (int x = 0; x < 2*plbbox; x++) {
-                    for (int y = 0; y < 2*plbbox; y++) {
-                        if (map[i+x][j+y] == CELL_WP) {
-                            map[i+x][j+y] = CELL_FREE;
-                        }
-                    }
-                }
-                map[cx][cy] = CELL_WP;
-                dbg.dot(cx, cy, Color.YELLOW);
-
-                j+= 2*plbbox;
-            }
-            i++;
-        }
-        */
+            /*
+             * for (int i = 0; i < sz - 2*plbbox; ) { for (int j = 0; j < sz - 2*plbbox; ) {
+             * int cx = 0; int cy = 0; int cnt = 0; for (int x = 0; x < 2*plbbox; x++) { for
+             * (int y = 0; y < 2*plbbox; y++) { if (map[i+x][j+y] == CELL_WP) { cx += i + x;
+             * cy += j + y; cnt++; } } }
+             *
+             * if (cnt == 0) { j++; continue; }
+             *
+             * cx /= cnt; cy /= cnt;
+             *
+             * if (doesCollide(cx, cy)) { // find another wp closes to geocenter
+             * System.out.println("Geo center collision"); break;
+             *
+             * }
+             *
+             * for (int x = 0; x < 2*plbbox; x++) { for (int y = 0; y < 2*plbbox; y++) { if
+             * (map[i+x][j+y] == CELL_WP) { map[i+x][j+y] = CELL_FREE; } } } map[cx][cy] =
+             * CELL_WP; dbg.dot(cx, cy, Color.YELLOW);
+             *
+             * j+= 2*plbbox; } i++; }
+             */
         }
     }
 
     // identifies all obstacles which can be navigated around
     // TODO: include convex polygons?
-    // TODO: yeah this implementation is BAD. needs redoing... flood-fill based approach perhaps?
+    // TODO: yeah this implementation is BAD. needs redoing... flood-fill based
+    // approach perhaps?
     private void identTraversableObstacles() {
         for (TraversableObstacle sm : tocandidates) {
-            if (!Utils.isVisible(map, dbg, sm.clra.x, sm.clra.y, sm.clrb.x, sm.clrb.y, (byte) (CELL_BLK | CELL_TO)) ||
-                    !Utils.isVisible(map, dbg, sm.clrb.x, sm.clrb.y, sm.clrc.x, sm.clrc.y, (byte) (CELL_BLK | CELL_TO)) ||
-                    !Utils.isVisible(map, dbg, sm.clrc.x, sm.clrc.y, sm.clrd.x, sm.clrd.y, (byte) (CELL_BLK | CELL_TO)) ||
-                    !Utils.isVisible(map, dbg, sm.clrd.x, sm.clrd.y, sm.clra.x, sm.clra.y, (byte) (CELL_BLK | CELL_TO)))
+            if (!Utils.isVisible(map, dbg, sm.clra.x, sm.clra.y, sm.clrb.x, sm.clrb.y, (byte) (CELL_BLK | CELL_TO))
+                    || !Utils.isVisible(map, dbg, sm.clrb.x, sm.clrb.y, sm.clrc.x, sm.clrc.y,
+                            (byte) (CELL_BLK | CELL_TO))
+                    || !Utils.isVisible(map, dbg, sm.clrc.x, sm.clrc.y, sm.clrd.x, sm.clrd.y,
+                            (byte) (CELL_BLK | CELL_TO))
+                    || !Utils.isVisible(map, dbg, sm.clrd.x, sm.clrd.y, sm.clra.x, sm.clra.y,
+                            (byte) (CELL_BLK | CELL_TO)))
                 continue;
 
             map[sm.wa.x][sm.wa.y] = CELL_FREE;
@@ -465,24 +447,24 @@ public class Map {
         if (DEBUG_TIMINGS)
             System.out.println("Vertices Sanitization: " + (double) (System.nanoTime() - start) / 1000000.0 + " ms.");
 
-        // clear area around starting position in case char is on the bounding box boundary
-        if (map[origin][origin-1] == CELL_BLK)
-            map[origin][origin-1] = CELL_FREE;
-        if (map[origin-1][origin-1] == CELL_BLK)
-            map[origin-1][origin-1] = CELL_FREE;
-        if (map[origin+1][origin-1] == CELL_BLK)
-            map[origin+1][origin-1] = CELL_FREE;
-        if (map[origin-1][origin] == CELL_BLK)
-            map[origin-1][origin] = CELL_FREE;
-        if (map[origin+1][origin] == CELL_BLK)
-            map[origin+1][origin] = CELL_FREE;
-        if (map[origin-1][origin+1] == CELL_BLK)
-            map[origin-1][origin+1] = CELL_FREE;
-        if (map[origin][origin+1] == CELL_BLK)
-            map[origin][origin+1] = CELL_FREE;
-        if (map[origin+1][origin+1] == CELL_BLK)
-            map[origin+1][origin+1] = CELL_FREE;
-
+        // clear area around starting position in case char is on the bounding box
+        // boundary
+        if (map[origin][origin - 1] == CELL_BLK)
+            map[origin][origin - 1] = CELL_FREE;
+        if (map[origin - 1][origin - 1] == CELL_BLK)
+            map[origin - 1][origin - 1] = CELL_FREE;
+        if (map[origin + 1][origin - 1] == CELL_BLK)
+            map[origin + 1][origin - 1] = CELL_FREE;
+        if (map[origin - 1][origin] == CELL_BLK)
+            map[origin - 1][origin] = CELL_FREE;
+        if (map[origin + 1][origin] == CELL_BLK)
+            map[origin + 1][origin] = CELL_FREE;
+        if (map[origin - 1][origin + 1] == CELL_BLK)
+            map[origin - 1][origin + 1] = CELL_FREE;
+        if (map[origin][origin + 1] == CELL_BLK)
+            map[origin][origin + 1] = CELL_FREE;
+        if (map[origin + 1][origin + 1] == CELL_BLK)
+            map[origin + 1][origin + 1] = CELL_FREE;
 
         // test if direct path is clear
         if (Utils.isVisible(map, dbg, origin, origin, endc.x, endc.y, (byte) (CELL_BLK | CELL_TO))) {
@@ -531,12 +513,14 @@ public class Map {
             start = System.nanoTime();
             buildVisGraph(tovertexes, CELL_BLK);
             if (DEBUG_TIMINGS)
-                System.out.println("     Visibility Graph: " + (double) (System.nanoTime() - start) / 1000000.0 + " ms.");
+                System.out
+                        .println("     Visibility Graph: " + (double) (System.nanoTime() - start) / 1000000.0 + " ms.");
 
             start = System.nanoTime();
             Iterable<Edge> path = findPath();
             if (DEBUG_TIMINGS)
-                System.out.println("              Routing: " + (double) (System.nanoTime() - start) / 1000000.0 + " ms.");
+                System.out
+                        .println("              Routing: " + (double) (System.nanoTime() - start) / 1000000.0 + " ms.");
 
             Iterator<Edge> it = path.iterator();
             while (it.hasNext()) {
@@ -549,7 +533,7 @@ public class Map {
             return path;
         }
 
-        //---------------------------------------------------------------------------------
+        // ---------------------------------------------------------------------------------
         start = System.nanoTime();
         List<Vertex> vertices = getVertices();
         if (DEBUG_TIMINGS)
@@ -593,7 +577,6 @@ public class Map {
 
         return null;
     }
-
 
     public void dbgdump() {
         dbg.save();

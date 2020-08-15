@@ -184,7 +184,8 @@ public class RichText extends Text {
         }
 
         public TextPart(String str, Map<? extends Attribute, ?> attrs) {
-            this((str.length() == 0) ? (new AttributedString(str)) : (new AttributedString(str, attrs)), 0, str.length());
+            this((str.length() == 0) ? (new AttributedString(str)) : (new AttributedString(str, attrs)), 0,
+                    str.length());
         }
 
         public TextPart(String str) {
@@ -224,22 +225,26 @@ public class RichText extends Text {
         }
 
         public float advance(int from, int to) {
-            if (from == to) return (0);
+            if (from == to)
+                return (0);
             return (tm().getAdvanceBetween(start + from, start + to));
         }
 
         public int width() {
-            if (start == end) return (0);
+            if (start == end)
+                return (0);
             return ((int) tm().getAdvanceBetween(start, end));
         }
 
         public int height() {
-            if (start == end) return (0);
+            if (start == end)
+                return (0);
             return ((int) (tl().getAscent() + tl().getDescent() + tl().getLeading()));
         }
 
         public int baseline() {
-            if (start == end) return (0);
+            if (start == end)
+                return (0);
             return ((int) tl().getAscent());
         }
 
@@ -279,7 +284,8 @@ public class RichText extends Text {
         }
 
         public void render(Graphics2D g) {
-            if (start == end) return;
+            if (start == end)
+                return;
             tl().draw(g, x, y + tl().getAscent());
         }
 
@@ -294,8 +300,7 @@ public class RichText extends Text {
 
     public Part partat(Coord c) {
         for (Part p = parts; p != null; p = p.next) {
-            if ((c.x >= p.x) && (c.y >= p.y) &&
-                    (c.x < p.x + p.width()) && (c.y < p.y + p.height())) {
+            if ((c.x >= p.x) && (c.y >= p.y) && (c.x < p.x + p.width()) && (c.y < p.y + p.height())) {
                 return (p);
             }
         }
@@ -335,14 +340,12 @@ public class RichText extends Text {
     }
 
     /*
-     * This fix exists for Java 1.5. Apparently, before Java 1.6,
-     * TextAttribute.SIZE had to be specified with a Float, and not a
-     * general Number; however, Java 1.6 fails to mention that in the
-     * documentation (which rather explicitly says that any
-     * java.lang.Number is perfectly OK and accepted
-     * practice). However, specifying ints for font size looks nicer
-     * in the rest of the code, so this function gets to collect all
-     * the ugliness of conversion in itself.
+     * This fix exists for Java 1.5. Apparently, before Java 1.6, TextAttribute.SIZE
+     * had to be specified with a Float, and not a general Number; however, Java 1.6
+     * fails to mention that in the documentation (which rather explicitly says that
+     * any java.lang.Number is perfectly OK and accepted practice). However,
+     * specifying ints for font size looks nicer in the rest of the code, so this
+     * function gets to collect all the ugliness of conversion in itself.
      */
     private static Map<? extends Attribute, ?> fixattrs(Map<? extends Attribute, ?> attrs) {
         Map<Attribute, Object> ret = new HashMap<Attribute, Object>();
@@ -386,7 +389,8 @@ public class RichText extends Text {
         }
 
         private static boolean namechar(char c) {
-            return ((c == ':') || (c == '_') || (c == '$') || (c == '.') || (c == '-') || ((c >= '0') && (c <= '9')) || ((c >= 'A') && (c <= 'Z')) || ((c >= 'a') && (c <= 'z')));
+            return ((c == ':') || (c == '_') || (c == '$') || (c == '.') || (c == '-') || ((c >= '0') && (c <= '9'))
+                    || ((c >= 'A') && (c <= 'Z')) || ((c >= 'a') && (c <= 'z')));
         }
 
         protected String name(PeekReader in) throws IOException {
@@ -560,21 +564,21 @@ public class RichText extends Text {
             return (buf.toString());
         }
 
-	public static String col2a(Color col) {
-	    StringBuilder buf = new StringBuilder();
-	    buf.append("$col[");
-	    buf.append(col.getRed());
-	    buf.append(",");
-	    buf.append(col.getGreen());
-	    buf.append(",");
-	    buf.append(col.getBlue());
-	    if(col.getAlpha() != 255) {
-		buf.append(",");
-		buf.append(col.getAlpha());
-	    }
-	    buf.append("]");
-	    return(buf.toString());
-	}
+        public static String col2a(Color col) {
+            StringBuilder buf = new StringBuilder();
+            buf.append("$col[");
+            buf.append(col.getRed());
+            buf.append(",");
+            buf.append(col.getGreen());
+            buf.append(",");
+            buf.append(col.getBlue());
+            if (col.getAlpha() != 255) {
+                buf.append(",");
+                buf.append(col.getAlpha());
+            }
+            buf.append("]");
+            return (buf.toString());
+        }
     }
 
     public static class Foundry {
@@ -621,11 +625,12 @@ public class RichText extends Text {
             return (this);
         }
 
-        private static void aline/* Hurrhurr, pun intended*/(List<Part> line, int y) {
+        private static void aline/* Hurrhurr, pun intended */(List<Part> line, int y) {
             int mb = 0;
             for (Part p : line) {
                 int cb = p.baseline();
-                if (cb > mb) mb = cb;
+                if (cb > mb)
+                    mb = cb;
             }
             for (Part p : line) {
                 p.y = y + mb - p.baseline();
@@ -659,9 +664,11 @@ public class RichText extends Text {
                 }
                 lp = p;
                 line.add(p);
-                if (ph > lh) lh = ph;
+                if (ph > lh)
+                    lh = ph;
                 x += pw;
-                if (x > mw) mw = x;
+                if (x > mw)
+                    mw = x;
                 if (lb) {
                     aline(line, y);
                     x = 0;
@@ -679,8 +686,10 @@ public class RichText extends Text {
             for (Part p = fp; p != null; p = p.next) {
                 int x = p.x + p.width();
                 int y = p.y + p.height();
-                if (x > sz.x) sz.x = x;
-                if (y > sz.y) sz.y = y;
+                if (x > sz.x)
+                    sz.x = x;
+                if (y > sz.y)
+                    sz.y = y;
             }
             return (sz);
         }
@@ -694,8 +703,10 @@ public class RichText extends Text {
             fp.prepare(rs);
             fp = layout(fp, width);
             Coord sz = bounds(fp);
-            if (sz.x < 1) sz = sz.add(1, 0);
-            if (sz.y < 1) sz = sz.add(0, 1);
+            if (sz.x < 1)
+                sz = sz.add(1, 0);
+            if (sz.y < 1)
+                sz = sz.add(0, 1);
             BufferedImage img = TexI.mkbuf(sz);
             Graphics2D g = img.createGraphics();
             if (aa)

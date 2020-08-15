@@ -1,6 +1,5 @@
 package haven.timers;
 
-
 import haven.*;
 
 import java.awt.event.KeyEvent;

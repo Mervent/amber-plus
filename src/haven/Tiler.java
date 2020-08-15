@@ -76,8 +76,7 @@ public abstract class Tiler {
                 int cvn = vn;
                 Vertex[] cv = parts[i].v;
                 for (int o = 0; o < cv.length; o++) {
-                    found:
-                    {
+                    found: {
                         for (int u = 0; u < cvn; u++) {
                             if (cv[o] == vbuf[u]) {
                                 vmap[i][o] = u;
@@ -116,8 +115,8 @@ public abstract class Tiler {
             return ((this.mat == null) ? mat : (GLState.compose(mat, this.mat)));
         }
 
-        public static final float[] ctcx = {0, 0, 1, 1}, ctcy = {0, 1, 1, 0};
-        public static final int[] rdiag = {0, 1, 2, 0, 2, 3}, ldiag = {0, 1, 3, 1, 2, 3};
+        public static final float[] ctcx = { 0, 0, 1, 1 }, ctcy = { 0, 1, 1, 0 };
+        public static final int[] rdiag = { 0, 1, 2, 0, 2, 3 }, ldiag = { 0, 1, 3, 1, 2, 3 };
 
         public static MPart splitquad(Coord lc, Coord gc, Surface.Vertex[] corners, boolean diag) {
             return (new MPart(lc, gc, corners, ctcx, ctcy, diag ? ldiag : rdiag));
@@ -203,18 +202,11 @@ public abstract class Tiler {
     public static void flatmodel(MapMesh m, Coord lc) {
         MapMesh.MapSurface s = m.data(m.gnd);
         if (s.split[s.ts.o(lc)]) {
-            s.new Face(s.surf[s.vs.o(lc.x, lc.y)],
-                    s.surf[s.vs.o(lc.x, lc.y + 1)],
-                    s.surf[s.vs.o(lc.x + 1, lc.y + 1)]);
-            s.new Face(s.surf[s.vs.o(lc.x, lc.y)],
-                    s.surf[s.vs.o(lc.x + 1, lc.y + 1)],
-                    s.surf[s.vs.o(lc.x + 1, lc.y)]);
+            s.new Face(s.surf[s.vs.o(lc.x, lc.y)], s.surf[s.vs.o(lc.x, lc.y + 1)], s.surf[s.vs.o(lc.x + 1, lc.y + 1)]);
+            s.new Face(s.surf[s.vs.o(lc.x, lc.y)], s.surf[s.vs.o(lc.x + 1, lc.y + 1)], s.surf[s.vs.o(lc.x + 1, lc.y)]);
         } else {
-            s.new Face(s.surf[s.vs.o(lc.x, lc.y)],
-                    s.surf[s.vs.o(lc.x, lc.y + 1)],
-                    s.surf[s.vs.o(lc.x + 1, lc.y)]);
-            s.new Face(s.surf[s.vs.o(lc.x, lc.y + 1)],
-                    s.surf[s.vs.o(lc.x + 1, lc.y + 1)],
+            s.new Face(s.surf[s.vs.o(lc.x, lc.y)], s.surf[s.vs.o(lc.x, lc.y + 1)], s.surf[s.vs.o(lc.x + 1, lc.y)]);
+            s.new Face(s.surf[s.vs.o(lc.x, lc.y + 1)], s.surf[s.vs.o(lc.x + 1, lc.y + 1)],
                     s.surf[s.vs.o(lc.x + 1, lc.y)]);
         }
     }

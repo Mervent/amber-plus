@@ -69,8 +69,7 @@ public class Audio {
             double[][] buf = new double[nch][ns];
             int max = 0;
             synchronized (clips) {
-                clip:
-                for (Iterator<CS> i = clips.iterator(); i.hasNext(); ) {
+                clip: for (Iterator<CS> i = clips.iterator(); i.hasNext();) {
                     CS cs = i.next();
                     int left = ns;
                     int boff = 0;
@@ -113,7 +112,7 @@ public class Audio {
 
         public void stop(CS clip) {
             synchronized (clips) {
-                for (Iterator<CS> i = clips.iterator(); i.hasNext(); ) {
+                for (Iterator<CS> i = clips.iterator(); i.hasNext();) {
                     if (i.next() == clip) {
                         i.remove();
                         break;
@@ -268,7 +267,7 @@ public class Audio {
         public double irate, orate;
         public double sp;
         private double ack;
-        private double[] lval = {0}, nval = {0};
+        private double[] lval = { 0 }, nval = { 0 };
         private double[][] data = {};
         private int dp = 0, dl = 0;
 
@@ -478,7 +477,8 @@ public class Audio {
                         int ret = fillbuf(buf, 0, buf.length);
                         if (ret < 0)
                             return;
-                        for (int off = 0; off < ret; off += line.write(buf, off, ret - off)) ;
+                        for (int off = 0; off < ret; off += line.write(buf, off, ret - off))
+                            ;
                         if (reopen)
                             break;
                     }

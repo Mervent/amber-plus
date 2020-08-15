@@ -58,14 +58,15 @@ public class Shopbox extends Widget implements SpriteOwner, Owner {
     public Shopbox(boolean var1) {
         super(bg.sz());
         if (this.admin = var1) {
-            this.spipe = (Button)this.add(new Button(75, "Connect"), spipec);
-            this.bpipe = (Button)this.add(new Button(75, "Connect"), bpipec);
-            this.cbtn = (Button)this.add(new Button(75, "Change"), cbtnc);
-            this.pnume = (TextEntry)this.adda(new TextEntry(30, ""), pricec.add(Inventory.invsq.sz()).add(5, 0), 0.0D, 1.0D);
+            this.spipe = (Button) this.add(new Button(75, "Connect"), spipec);
+            this.bpipe = (Button) this.add(new Button(75, "Connect"), bpipec);
+            this.cbtn = (Button) this.add(new Button(75, "Change"), cbtnc);
+            this.pnume = (TextEntry) this.adda(new TextEntry(30, ""), pricec.add(Inventory.invsq.sz()).add(5, 0), 0.0D,
+                    1.0D);
             this.pnume.canactivate = true;
             this.pnume.dshow = true;
             this.adda(new Label("Quality:"), qualc.add(0, 0), 0.0D, 1.0D);
-            this.pqe = (TextEntry)this.adda(new TextEntry(40, ""), qualc.add(40, 0), 0.0D, 1.0D);
+            this.pqe = (TextEntry) this.adda(new TextEntry(40, ""), qualc.add(40, 0), 0.0D, 1.0D);
             this.pqe.canactivate = true;
             this.pqe.dshow = true;
         }
@@ -76,8 +77,7 @@ public class Shopbox extends Widget implements SpriteOwner, Owner {
         ResData var2 = this.res;
         GOut var3;
         if (var2 != null) {
-            label56:
-            {
+            label56: {
                 var3 = g.reclip(itemc, Inventory.invsq.sz());
                 var3.image(Inventory.invsq, Coord.z);
                 GSprite var4 = this.spr;
@@ -107,21 +107,21 @@ public class Shopbox extends Widget implements SpriteOwner, Owner {
         }
 
         Spec var8 = this.price;
-        if(var8 != null) {
+        if (var8 != null) {
             var3 = g.reclip(pricec, Inventory.invsq.sz());
             var3.image(Inventory.invsq, Coord.z);
 
             try {
                 var8.spr().draw(var3);
             } catch (Loading var6) {
-                var3.image(((Image)WItem.missing.layer(Resource.imgc)).tex(), Coord.z, Inventory.sqsz);
+                var3.image(((Image) WItem.missing.layer(Resource.imgc)).tex(), Coord.z, Inventory.sqsz);
             }
 
-            if(!this.admin && this.pnumt != null) {
+            if (!this.admin && this.pnumt != null) {
                 g.aimage(this.pnumt.tex(), pricec.add(Inventory.invsq.sz()), 0.0D, 1.0D);
             }
 
-            if(!this.admin && this.pqt != null) {
+            if (!this.admin && this.pqt != null) {
                 g.aimage(qlbl.tex(), qualc, 0.0D, 1.0D);
                 g.aimage(this.pqt.tex(), qualc.add(qlbl.tex().sz().x + 4, 0), 0.0D, 1.0D);
             }
@@ -168,7 +168,8 @@ public class Shopbox extends Widget implements SpriteOwner, Owner {
                     BufferedImage var4 = ItemInfo.longtip(this.info());
                     Pagina var5 = ((Resource) var3.res.get()).layer(Resource.pagina);
                     if (var5 != null) {
-                        var4 = ItemInfo.catimgs(0, new BufferedImage[]{var4, RichText.render("\n" + var5.text, 200, new Object[0]).img});
+                        var4 = ItemInfo.catimgs(0, new BufferedImage[] { var4,
+                                RichText.render("\n" + var5.text, 200, new Object[0]).img });
                     }
 
                     this.longtip = new TexI(var4);
@@ -240,18 +241,18 @@ public class Shopbox extends Widget implements SpriteOwner, Owner {
     }
 
     public void wdgmsg(Widget var1, String var2, Object... var3) {
-        if(var1 == this.bbtn) {
+        if (var1 == this.bbtn) {
             this.wdgmsg("buy", new Object[0]);
-        } else if(var1 == this.spipe) {
+        } else if (var1 == this.spipe) {
             this.wdgmsg("spipe", new Object[0]);
-        } else if(var1 == this.bpipe) {
+        } else if (var1 == this.bpipe) {
             this.wdgmsg("bpipe", new Object[0]);
-        } else if(var1 == this.cbtn) {
+        } else if (var1 == this.cbtn) {
             this.wdgmsg("change", new Object[0]);
-        } else if(var1 != this.pnume && var1 != this.pqe) {
+        } else if (var1 != this.pnume && var1 != this.pqe) {
             super.wdgmsg(var1, var2, var3);
         } else {
-            this.wdgmsg("price", new Object[]{parsenum(this.pnume), parsenum(this.pqe)});
+            this.wdgmsg("price", new Object[] { parsenum(this.pnume), parsenum(this.pqe) });
         }
     }
 
@@ -267,7 +268,7 @@ public class Shopbox extends Widget implements SpriteOwner, Owner {
     }
 
     private static Text rnum(String var0, int var1) {
-        return var1 < 1 ? null : Text.render(String.format(var0, new Object[]{Integer.valueOf(var1)}));
+        return var1 < 1 ? null : Text.render(String.format(var0, new Object[] { Integer.valueOf(var1) }));
     }
 
     public void uimsg(String var1, Object... var2) {
@@ -290,7 +291,7 @@ public class Shopbox extends Widget implements SpriteOwner, Owner {
             int var7;
             if (var1 == "n") {
                 var7 = ((Integer) var2[0]).intValue();
-                this.num = Text.render(String.format("%d left", new Object[]{Integer.valueOf(var7)}));
+                this.num = Text.render(String.format("%d left", new Object[] { Integer.valueOf(var7) }));
             } else if (var1 == "price") {
                 byte var8 = 0;
                 if (var2[var8] == null) {
@@ -306,12 +307,13 @@ public class Shopbox extends Widget implements SpriteOwner, Owner {
 
                     Object var6 = null;
                     if (var2[var7] instanceof Object[]) {
-                        for (var6 = new Object[0][]; var2[var7] instanceof Object[]; var6 = Utils.extend((Object[]) var6, var2[var7++])) {
+                        for (var6 = new Object[0][]; var2[var7] instanceof Object[]; var6 = Utils
+                                .extend((Object[]) var6, var2[var7++])) {
                             ;
                         }
                     }
 
-                    this.price = new Spec(new ResData(var4, (Message)var5), Spec.uictx(this.ui), (Object[])var6);
+                    this.price = new Spec(new ResData(var4, (Message) var5), Spec.uictx(this.ui), (Object[]) var6);
                 }
 
                 this.pricetip = null;
@@ -365,7 +367,6 @@ public class Shopbox extends Widget implements SpriteOwner, Owner {
         protected abstract T find(List<ItemInfo> var1);
     }
 
-
     class One extends AttrCache<Tex> {
         One(Shopbox var1) {
             super(var1);
@@ -373,7 +374,9 @@ public class Shopbox extends Widget implements SpriteOwner, Owner {
 
         protected Tex find(List<ItemInfo> var1) {
             GItem.NumberInfo var2 = ItemInfo.find(GItem.NumberInfo.class, var1);
-            return var2 == null ? null : new TexI(Utils.outline2(Text.render(Integer.toString(var2.itemnum()), Color.WHITE).img, Utils.contrast(Color.WHITE)));
+            return var2 == null ? null
+                    : new TexI(Utils.outline2(Text.render(Integer.toString(var2.itemnum()), Color.WHITE).img,
+                            Utils.contrast(Color.WHITE)));
         }
     }
 }

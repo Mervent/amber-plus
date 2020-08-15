@@ -43,10 +43,8 @@ public class ShadowMap extends GLState implements GLState.GlobalState, GLState.G
     private final Projection lproj;
     private final DirCam lcam;
     private final FBView tgt;
-    private final static Matrix4f texbias = new Matrix4f(0.5f, 0.0f, 0.0f, 0.5f,
-            0.0f, 0.5f, 0.0f, 0.5f,
-            0.0f, 0.0f, 0.5f, 0.5f,
-            0.0f, 0.0f, 0.0f, 1.0f);
+    private final static Matrix4f texbias = new Matrix4f(0.5f, 0.0f, 0.0f, 0.5f, 0.0f, 0.5f, 0.0f, 0.5f, 0.0f, 0.0f,
+            0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f);
     private final List<RenderList.Slot> parts = new ArrayList<RenderList.Slot>();
     private int slidx;
     private Matrix4f txf;
@@ -111,30 +109,21 @@ public class ShadowMap extends GLState implements GLState.GlobalState, GLState.G
                 }
             }
             Matrix4f cm = Transform.rxinvert(cam.fin(Matrix4f.id));
-        /*
-	      txf = cm;
-	      barda(txf);
-	      txf = lcam.fin(Matrix4f.id).mul(txf);
-	      barda(txf);
-	      txf = lproj.fin(Matrix4f.id).mul(txf);
-	      barda(txf);
-	      txf = texbias.mul(txf);
-	      barda(txf);
-	    */
-            txf = texbias
-                    .mul(lproj.fin(Matrix4f.id))
-                    .mul(lcam.fin(Matrix4f.id))
-                    .mul(cm);
+            /*
+             * txf = cm; barda(txf); txf = lcam.fin(Matrix4f.id).mul(txf); barda(txf); txf =
+             * lproj.fin(Matrix4f.id).mul(txf); barda(txf); txf = texbias.mul(txf);
+             * barda(txf);
+             */
+            txf = texbias.mul(lproj.fin(Matrix4f.id)).mul(lcam.fin(Matrix4f.id)).mul(cm);
             tgt.render(scene, g);
         }
     }
 
     /*
-      static void barda(Matrix4f m) {
-      float[] a = m.mul4(new float[] {0, 0, 0, 1});
-      System.err.println(String.format("(%f, %f, %f, %f)", a[0], a[1], a[2], a[3]));
-      }
-    */
+     * static void barda(Matrix4f m) { float[] a = m.mul4(new float[] {0, 0, 0, 1});
+     * System.err.println(String.format("(%f, %f, %f, %f)", a[0], a[1], a[2],
+     * a[3])); }
+     */
 
     public Global global(RenderList rl, Buffer ctx) {
         return (this);
@@ -144,7 +133,7 @@ public class ShadowMap extends GLState implements GLState.GlobalState, GLState.G
     }
 
     public void postrender(RenderList rl, GOut g) {
-	/* g.image(lbuf, Coord.z, g.sz); */
+        /* g.image(lbuf, Coord.z, g.sz); */
     }
 
     public void prep(Buffer buf) {
@@ -171,14 +160,18 @@ public class ShadowMap extends GLState implements GLState.GlobalState, GLState.G
                     if (!unroll) {
                         LValue xo = code.local(FLOAT, null).ref();
                         LValue yo = code.local(FLOAT, null).ref();
-                        code.add(new For(ass(yo, l(-yr / 2)), lt(yo, l((yr / 2) + (yd / 2))), aadd(yo, l(yd)),
-                                new For(ass(xo, l(-xr / 2)), lt(xo, l((xr / 2) + (xd / 2))), aadd(xo, l(xd)),
-                                        new If(gt(add(pick(texture2D(map.ref(), add(pick(mapc, "xy"), vec2(xo, yo))), "z"), l(thr)), pick(mapc, "z")),
+                        code.add(
+                                new For(ass(yo, l(-yr / 2)), lt(yo, l((yr / 2) + (yd / 2))), aadd(yo, l(yd)), new For(
+                                        ass(xo, l(-xr / 2)), lt(xo, l((xr / 2) + (xd / 2))), aadd(xo, l(xd)), new If(
+                                                gt(add(pick(texture2D(map.ref(), add(pick(mapc, "xy"), vec2(xo, yo))),
+                                                        "z"), l(thr)), pick(mapc, "z")),
                                                 stmt(aadd(sdw, l(1.0 / (res * res))))))));
                     } else {
                         for (double yo = -yr / 2; yo < (yr / 2) + (yd / 2); yo += yd) {
                             for (double xo = -xr / 2; xo < (xr / 2) + (xd / 2); xo += xd) {
-                                code.add(new If(gt(add(pick(texture2D(map.ref(), add(pick(mapc, "xy"), vec2(l(xo), l(yo)))), "z"), l(thr)), pick(mapc, "z")),
+                                code.add(new If(
+                                        gt(add(pick(texture2D(map.ref(), add(pick(mapc, "xy"), vec2(l(xo), l(yo)))),
+                                                "z"), l(thr)), pick(mapc, "z")),
                                         stmt(aadd(sdw, l(1.0 / (res * res))))));
                             }
                         }
@@ -195,8 +188,8 @@ public class ShadowMap extends GLState implements GLState.GlobalState, GLState.G
 
             ph.dolight.mod(new Runnable() {
                 public void run() {
-                    ph.dolight.dcalc.add(new If(eq(sl.ref(), ph.dolight.i),
-                                    stmt(amul(ph.dolight.dl.tgt, shcalc.call()))),
+                    ph.dolight.dcalc.add(
+                            new If(eq(sl.ref(), ph.dolight.i), stmt(amul(ph.dolight.dl.tgt, shcalc.call()))),
                             ph.dolight.dcurs);
                 }
             }, 0);

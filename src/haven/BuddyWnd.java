@@ -46,16 +46,9 @@ public class BuddyWnd extends Widget implements Iterable<BuddyWnd.Buddy> {
     public static final int width = 263;
     public static final Tex online = Resource.loadtex("gfx/hud/online");
     public static final Tex offline = Resource.loadtex("gfx/hud/offline");
-    public static final Color[] gc = new Color[]{
-            new Color(255, 255, 255),
-            new Color(0, 255, 0),
-            new Color(255, 0, 0),
-            new Color(166, 206, 248),
-            new Color(0, 255, 255),
-            new Color(255, 255, 0),
-            new Color(255, 0, 255),
-            new Color(255, 0, 128),
-    };
+    public static final Color[] gc = new Color[] { new Color(255, 255, 255), new Color(0, 255, 0), new Color(255, 0, 0),
+            new Color(166, 206, 248), new Color(0, 255, 255), new Color(255, 255, 0), new Color(255, 0, 255),
+            new Color(255, 0, 128), };
     private Comparator<Buddy> bcmp;
     private Comparator<Buddy> alphacmp = new Comparator<Buddy>() {
         private Collator c = Collator.getInstance();
@@ -66,14 +59,18 @@ public class BuddyWnd extends Widget implements Iterable<BuddyWnd.Buddy> {
     };
     private Comparator<Buddy> groupcmp = new Comparator<Buddy>() {
         public int compare(Buddy a, Buddy b) {
-            if (a.group == b.group) return (alphacmp.compare(a, b));
-            else return (a.group - b.group);
+            if (a.group == b.group)
+                return (alphacmp.compare(a, b));
+            else
+                return (a.group - b.group);
         }
     };
     private Comparator<Buddy> statuscmp = new Comparator<Buddy>() {
         public int compare(Buddy a, Buddy b) {
-            if (a.online == b.online) return (alphacmp.compare(a, b));
-            else return (b.online - a.online);
+            if (a.online == b.online)
+                return (alphacmp.compare(a, b));
+            else
+                return (b.online - a.online);
         }
     };
 
@@ -140,17 +137,17 @@ public class BuddyWnd extends Widget implements Iterable<BuddyWnd.Buddy> {
 
         public Map<String, Runnable> opts() {
             Map<String, Runnable> opts = new LinkedHashMap<>();
-            if(online >= 0) {
+            if (online >= 0) {
                 opts.put("Chat", this::chat);
-                if(online == 1)
+                if (online == 1)
                     opts.put("Invite", this::invite);
                 opts.put("End kinship", this::endkin);
             } else {
                 opts.put("Forget", this::forget);
             }
-            if(seen)
+            if (seen)
                 opts.put("Describe", this::describe);
-            return(opts);
+            return (opts);
         }
     }
 
@@ -216,7 +213,10 @@ public class BuddyWnd extends Widget implements Iterable<BuddyWnd.Buddy> {
             this.buddy = buddy;
             this.ava = adda(new Avaview(Avaview.dasz, -1, "avacam"), sz.x / 2, 10, 0.5, 0);
             this.nick = add(new TextEntry(sz.x - 20, buddy.name) {
-                {dshow = true;}
+                {
+                    dshow = true;
+                }
+
                 public void activate(String text) {
                     buddy.chname(text);
                     commit();
@@ -238,28 +238,28 @@ public class BuddyWnd extends Widget implements Iterable<BuddyWnd.Buddy> {
         }
 
         public void tick(double dt) {
-            if((utime != 0) && (Utils.ntime() >= utime))
+            if ((utime != 0) && (Utils.ntime() >= utime))
                 setatime();
         }
 
         private void setatime() {
             String text;
-            if(buddy.online == 1) {
+            if (buddy.online == 1) {
                 this.utime = 0;
                 text = "Last seen: Now";
             } else {
-                int au, atime = (int)((long)Utils.ntime() - this.atime);
+                int au, atime = (int) ((long) Utils.ntime() - this.atime);
                 String unit;
-                if(atime >= (604800 * 2)) {
+                if (atime >= (604800 * 2)) {
                     au = 604800;
                     unit = "week";
-                } else if(atime >= 86400) {
+                } else if (atime >= 86400) {
                     au = 86400;
                     unit = "day";
-                } else if(atime >= 3600) {
+                } else if (atime >= 3600) {
                     au = 3600;
                     unit = "hour";
-                } else if(atime >= 60) {
+                } else if (atime >= 60) {
                     au = 60;
                     unit = "minute";
                 } else {
@@ -268,20 +268,20 @@ public class BuddyWnd extends Widget implements Iterable<BuddyWnd.Buddy> {
                 }
                 int am = atime / au;
                 this.utime = this.atime + ((am + 1) * au);
-                text = "Last seen: " + am + " " + unit + ((am > 1)?"s":"") + " ago";
+                text = "Last seen: " + am + " " + unit + ((am > 1) ? "s" : "") + " ago";
             }
-            if(atimel != null)
+            if (atimel != null)
                 ui.destroy(atimel);
             atimel = add(new Label(text), 10, grp.c.y + grp.sz.y + 10);
         }
 
         private void setopts() {
-            for(Button opt : this.opts)
+            for (Button opt : this.opts)
                 ui.destroy(opt);
             Map<String, Runnable> bopts = buddy.opts();
             List<Button> opts = new ArrayList<>(bopts.size());
             int y = grp.c.y + grp.sz.y + 35;
-            for(Map.Entry<String, Runnable> opt : bopts.entrySet()) {
+            for (Map.Entry<String, Runnable> opt : bopts.entrySet()) {
                 Button btn = add(new Button(sz.x - 20, opt.getKey(), false, opt.getValue()), 10, y);
                 y = btn.c.y + btn.sz.y + 5;
                 opts.add(btn);
@@ -290,12 +290,12 @@ public class BuddyWnd extends Widget implements Iterable<BuddyWnd.Buddy> {
         }
 
         public void uimsg(String msg, Object... args) {
-            if(msg == "i-ava") {
-                Composited.Desc desc = Composited.Desc.decode(ui.sess, (Object[])args[0]);
-                Resource.Resolver map = new Resource.Resolver.ResourceMap(ui.sess, (Object[])args[1]);
+            if (msg == "i-ava") {
+                Composited.Desc desc = Composited.Desc.decode(ui.sess, (Object[]) args[0]);
+                Resource.Resolver map = new Resource.Resolver.ResourceMap(ui.sess, (Object[]) args[1]);
                 ava.pop(desc, map);
-            } else if(msg == "i-atime") {
-                atime = (long)Utils.ntime() - ((Number)args[0]).longValue();
+            } else if (msg == "i-atime") {
+                atime = (long) Utils.ntime() - ((Number) args[0]).longValue();
                 setatime();
             } else {
                 super.uimsg(msg, args);
@@ -346,7 +346,10 @@ public class BuddyWnd extends Widget implements Iterable<BuddyWnd.Buddy> {
             }
             return num;
         }
-        public boolean searchmatch(int idx, String txt) {return(buddies.get(idx).name.toLowerCase().indexOf(txt.toLowerCase()) >= 0);}
+
+        public boolean searchmatch(int idx, String txt) {
+            return (buddies.get(idx).name.toLowerCase().indexOf(txt.toLowerCase()) >= 0);
+        }
 
         protected void drawbg(GOut g) {
             g.chcolor(0, 0, 0, 128);
@@ -355,7 +358,7 @@ public class BuddyWnd extends Widget implements Iterable<BuddyWnd.Buddy> {
         }
 
         public void drawitem(GOut g, Buddy b, int idx) {
-            if(soughtitem(idx)) {
+            if (soughtitem(idx)) {
                 g.chcolor(255, 255, 0, 32);
                 g.frect(Coord.z, g.sz);
                 g.chcolor();
@@ -376,15 +379,15 @@ public class BuddyWnd extends Widget implements Iterable<BuddyWnd.Buddy> {
         }
 
         public void change(Buddy b) {
-            if(b == null) {
-                BuddyWnd.this.wdgmsg("ch", (Object)null);
+            if (b == null) {
+                BuddyWnd.this.wdgmsg("ch", (Object) null);
             } else {
                 BuddyWnd.this.wdgmsg("ch", b.id);
             }
         }
 
         public void opts(final Buddy b, Coord c) {
-            if(menu == null) {
+            if (menu == null) {
                 Map<String, Runnable> bopts = b.opts();
                 menu = new FlowerMenu(bopts.keySet().toArray(new String[0])) {
                     public void destroy() {
@@ -393,9 +396,9 @@ public class BuddyWnd extends Widget implements Iterable<BuddyWnd.Buddy> {
                     }
 
                     public void choose(Petal opt) {
-                        if(opt != null) {
+                        if (opt != null) {
                             Runnable act = bopts.get(opt.name);
-                            if(act != null)
+                            if (act != null)
                                 act.run();
                             uimsg("act", opt.num);
                         } else {
@@ -462,9 +465,12 @@ public class BuddyWnd extends Widget implements Iterable<BuddyWnd.Buddy> {
         if (sort.equals("")) {
             bcmp = statuscmp;
         } else {
-            if (sort.equals("alpha")) bcmp = alphacmp;
-            if (sort.equals("group")) bcmp = groupcmp;
-            if (sort.equals("status")) bcmp = statuscmp;
+            if (sort.equals("alpha"))
+                bcmp = alphacmp;
+            if (sort.equals("group"))
+                bcmp = groupcmp;
+            if (sort.equals("status"))
+                bcmp = statuscmp;
         }
         y += 35;
 
@@ -557,9 +563,12 @@ public class BuddyWnd extends Widget implements Iterable<BuddyWnd.Buddy> {
     private void setcmp(Comparator<Buddy> cmp) {
         bcmp = cmp;
         String val = "";
-        if (cmp == alphacmp) val = "alpha";
-        if (cmp == groupcmp) val = "group";
-        if (cmp == statuscmp) val = "status";
+        if (cmp == alphacmp)
+            val = "alpha";
+        if (cmp == groupcmp)
+            val = "group";
+        if (cmp == statuscmp)
+            val = "status";
         Utils.setpref("buddysort", val);
         synchronized (buddies) {
             Collections.sort(buddies, bcmp);
@@ -630,24 +639,24 @@ public class BuddyWnd extends Widget implements Iterable<BuddyWnd.Buddy> {
             pname.settext((String) args[0]);
             pname.buf.point = pname.buf.line.length();
             pname.commit();
-        } else if(msg == "i-set") {
-            Buddy b = (args[0] == null) ? null : find((Integer)args[0]);
+        } else if (msg == "i-set") {
+            Buddy b = (args[0] == null) ? null : find((Integer) args[0]);
             bl.sel = b;
-            if((info == null) || (info.buddy != b)) {
-                if(info != null) {
+            if ((info == null) || (info.buddy != b)) {
+                if (info != null) {
                     ui.destroy(info);
                     ui.destroy(infof);
                     info = null;
                     pack();
                 }
-                if(b != null) {
+                if (b != null) {
                     info = add(new BuddyInfo(new Coord(225, sz.y - 35 - Window.wbox.bisz().y), b), width + 20, 35);
                     infof = Frame.around(this, Collections.singletonList(info));
                 }
                 pack();
             }
-        } else if(msg.substring(0, 2).equals("i-")) {
-            if(info != null)
+        } else if (msg.substring(0, 2).equals("i-")) {
+            if (info != null)
                 info.uimsg(msg, args);
         } else {
             super.uimsg(msg, args);

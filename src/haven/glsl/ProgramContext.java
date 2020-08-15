@@ -40,8 +40,10 @@ public class ProgramContext {
     public boolean instanced = false;
     private final Collection<Object> mods = new LinkedList<Object>();
 
-    public static final Variable gl_LightSource = new Variable.Implicit(new Array(Struct.gl_LightSourceParameters), new Symbol.Fix("gl_LightSource"));
-    public static final Variable gl_FrontMaterial = new Variable.Implicit(Struct.gl_MaterialParameters, new Symbol.Fix("gl_FrontMaterial"));
+    public static final Variable gl_LightSource = new Variable.Implicit(new Array(Struct.gl_LightSourceParameters),
+            new Symbol.Fix("gl_LightSource"));
+    public static final Variable gl_FrontMaterial = new Variable.Implicit(Struct.gl_MaterialParameters,
+            new Symbol.Fix("gl_FrontMaterial"));
 
     public ProgramContext() {
         vctx = new VertexContext(this);

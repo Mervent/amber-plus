@@ -63,6 +63,7 @@ public class OCache implements Iterable<Gob> {
 
     public interface ChangeCallback {
         public void changed(Gob ob);
+
         public void removed(Gob ob);
     }
 
@@ -76,7 +77,7 @@ public class OCache implements Iterable<Gob> {
 
     public void changed(Gob ob) {
         ob.changed();
-        for(ChangeCallback cb : cbs)
+        for (ChangeCallback cb : cbs)
             cb.changed(ob);
     }
 
@@ -86,7 +87,7 @@ public class OCache implements Iterable<Gob> {
                 Gob old = objs.remove(id);
                 deleted.put(id, frame);
                 old.dispose();
-                for(ChangeCallback cb : cbs)
+                for (ChangeCallback cb : cbs)
                     cb.removed(old);
             }
         }
@@ -94,8 +95,8 @@ public class OCache implements Iterable<Gob> {
 
     public synchronized void remove(long id) {
         Gob old = objs.remove(id);
-        if(old != null) {
-            for(ChangeCallback cb : cbs)
+        if (old != null) {
+            for (ChangeCallback cb : cbs)
                 cb.removed(old);
         }
     }
@@ -123,7 +124,8 @@ public class OCache implements Iterable<Gob> {
                             if (dmgspr.owner == g)
                                 g.ols.add(new Gob.Overlay(DamageSprite.ID, dmgspr));
                             else
-                                g.ols.add(new Gob.Overlay(DamageSprite.ID, new DamageSprite(dmgspr.dmg, dmgspr.arm, g)));
+                                g.ols.add(
+                                        new Gob.Overlay(DamageSprite.ID, new DamageSprite(dmgspr.dmg, dmgspr.arm, g)));
                         }
                     }
                 }
@@ -140,19 +142,19 @@ public class OCache implements Iterable<Gob> {
     }
 
     public synchronized void ladd(Collection<Gob> gob) {
-	local.add(gob);
-	for(Gob g : gob) {
-	    for(ChangeCallback cb : cbs)
-		cb.changed(g);
-	}
+        local.add(gob);
+        for (Gob g : gob) {
+            for (ChangeCallback cb : cbs)
+                cb.changed(g);
+        }
     }
 
     public synchronized void lrem(Collection<Gob> gob) {
-	local.remove(gob);
-	for(Gob g : gob) {
-	    for(ChangeCallback cb : cbs)
-		cb.removed(g);
-	}
+        local.remove(gob);
+        for (Gob g : gob) {
+            for (ChangeCallback cb : cbs)
+                cb.removed(g);
+        }
     }
 
     public synchronized Gob getgob(long id) {
@@ -182,7 +184,7 @@ public class OCache implements Iterable<Gob> {
             else
                 return (ret);
         }
-    /* XXX: Clean up in deleted */
+        /* XXX: Clean up in deleted */
     }
 
     private long nextvirt = -1;
@@ -200,7 +202,7 @@ public class OCache implements Iterable<Gob> {
     }
 
     private Indir<Resource> getres(int id) {
-        return(glob.sess.getres(id));
+        return (glob.sess.getres(id));
     }
 
     public synchronized void move(Gob g, Coord2d c, double a) {
@@ -211,7 +213,7 @@ public class OCache implements Iterable<Gob> {
     public void move(Gob gob, Message msg) {
         Coord2d c = msg.coord().mul(posres);
         int ia = msg.uint16();
-        if(gob != null)
+        if (gob != null)
             move(gob, c, (ia / 65536.0) * Math.PI * 2);
     }
 
@@ -219,7 +221,8 @@ public class OCache implements Iterable<Gob> {
         MessageBuf sdt = new MessageBuf(dat);
         Drawable dr = g.getattr(Drawable.class);
         ResDrawable d = (dr instanceof ResDrawable) ? (ResDrawable) dr : null;
-        if ((d != null) && (d.res == res) && !d.sdt.equals(sdt) && (d.spr != null) && (d.spr instanceof Gob.Overlay.CUpd)) {
+        if ((d != null) && (d.res == res) && !d.sdt.equals(sdt) && (d.spr != null)
+                && (d.spr instanceof Gob.Overlay.CUpd)) {
             ((Gob.Overlay.CUpd) d.spr).update(sdt);
             d.sdt = sdt;
         } else if ((d == null) || (d.res != res) || !d.sdt.equals(sdt)) {
@@ -231,11 +234,11 @@ public class OCache implements Iterable<Gob> {
     public void cres(Gob gob, Message msg) {
         int resid = msg.uint16();
         Message sdt = Message.nil;
-        if((resid & 0x8000) != 0) {
+        if ((resid & 0x8000) != 0) {
             resid &= ~0x8000;
             sdt = new MessageBuf(msg.bytes(msg.uint8()));
         }
-        if(gob != null)
+        if (gob != null)
             cres(gob, getres(resid), sdt);
     }
 
@@ -250,7 +253,7 @@ public class OCache implements Iterable<Gob> {
     public void linbeg(Gob gob, Message msg) {
         Coord2d s = msg.coord().mul(posres);
         Coord2d v = msg.coord().mul(posres);
-        if(gob != null)
+        if (gob != null)
             linbeg(gob, s, v);
     }
 
@@ -273,17 +276,17 @@ public class OCache implements Iterable<Gob> {
     public void linstep(Gob gob, Message msg) {
         double t, e;
         int w = msg.int32();
-        if(w == -1) {
+        if (w == -1) {
             t = e = -1;
-        } else if((w & 0x80000000) == 0) {
+        } else if ((w & 0x80000000) == 0) {
             t = w * 0x1p-10;
             e = -1;
         } else {
             t = (w & ~0x80000000) * 0x1p-10;
             w = msg.int32();
-            e = (w < 0)?-1:(w * 0x1p-10);
+            e = (w < 0) ? -1 : (w * 0x1p-10);
         }
-        if(gob != null)
+        if (gob != null)
             linstep(gob, t, e);
     }
 
@@ -321,11 +324,12 @@ public class OCache implements Iterable<Gob> {
 
     public void composite(Gob gob, Message msg) {
         Indir<Resource> base = getres(msg.uint16());
-        if(gob != null)
+        if (gob != null)
             composite(gob, base);
     }
 
-    public synchronized void cmppose(Gob g, int pseq, List<ResData> poses, List<ResData> tposes, boolean interp, float ttime) {
+    public synchronized void cmppose(Gob g, int pseq, List<ResData> poses, List<ResData> tposes, boolean interp,
+            float ttime) {
         Composite cmp = (Composite) g.getattr(Drawable.class);
         if (cmp != null && cmp.pseq != pseq) {
             cmp.pseq = pseq;
@@ -545,7 +549,7 @@ public class OCache implements Iterable<Gob> {
 
     public synchronized void homing(Gob g, long oid, Coord2d tc, double v) {
         Homing homo = g.getattr(Homing.class);
-        if((homo == null) || (homo.tgt != oid)) {
+        if ((homo == null) || (homo.tgt != oid)) {
             g.setattr(new Homing(g, oid, tc, v));
         } else {
             homo.tc = tc;
@@ -556,13 +560,13 @@ public class OCache implements Iterable<Gob> {
 
     public void homing(Gob gob, Message msg) {
         long oid = msg.uint32();
-        if(oid == 0xffffffffl) {
-            if(gob != null)
+        if (oid == 0xffffffffl) {
+            if (gob != null)
                 homostop(gob);
         } else {
             Coord2d tgtc = msg.coord().mul(posres);
             double v = msg.int32() * 0x1p-10 * 11;
-            if(gob != null)
+            if (gob != null)
                 homing(gob, oid, tgtc, v);
         }
     }
@@ -737,8 +741,8 @@ public class OCache implements Iterable<Gob> {
     public void resattr(Gob gob, Message msg) {
         Indir<Resource> resid = getres(msg.uint16());
         int len = msg.uint8();
-        Message dat = (len > 0)?new MessageBuf(msg.bytes(len)):null;
-        if(gob != null)
+        Message dat = (len > 0) ? new MessageBuf(msg.bytes(len)) : null;
+        if (gob != null)
             resattr(gob, resid, dat);
     }
 

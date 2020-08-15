@@ -54,12 +54,14 @@ public class Window extends Widget implements DTarget {
     public static final int capo = 7, capio = 2;
     public static final Coord dlmrgn = new Coord(23, 14), dsmrgn = new Coord(9, 9);
     public static final BufferedImage ctex = Resource.loadimg("gfx/hud/fonttex");
-    public static final Text.Furnace cf = new Text.Imager(new PUtils.TexFurn(new Text.Foundry(Text.sans, Text.cfg.wndCap).aa(true), ctex)) {
+    public static final Text.Furnace cf = new Text.Imager(
+            new PUtils.TexFurn(new Text.Foundry(Text.sans, Text.cfg.wndCap).aa(true), ctex)) {
         protected BufferedImage proc(Text text) {
             return (rasterimg(blurmask2(text.img.getRaster(), 1, 1, Color.BLACK)));
         }
     };
-    public static final IBox wbox = new IBox("gfx/hud/wnd", "tl", "tr", "bl", "br", "extvl", "extvr", "extht", "exthb") {
+    public static final IBox wbox = new IBox("gfx/hud/wnd", "tl", "tr", "bl", "br", "extvl", "extvr", "extht",
+            "exthb") {
         final Coord co = new Coord(3, 3), bo = new Coord(2, 2);
 
         public Coord btloff() {
@@ -78,10 +80,8 @@ public class Window extends Widget implements DTarget {
             return (super.cisz().sub(co.mul(2)));
         }
     };
-    private static final BufferedImage[] cbtni = new BufferedImage[]{
-            Resource.loadimg("gfx/hud/wnd/lg/cbtnu"),
-            Resource.loadimg("gfx/hud/wnd/lg/cbtnd"),
-            Resource.loadimg("gfx/hud/wnd/lg/cbtnh")};
+    private static final BufferedImage[] cbtni = new BufferedImage[] { Resource.loadimg("gfx/hud/wnd/lg/cbtnu"),
+            Resource.loadimg("gfx/hud/wnd/lg/cbtnd"), Resource.loadimg("gfx/hud/wnd/lg/cbtnh") };
     public final Coord tlo, rbo, mrgn;
     public final IButton cbtn;
     public boolean dt = false;
@@ -109,7 +109,7 @@ public class Window extends Widget implements DTarget {
         origcap = cap;
         cbtn = add(new IButton(cbtni[0], cbtni[1], cbtni[2]));
         chcap(Resource.getLocString(Resource.BUNDLE_WINDOW, cap));
-	resize2(sz);
+        resize2(sz);
         setfocustab(true);
     }
 
@@ -186,17 +186,13 @@ public class Window extends Widget implements DTarget {
             g.image(bgr, bgc, ctl, csz);
         cdraw(g.reclip(atl, asz));
         drawframe(g);
-    /*
-    wbox.draw(g, wtl, wsz);
-	if(cap != null) {
-	    int w = cap.sz().x;
-	    int y = wtl.y - capo;
-	    g.image(cl, new Coord(wtl.x + (wsz.x / 2) - (w / 2) - cl.sz().x, y));
-	    g.image(cm, new Coord(wtl.x + (wsz.x / 2) - (w / 2), y), new Coord(w, cm.sz().y));
-	    g.image(cr, new Coord(wtl.x + (wsz.x / 2) + (w / 2), y));
-	    g.image(cap.tex(), new Coord(wtl.x + (wsz.x / 2) - (w / 2), y + capio));
-	}
-	*/
+        /*
+         * wbox.draw(g, wtl, wsz); if(cap != null) { int w = cap.sz().x; int y = wtl.y -
+         * capo; g.image(cl, new Coord(wtl.x + (wsz.x / 2) - (w / 2) - cl.sz().x, y));
+         * g.image(cm, new Coord(wtl.x + (wsz.x / 2) - (w / 2), y), new Coord(w,
+         * cm.sz().y)); g.image(cr, new Coord(wtl.x + (wsz.x / 2) + (w / 2), y));
+         * g.image(cap.tex(), new Coord(wtl.x + (wsz.x / 2) - (w / 2), y + capio)); }
+         */
         super.draw(g);
     }
 
@@ -238,7 +234,7 @@ public class Window extends Widget implements DTarget {
     }
 
     public void resize(Coord sz) {
-	resize2(sz);
+        resize2(sz);
     }
 
     public void uimsg(String msg, Object... args) {
@@ -268,7 +264,8 @@ public class Window extends Widget implements DTarget {
             return (true);
         }
         Coord cpc = c.sub(cptl);
-        if (c.isect(ctl, csz) || (c.isect(cptl, cpsz) && (cm.back.getRaster().getSample(cpc.x % cm.back.getWidth(), cpc.y, 3) >= 128))) {
+        if (c.isect(ctl, csz) || (c.isect(cptl, cpsz)
+                && (cm.back.getRaster().getSample(cpc.x % cm.back.getWidth(), cpc.y, 3) >= 128))) {
             if (button == 1) {
                 dm = ui.grabmouse(this);
                 doff = c;
@@ -309,9 +306,9 @@ public class Window extends Widget implements DTarget {
     }
 
     public boolean keydown(java.awt.event.KeyEvent ev) {
-        if(super.keydown(ev))
+        if (super.keydown(ev))
             return (true);
-        if(ev.getKeyChar() == 27) {
+        if (ev.getKeyChar() == 27) {
             wdgmsg("close");
             return (true);
         }

@@ -115,9 +115,9 @@ public abstract class Listbox<T> extends ListWidget<T> {
     }
 
     public void resize(Coord sz) {
-	super.resize(sz);
-    this.h = Math.max(sz.y / itemh, 1);
-	sb.resize(sz.y);
-	sb.c = new Coord(sz.x - sb.sz.x, 0);
+        super.resize(sz);
+        this.h = Math.max(sz.y / itemh, 1);
+        sb.resize(sz.y);
+        sb.c = new Coord(sz.x - sb.sz.x, 0);
     }
 }

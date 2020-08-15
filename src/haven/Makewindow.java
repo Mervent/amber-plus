@@ -52,8 +52,7 @@ public class Makewindow extends Widget {
     }
 
     private static final OwnerContext.ClassResolver<Makewindow> ctxr = new OwnerContext.ClassResolver<Makewindow>()
-            .add(Glob.class, wdg -> wdg.ui.sess.glob)
-            .add(Session.class, wdg -> wdg.ui.sess);
+            .add(Glob.class, wdg -> wdg.ui.sess.glob).add(Session.class, wdg -> wdg.ui.sess);
 
     public class Spec implements GSprite.Owner, ItemInfo.SpriteOwner {
         public Indir<Resource> res;
@@ -67,7 +66,8 @@ public class Makewindow extends Widget {
             this.res = res;
             this.sdt = new MessageBuf(sdt);
             if (num >= 0)
-                this.num = new TexI(Utils.outline2(Text.render(Integer.toString(num), Color.WHITE,  Text.num10Fnd).img, Utils.contrast(Color.WHITE)));
+                this.num = new TexI(Utils.outline2(Text.render(Integer.toString(num), Color.WHITE, Text.num10Fnd).img,
+                        Utils.contrast(Color.WHITE)));
             else
                 this.num = null;
             this.rawinfo = info;
@@ -85,15 +85,16 @@ public class Makewindow extends Widget {
         }
 
         private int opt = 0;
+
         public boolean opt() {
-            if(opt == 0) {
+            if (opt == 0) {
                 try {
                     opt = (ItemInfo.find(Optional.class, info()) != null) ? 1 : 2;
-                } catch(Loading l) {
-                    return(false);
+                } catch (Loading l) {
+                    return (false);
                 }
             }
-            return(opt == 1);
+            return (opt == 1);
         }
 
         public BufferedImage shorttip() {
@@ -193,25 +194,25 @@ public class Makewindow extends Widget {
     public void uimsg(String msg, Object... args) {
         if (msg == "inpop") {
             List<Spec> inputs = new LinkedList<Spec>();
-            for (int i = 0; i < args.length; ) {
+            for (int i = 0; i < args.length;) {
                 int resid = (Integer) args[i++];
                 Message sdt = (args[i] instanceof byte[]) ? new MessageBuf((byte[]) args[i++]) : MessageBuf.nil;
                 int num = (Integer) args[i++];
                 Object[] info = {};
-                if((i < args.length) && (args[i] instanceof Object[]))
-                    info = (Object[])args[i++];
+                if ((i < args.length) && (args[i] instanceof Object[]))
+                    info = (Object[]) args[i++];
                 inputs.add(new Spec(ui.sess.getres(resid), sdt, num, info));
             }
             this.inputs = inputs;
         } else if (msg == "opop") {
             List<Spec> outputs = new LinkedList<Spec>();
-            for (int i = 0; i < args.length; ) {
+            for (int i = 0; i < args.length;) {
                 int resid = (Integer) args[i++];
                 Message sdt = (args[i] instanceof byte[]) ? new MessageBuf((byte[]) args[i++]) : MessageBuf.nil;
                 int num = (Integer) args[i++];
                 Object[] info = {};
-                if((i < args.length) && (args[i] instanceof Object[]))
-                    info = (Object[])args[i++];
+                if ((i < args.length) && (args[i] instanceof Object[]))
+                    info = (Object[]) args[i++];
                 outputs.add(new Spec(ui.sess.getres(resid), sdt, num, info));
             }
             this.outputs = outputs;
@@ -230,12 +231,12 @@ public class Makewindow extends Widget {
     public void draw(GOut g) {
         Coord c = new Coord(xoff, 0);
         boolean popt = false;
-        for(Spec s : inputs) {
+        for (Spec s : inputs) {
             boolean opt = s.opt();
-            if(opt != popt)
+            if (opt != popt)
                 c = c.add(10, 0);
             GOut sg = g.reclip(c, Inventory.invsq.sz());
-            if(opt) {
+            if (opt) {
                 sg.chcolor(0, 255, 0, 255);
                 sg.image(Inventory.invsq, Coord.z);
                 sg.chcolor();
@@ -297,8 +298,8 @@ public class Makewindow extends Widget {
 
                 if (product != qModProduct) {
                     qModProduct = product;
-                    softcap = Text.renderstroked("" + (int) Math.pow(product, 1.0 / qmodValues.size()),
-                            Color.WHITE, Color.BLACK, Text.num12boldFnd).tex();
+                    softcap = Text.renderstroked("" + (int) Math.pow(product, 1.0 / qmodValues.size()), Color.WHITE,
+                            Color.BLACK, Text.num12boldFnd).tex();
                 }
 
                 Coord sz = softcap.sz();
@@ -339,11 +340,11 @@ public class Makewindow extends Widget {
         find: {
             c = new Coord(xoff, 0);
             boolean popt = false;
-            for(Spec s : inputs) {
+            for (Spec s : inputs) {
                 boolean opt = s.opt();
-                if(opt != popt)
+                if (opt != popt)
                     c = c.add(10, 0);
-                if(mc.isect(c, Inventory.invsq.sz())) {
+                if (mc.isect(c, Inventory.invsq.sz())) {
                     tspec = s;
                     break find;
                 }
@@ -351,8 +352,8 @@ public class Makewindow extends Widget {
                 popt = opt;
             }
             c = new Coord(xoff, outy);
-            for(Spec s : outputs) {
-                if(mc.isect(c, Inventory.invsq.sz())) {
+            for (Spec s : outputs) {
+                if (mc.isect(c, Inventory.invsq.sz())) {
                     tspec = s;
                     break find;
                 }
@@ -413,12 +414,13 @@ public class Makewindow extends Widget {
 
     public static class Optional extends ItemInfo.Tip {
         public static final Text text = RichText.render("$i{Optional}", 0);
+
         public Optional(Owner owner) {
             super(owner);
         }
 
         public BufferedImage tipimg() {
-            return(text.img);
+            return (text.img);
         }
     }
 

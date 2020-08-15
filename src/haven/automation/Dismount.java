@@ -1,6 +1,5 @@
 package haven.automation;
 
-
 import haven.*;
 
 import static haven.OCache.posres;
@@ -33,6 +32,7 @@ public class Dismount implements Runnable {
             return;
 
         FlowerMenu.setNextSelection("Dismount rider");
-        gui.map.wdgmsg("click", animal.sc, animal.rc.floor(posres), 3, 0, 0, (int) animal.id, animal.rc.floor(posres), 0, -1);
+        gui.map.wdgmsg("click", animal.sc, animal.rc.floor(posres), 3, 0, 0, (int) animal.id, animal.rc.floor(posres),
+                0, -1);
     }
 }

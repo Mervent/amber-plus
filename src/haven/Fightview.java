@@ -38,8 +38,11 @@ public class Fightview extends Widget {
     public static final Coord cavac = new Coord(width - Avaview.dasz.x - 10, 10);
     public static final Coord cgivec = new Coord(cavac.x - 35, cavac.y);
     public static final Coord cpursc = new Coord(cavac.x - 75, cgivec.y + 35);
-    public final  LinkedList<Relation> lsrel = new LinkedList<Relation>();
-    public final Bufflist buffs = add(new Bufflist()); {buffs.hide();}
+    public final LinkedList<Relation> lsrel = new LinkedList<Relation>();
+    public final Bufflist buffs = add(new Bufflist());
+    {
+        buffs.hide();
+    }
     public final Map<Long, Widget> obinfo = new HashMap<>();
     public Relation current = null;
     public Indir<Resource> blk, batk, iatk;
@@ -68,7 +71,10 @@ public class Fightview extends Widget {
         {
             buffs.hide();
         }
-        public final Bufflist relbuffs = add(new Bufflist()); {relbuffs.hide();}
+        public final Bufflist relbuffs = add(new Bufflist());
+        {
+            relbuffs.hide();
+        }
         public int ip, oip;
         public Indir<Resource> lastact = null;
         public double lastuse = 0;
@@ -109,7 +115,8 @@ public class Fightview extends Widget {
                     Resource res = lastact.get();
                     Resource.Tooltip tt = res.layer(Resource.tooltip);
                     if (tt == null) {
-                        gameui().syslog.append("Combat: WARNING! tooltip is missing for " + res.name + ". Notify Jorb/Loftar about this.", combatLogOpClr);
+                        gameui().syslog.append("Combat: WARNING! tooltip is missing for " + res.name
+                                + ". Notify Jorb/Loftar about this.", combatLogOpClr);
                         return;
                     }
                     gameui().syslog.append(String.format("%d: %s, ip %d - %d", gobid, tt.t, ip, oip), combatLogOpClr);
@@ -127,11 +134,14 @@ public class Fightview extends Widget {
                 Resource res = lastact.get();
                 Resource.Tooltip tt = res.layer(Resource.tooltip);
                 if (tt == null) {
-                    gameui().syslog.append("Combat: WARNING! tooltip is missing for " + res.name + ". Notify Jorb/Loftar about this.", combatLogMeClr);
+                    gameui().syslog.append(
+                            "Combat: WARNING! tooltip is missing for " + res.name + ". Notify Jorb/Loftar about this.",
+                            combatLogMeClr);
                     return;
                 }
                 String cd = Utils.fmt1DecPlace(atkct - lastuse);
-                gameui().syslog.append(String.format("me: %s, ip %d - %d, cd %ss", tt.t, current.ip, current.oip, cd), combatLogMeClr);
+                gameui().syslog.append(String.format("me: %s, ip %d - %d, cd %ss", tt.t, current.ip, current.oip, cd),
+                        combatLogMeClr);
             } catch (Loading l) {
             }
         }
@@ -156,44 +166,51 @@ public class Fightview extends Widget {
             else
                 p = getrel((Integer) args[1]).buffs;
             p.addchild(child);
-        } else if(args[0].equals("relbuff")) {
-            getrel((Integer)args[1]).relbuffs.addchild(child);
+        } else if (args[0].equals("relbuff")) {
+            getrel((Integer) args[1]).relbuffs.addchild(child);
         } else {
             super.addchild(child, args);
         }
     }
 
-    /* XXX? It's a bit ugly that there's no trimming of obinfo, but
-     * it's not obvious that one really ever wants it trimmed, and
-     * it's really not like it uses a lot of memory. */
+    /*
+     * XXX? It's a bit ugly that there's no trimming of obinfo, but it's not obvious
+     * that one really ever wants it trimmed, and it's really not like it uses a lot
+     * of memory.
+     */
     public Widget obinfo(long gobid, boolean creat) {
-        synchronized(obinfo) {
+        synchronized (obinfo) {
             Widget ret = obinfo.get(gobid);
-            if((ret == null) && creat)
+            if ((ret == null) && creat)
                 obinfo.put(gobid, ret = new AWidget());
-            return(ret);
+            return (ret);
         }
     }
 
     public <T extends Widget> T obinfo(long gobid, Class<T> cl, boolean creat) {
         Widget cnt = obinfo(gobid, creat);
-        if(cnt == null)
-            return(null);
+        if (cnt == null)
+            return (null);
         T ret = cnt.getchild(cl);
-        if((ret == null) && creat) {
+        if ((ret == null) && creat) {
             try {
                 ret = Utils.construct(cl.getConstructor());
-            } catch(NoSuchMethodException e) {
-                throw(new RuntimeException(e));
+            } catch (NoSuchMethodException e) {
+                throw (new RuntimeException(e));
             }
             cnt.add(ret);
         }
-        return(ret);
+        return (ret);
     }
 
     public static interface ObInfo {
-        public default int prio() {return(1000);}
-        public default Coord2d grav() {return(new Coord2d(0, 1));}
+        public default int prio() {
+            return (1000);
+        }
+
+        public default Coord2d grav() {
+            return (new Coord2d(0, 1));
+        }
     }
 
     private void setcur(Relation rel) {
@@ -236,9 +253,9 @@ public class Fightview extends Widget {
 
     public void tick(double dt) {
         super.tick(dt);
-        for(Relation rel : lsrel) {
+        for (Relation rel : lsrel) {
             Widget inf = obinfo(rel.gobid, false);
-            if(inf != null)
+            if (inf != null)
                 inf.tick(dt);
         }
     }
@@ -345,12 +362,12 @@ public class Fightview extends Widget {
             rel.ip = (Integer) args[2];
             rel.oip = (Integer) args[3];
             return;
-        } else if(msg == "used") {
-            use((args[0] == null)?null:ui.sess.getres((Integer)args[0]));
+        } else if (msg == "used") {
+            use((args[0] == null) ? null : ui.sess.getres((Integer) args[0]));
             return;
-        } else if(msg == "ruse") {
-            Relation rel = getrel((Integer)args[0]);
-            rel.use((args[1] == null)?null:ui.sess.getres((Integer)args[1]));
+        } else if (msg == "ruse") {
+            Relation rel = getrel((Integer) args[0]);
+            rel.use((args[1] == null) ? null : ui.sess.getres((Integer) args[1]));
             return;
         } else if (msg == "cur") {
             try {
@@ -363,7 +380,7 @@ public class Fightview extends Widget {
             }
             return;
         } else if (msg == "atkc") {
-            atkcd = ((Number)args[0]).doubleValue();
+            atkcd = ((Number) args[0]).doubleValue();
             atkcs = Utils.rtime();
             atkct = atkcs + (atkcd * 0.06);
             return;

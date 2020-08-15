@@ -82,9 +82,9 @@ public class GOut {
         public static String constname(Class<?> cl, int val) {
             String ret = null;
             for (java.lang.reflect.Field f : cl.getFields()) {
-                if (((f.getModifiers() & java.lang.reflect.Modifier.STATIC) != 0) &&
-                        ((f.getModifiers() & java.lang.reflect.Modifier.PUBLIC) != 0) &&
-                        (f.getType() == Integer.TYPE)) {
+                if (((f.getModifiers() & java.lang.reflect.Modifier.STATIC) != 0)
+                        && ((f.getModifiers() & java.lang.reflect.Modifier.PUBLIC) != 0)
+                        && (f.getType() == Integer.TYPE)) {
                     int v;
                     try {
                         v = f.getInt(null);
@@ -317,7 +317,8 @@ public class GOut {
         checkerr();
     }
 
-    public void atextstroked(String text, Coord c, double ax, double ay, Color color, Color stroke, Text.Foundry foundry) {
+    public void atextstroked(String text, Coord c, double ax, double ay, Color color, Color stroke,
+            Text.Foundry foundry) {
         Text t = Text.renderstroked(text, color, stroke, foundry);
         Tex T = t.tex();
         Coord sz = t.sz();
@@ -346,7 +347,8 @@ public class GOut {
         for (int i = 0; i < c.length; i += 2) {
             Coord vc = (Coord) c[i];
             Color col = (Color) c[i + 1];
-            gl.glColor4f((col.getRed() / 255.0f), (col.getGreen() / 255.0f), (col.getBlue() / 255.0f), (col.getAlpha() / 255.0f));
+            gl.glColor4f((col.getRed() / 255.0f), (col.getGreen() / 255.0f), (col.getBlue() / 255.0f),
+                    (col.getAlpha() / 255.0f));
             vertex(vc);
         }
         gl.glEnd();
@@ -371,10 +373,14 @@ public class GOut {
             return;
         ul = tx.add(ul);
         Coord br = ul.add(sz);
-        if (ul.x < this.ul.x) ul.x = this.ul.x;
-        if (ul.y < this.ul.y) ul.y = this.ul.y;
-        if (br.x > this.ul.x + this.sz.x) br.x = this.ul.x + this.sz.x;
-        if (br.y > this.ul.y + this.sz.y) br.y = this.ul.y + this.sz.y;
+        if (ul.x < this.ul.x)
+            ul.x = this.ul.x;
+        if (ul.y < this.ul.y)
+            ul.y = this.ul.y;
+        if (br.x > this.ul.x + this.sz.x)
+            br.x = this.ul.x + this.sz.x;
+        if (br.y > this.ul.y + this.sz.y)
+            br.y = this.ul.y + this.sz.y;
         if ((ul.x >= br.x) || (ul.y >= br.y))
             return;
         st.set(cur2d);
@@ -433,10 +439,14 @@ public class GOut {
         float r = tl + ((tr - tl) * ((float) brt.x) / ((float) sz.x));
         float b = tt + ((tb - tt) * ((float) brt.y) / ((float) sz.y));
         gl.glBegin(GL2.GL_QUADS);
-        gl.glTexCoord2f(l, 1 - t); gl.glVertex2i(ul.x, ul.y);
-        gl.glTexCoord2f(r, 1 - t); gl.glVertex2i(br.x, ul.y);
-        gl.glTexCoord2f(r, 1 - b); gl.glVertex2i(br.x, br.y);
-        gl.glTexCoord2f(l, 1 - b); gl.glVertex2i(ul.x, br.y);
+        gl.glTexCoord2f(l, 1 - t);
+        gl.glVertex2i(ul.x, ul.y);
+        gl.glTexCoord2f(r, 1 - t);
+        gl.glVertex2i(br.x, ul.y);
+        gl.glTexCoord2f(r, 1 - b);
+        gl.glVertex2i(br.x, br.y);
+        gl.glTexCoord2f(l, 1 - b);
+        gl.glVertex2i(ul.x, br.y);
         gl.glEnd();
         checkerr();
     }
@@ -454,9 +464,9 @@ public class GOut {
         double d = 0.1;
         int i = 0;
         double a = a1;
-        while(true) {
-            vertex(c.add((int)Math.round(Math.cos(a) * r.x), -(int)Math.round(Math.sin(a) * r.y)));
-            if(a >= a2)
+        while (true) {
+            vertex(c.add((int) Math.round(Math.cos(a) * r.x), -(int) Math.round(Math.sin(a) * r.y)));
+            if (a >= a2)
                 break;
             a = Math.min(a + d, a2);
         }
@@ -523,8 +533,7 @@ public class GOut {
         vertex(c);
         vertex(c.add(0, ul.y));
         double p2 = Math.PI / 2;
-        all:
-        {
+        all: {
             float tc;
 
             tc = (float) (Math.tan(a) * -ul.y);
@@ -629,8 +638,10 @@ public class GOut {
         gl.bglSubmit(new BGL.Request() {
             public void run(GL2 gl) {
                 byte[] buf = new byte[4];
-                gl.glReadPixels(c.x + tx.x, root.sz.y - c.y - tx.y, 1, 1, GL.GL_RGBA, GL2.GL_UNSIGNED_BYTE, ByteBuffer.wrap(buf));
-                Color result = new Color(((int)buf[0]) & 0xff, ((int)buf[1]) & 0xff, ((int)buf[2]) & 0xff, ((int)buf[3]) & 0xff);
+                gl.glReadPixels(c.x + tx.x, root.sz.y - c.y - tx.y, 1, 1, GL.GL_RGBA, GL2.GL_UNSIGNED_BYTE,
+                        ByteBuffer.wrap(buf));
+                Color result = new Color(((int) buf[0]) & 0xff, ((int) buf[1]) & 0xff, ((int) buf[2]) & 0xff,
+                        ((int) buf[3]) & 0xff);
                 checkerr(gl);
                 cb.done(result);
             }
@@ -641,7 +652,8 @@ public class GOut {
         gl.bglSubmit(new BGL.Request() {
             public void run(GL2 gl) {
                 byte[] buf = new byte[sz.x * sz.y * 4];
-                gl.glReadPixels(ul.x + tx.x, root.sz.y - ul.y - sz.y - tx.y, sz.x, sz.y, GL.GL_RGBA, GL2.GL_UNSIGNED_BYTE, ByteBuffer.wrap(buf));
+                gl.glReadPixels(ul.x + tx.x, root.sz.y - ul.y - sz.y - tx.y, sz.x, sz.y, GL.GL_RGBA,
+                        GL2.GL_UNSIGNED_BYTE, ByteBuffer.wrap(buf));
                 checkerr(gl);
                 for (int y = 0; y < sz.y / 2; y++) {
                     int to = y * sz.x * 4, bo = (sz.y - y - 1) * sz.x * 4;
@@ -651,7 +663,8 @@ public class GOut {
                         buf[bo] = t;
                     }
                 }
-                WritableRaster raster = Raster.createInterleavedRaster(new DataBufferByte(buf, buf.length), sz.x, sz.y, 4 * sz.x, 4, new int[]{0, 1, 2, 3}, null);
+                WritableRaster raster = Raster.createInterleavedRaster(new DataBufferByte(buf, buf.length), sz.x, sz.y,
+                        4 * sz.x, 4, new int[] { 0, 1, 2, 3 }, null);
                 cb.done(new BufferedImage(TexI.glcm, raster, false, null));
             }
         });

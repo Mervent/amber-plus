@@ -52,21 +52,22 @@ public class TexCube {
         this.back = img;
     }
 
-    private static final int[][] order = {
-            {3, 1},            // +X
-            {1, 1},            // -X
-            {2, 0},            // +Y
-            {2, 2},            // -Y
-            {2, 1},            // +Z
-            {0, 1},            // -Z
+    private static final int[][] order = { { 3, 1 }, // +X
+            { 1, 1 }, // -X
+            { 2, 0 }, // +Y
+            { 2, 2 }, // -Y
+            { 2, 1 }, // +Z
+            { 0, 1 }, // -Z
     };
 
     protected void fill(GOut g) {
         BGL gl = g.gl;
         Coord dim = new Coord(tdim, tdim);
         for (int i = 0; i < order.length; i++) {
-            ByteBuffer data = ByteBuffer.wrap(TexI.convert(back, dim, new Coord(order[i][0] * tdim, order[i][1] * tdim), dim));
-            gl.glTexImage2D(GL.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL.GL_RGBA, tdim, tdim, 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, data);
+            ByteBuffer data = ByteBuffer
+                    .wrap(TexI.convert(back, dim, new Coord(order[i][0] * tdim, order[i][1] * tdim), dim));
+            gl.glTexImage2D(GL.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL.GL_RGBA, tdim, tdim, 0, GL.GL_RGBA,
+                    GL.GL_UNSIGNED_BYTE, data);
         }
     }
 

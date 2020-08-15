@@ -19,7 +19,8 @@ public class Summary extends QList {
 
         for (int i = 0; i < this.ql.size(); ++i) {
             QBuff qb = this.ql.get(i);
-            String str = String.format(i < this.ql.size() - 1 ? "%,d, " : "%,d", new Object[]{Long.valueOf(Math.round(qb.q))});
+            String str = String.format(i < this.ql.size() - 1 ? "%,d, " : "%,d",
+                    new Object[] { Long.valueOf(Math.round(qb.q)) });
             ci.add(qb.icon, new Coord(ci.sz.x, 0));
             ci.add(Text.render(str).img, new Coord(ci.sz.x, 0));
         }

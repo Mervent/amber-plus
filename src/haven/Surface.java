@@ -34,9 +34,10 @@ public class Surface {
     private Map<DataID, Object> data = new HashMap<DataID, Object>();
     public Vertex[] vl, fv, tv;
 
-    /* XXX: I'm starting to lose track of how many times I've
-     * implemented this structure, but it seems to be hard to
-     * generalize in Java. */
+    /*
+     * XXX: I'm starting to lose track of how many times I've implemented this
+     * structure, but it seems to be hard to generalize in Java.
+     */
     public interface DataID<T> {
         public T make(Surface s);
     }

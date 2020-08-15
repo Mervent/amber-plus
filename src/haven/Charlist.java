@@ -74,7 +74,8 @@ public class Charlist extends Widget {
                 scroll(1);
             }
         }, bg.sz().x / 2, sau.c.y + sau.sz.y + (bg.sz().y * height) + (margin * (height - 1)), 0.5, 0);
-        sau.hide(); sad.hide();
+        sau.hide();
+        sad.hide();
         resize(new Coord(bg.sz().x, sad.c.y + sad.sz.y));
     }
 
@@ -154,31 +155,31 @@ public class Charlist extends Widget {
     }
 
     public void uimsg(String msg, Object... args) {
-        if(msg == "add") {
-            Char c = new Char((String)args[0]);
+        if (msg == "add") {
+            Char c = new Char((String) args[0]);
             c.ava = add(new Avaview(Avaview.dasz, -1, "avacam"));
             c.ava.hide();
-            if(args.length > 1) {
-                Composited.Desc desc = Composited.Desc.decode(ui.sess, (Object[])args[1]);
-                Resource.Resolver map = new Resource.Resolver.ResourceMap(ui.sess, (Object[])args[2]);
+            if (args.length > 1) {
+                Composited.Desc desc = Composited.Desc.decode(ui.sess, (Object[]) args[1]);
+                Resource.Resolver map = new Resource.Resolver.ResourceMap(ui.sess, (Object[]) args[2]);
                 c.ava.pop(desc, map);
             }
             c.plb = add(new Button(100, "Play"));
             c.plb.hide();
-            synchronized(chars) {
+            synchronized (chars) {
                 chars.add(c);
-                if(chars.size() > height) {
+                if (chars.size() > height) {
                     sau.show();
                     sad.show();
                 }
             }
-        } else if(msg == "ava") {
-            String cnm = (String)args[0];
-            Composited.Desc ava = Composited.Desc.decode(ui.sess, (Object[])args[1]);
-            Resource.Resolver map = new Resource.Resolver.ResourceMap(ui.sess, (Object[])args[2]);
-            synchronized(chars) {
-                for(Char c : chars) {
-                    if(c.name.equals(cnm)) {
+        } else if (msg == "ava") {
+            String cnm = (String) args[0];
+            Composited.Desc ava = Composited.Desc.decode(ui.sess, (Object[]) args[1]);
+            Resource.Resolver map = new Resource.Resolver.ResourceMap(ui.sess, (Object[]) args[2]);
+            synchronized (chars) {
+                for (Char c : chars) {
+                    if (c.name.equals(cnm)) {
                         c.ava.pop(ava);
                         break;
                     }
@@ -188,27 +189,27 @@ public class Charlist extends Widget {
     }
 
     private void seladj() {
-        if(sel < y)
+        if (sel < y)
             y = sel;
-        else if(sel >= y + height)
+        else if (sel >= y + height)
             y = sel - height + 1;
     }
 
     public boolean keydown(java.awt.event.KeyEvent ev) {
-        if(ev.getKeyCode() == ev.VK_UP) {
+        if (ev.getKeyCode() == ev.VK_UP) {
             sel = Math.max(sel - 1, 0);
             seladj();
-            return(true);
-        } else if(ev.getKeyCode() == ev.VK_DOWN) {
+            return (true);
+        } else if (ev.getKeyCode() == ev.VK_DOWN) {
             sel = Math.min(sel + 1, chars.size() - 1);
             seladj();
-            return(true);
-        } else if(ev.getKeyCode() == ev.VK_ENTER) {
-            if((sel >= 0) && (sel < chars.size())) {
+            return (true);
+        } else if (ev.getKeyCode() == ev.VK_ENTER) {
+            if ((sel >= 0) && (sel < chars.size())) {
                 chars.get(sel).plb.click();
             }
-            return(true);
+            return (true);
         }
-        return(false);
+        return (false);
     }
 }

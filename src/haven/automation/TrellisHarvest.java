@@ -1,6 +1,5 @@
 package haven.automation;
 
-
 import haven.*;
 
 import java.util.HashSet;
@@ -52,6 +51,7 @@ public class TrellisHarvest implements Runnable {
             return;
 
         FlowerMenu.setNextSelection("Harvest");
-        gui.map.wdgmsg("click", plant.sc, plant.rc.floor(posres), 3, 0, 0, (int) plant.id, plant.rc.floor(posres), 0, -1);
+        gui.map.wdgmsg("click", plant.sc, plant.rc.floor(posres), 3, 0, 0, (int) plant.id, plant.rc.floor(posres), 0,
+                -1);
     }
 }

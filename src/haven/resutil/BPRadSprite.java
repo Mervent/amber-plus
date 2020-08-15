@@ -18,12 +18,11 @@ public class BPRadSprite extends Sprite {
     final NormalArray nrma;
     final ShortBuffer sidx;
 
-
     public BPRadSprite(float rad, float basez, GLState smat) {
         super(null, null);
 
         this.smat = smat;
-        
+
         int per = Math.max(24, (int) (2 * Math.PI * (double) rad / 11.0D));
         FloatBuffer pa = Utils.mkfbuf(per * 3 * 2);
         FloatBuffer na = Utils.mkfbuf(per * 3 * 2);
@@ -38,7 +37,8 @@ public class BPRadSprite extends Sprite {
             na.put((per + i) * 3 + 0, c).put((per + i) * 3 + 1, s).put((per + i) * 3 + 2, 0.0F);
             int v = i * 6;
             sa.put(v + 0, (short) i).put(v + 1, (short) (i + per)).put(v + 2, (short) ((i + 1) % per));
-            sa.put(v + 3, (short) (i + per)).put(v + 4, (short) ((i + 1) % per + per)).put(v + 5, (short) ((i + 1) % per));
+            sa.put(v + 3, (short) (i + per)).put(v + 4, (short) ((i + 1) % per + per)).put(v + 5,
+                    (short) ((i + 1) % per));
         }
 
         this.posa = new VertexArray(pa);

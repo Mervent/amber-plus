@@ -55,8 +55,7 @@ public class VertexContext extends ShaderContext {
             new Variable.Implicit(Type.VEC4, new Symbol.Fix("gl_MultiTexCoord4")),
             new Variable.Implicit(Type.VEC4, new Symbol.Fix("gl_MultiTexCoord5")),
             new Variable.Implicit(Type.VEC4, new Symbol.Fix("gl_MultiTexCoord6")),
-            new Variable.Implicit(Type.VEC4, new Symbol.Fix("gl_MultiTexCoord7")),
-    };
+            new Variable.Implicit(Type.VEC4, new Symbol.Fix("gl_MultiTexCoord7")), };
 
     private static final Uniform u_proj = new Uniform.AutoApply(Type.MAT4, "proj", PView.proj) {
         public void apply(GOut g, VarID loc) {
@@ -149,8 +148,10 @@ public class VertexContext extends ShaderContext {
             return;
         walk(new Walker() {
             public void el(Element e) {
-                if (e instanceof WorldTransform) h_wxf = true;
-                else if (e instanceof MVTransform) h_mv = true;
+                if (e instanceof WorldTransform)
+                    h_wxf = true;
+                else if (e instanceof MVTransform)
+                    h_mv = true;
                 e.walk(this);
             }
         });
@@ -179,9 +180,11 @@ public class VertexContext extends ShaderContext {
         return (new PMVTransform(v));
     }
 
-    /* If, at some unexpected point in an unexpected future, I were
-     * to use anisotropic transforms, this will have to get a matrix
-     * inverter implemented for it. */
+    /*
+     * If, at some unexpected point in an unexpected future, I were to use
+     * anisotropic transforms, this will have to get a matrix inverter implemented
+     * for it.
+     */
     public Expression nxf(Expression v) {
         return (new MVTransform(v, true));
     }

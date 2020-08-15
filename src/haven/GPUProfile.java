@@ -70,7 +70,7 @@ public class GPUProfile extends Profile {
             {
                 int i = 0;
                 for (Iterator<Integer> qi = queries.iterator(); qi.hasNext(); i++) {
-                    int[] qo = {qi.next()};
+                    int[] qo = { qi.next() };
                     gl.glGetQueryObjecti64v(qo[0], GL2.GL_QUERY_RESULT, tms, i);
                     gl.glDeleteQueries(1, qo, 0);
                 }
@@ -92,7 +92,7 @@ public class GPUProfile extends Profile {
     public void check() {
         int[] buf = new int[1];
         int[] rb = new int[1];
-        for (Iterator<Frame> i = waiting.iterator(); i.hasNext(); ) {
+        for (Iterator<Frame> i = waiting.iterator(); i.hasNext();) {
             Frame f = i.next();
             for (int qo : f.queries) {
                 f.gl.glGetQueryObjectiv(qo, GL2.GL_QUERY_RESULT_AVAILABLE, rb, 0);

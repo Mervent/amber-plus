@@ -72,23 +72,20 @@ public class Partyview extends Widget {
                             if (gob == null) {
                                 if (gameui().map == null || gameui().map.player() == null)
                                     return tooltip;
-                                /*Coord a = gameui().map.player().rc;
-                                Coord b = m.getc();
-                                if (b == null)
-                                    return tooltip;
-
-                                double dx = (a.x - b.x) / 11.0d / 100.0d;
-                                double dy = (a.y - b.y) / 11.0d / 100.0d;
-                                double dist = Math.sqrt((dx * dx) + (dy * dy));
-
-                                double dxabs = Math.abs(dx);
-                                double dyabs = Math.abs(dy);
-
-                                String tooltipstr = String.format("  Distance: %s mg.  X: %s  Y: %s",
-                                        Utils.fmt1DecPlace(dist),
-                                        Utils.fmt1DecPlace(a.x > b.x ? -1 * dxabs: dxabs),
-                                        Utils.fmt1DecPlace(a.y > b.y ? dyabs : -1 * dyabs));
-                                tooltip = Text.render(tooltipstr).tex();*/
+                                /*
+                                 * Coord a = gameui().map.player().rc; Coord b = m.getc(); if (b == null) return
+                                 * tooltip;
+                                 *
+                                 * double dx = (a.x - b.x) / 11.0d / 100.0d; double dy = (a.y - b.y) / 11.0d /
+                                 * 100.0d; double dist = Math.sqrt((dx * dx) + (dy * dy));
+                                 *
+                                 * double dxabs = Math.abs(dx); double dyabs = Math.abs(dy);
+                                 *
+                                 * String tooltipstr = String.format("  Distance: %s mg.  X: %s  Y: %s",
+                                 * Utils.fmt1DecPlace(dist), Utils.fmt1DecPlace(a.x > b.x ? -1 * dxabs: dxabs),
+                                 * Utils.fmt1DecPlace(a.y > b.y ? dyabs : -1 * dyabs)); tooltip =
+                                 * Text.render(tooltipstr).tex();
+                                 */
 
                                 return tooltip;
                             }

@@ -43,52 +43,57 @@ public class EnvMap extends GLState {
     private static final TexCube sky = WaterTile.sky;
     public final float[] col;
     private TexUnit tsky;
-    
+
     public EnvMap(Color col) {
-	this.col = new float[] {
-	    col.getRed() / 255.0f,
-	    col.getGreen() / 255.0f,
-	    col.getBlue() / 255.0f,
-	};
+        this.col = new float[] { col.getRed() / 255.0f, col.getGreen() / 255.0f, col.getBlue() / 255.0f, };
     }
 
     public EnvMap(Resource res, Object... args) {
-	this((Color)args[0]);
+        this((Color) args[0]);
     }
 
     private static final ShaderMacro shader = prog -> {
-	prog.dump = true;
-	prog.fctx.fragcol.mod(in -> {
-		return(add(in, mul(textureCube(csky.ref(), neg(mul(icam.ref(),
-								   reflect(MiscLib.fragedir(prog.fctx).depref(),
-									   MiscLib.frageyen(prog.fctx).depref())))),
-				   vec4(ccol.ref(), l(0.0)))));
-	    }, 90);
+        prog.dump = true;
+        prog.fctx.fragcol.mod(in -> {
+            return (add(
+                    in, mul(
+                            textureCube(csky.ref(),
+                                    neg(mul(icam.ref(),
+                                            reflect(MiscLib.fragedir(prog.fctx).depref(),
+                                                    MiscLib.frageyen(prog.fctx).depref())))),
+                            vec4(ccol.ref(), l(0.0)))));
+        }, 90);
     };
 
-    public ShaderMacro shader() {return(shader);}
-    public boolean reqshader() {return(true);}
+    public ShaderMacro shader() {
+        return (shader);
+    }
+
+    public boolean reqshader() {
+        return (true);
+    }
 
     public void reapply(GOut g) {
-	g.gl.glUniform1i(g.st.prog.uniform(csky), tsky.id);
-	g.gl.glUniform3fv(g.st.prog.uniform(ccol), 1, col, 0);
-	g.gl.glUniformMatrix3fv(g.st.prog.uniform(icam), 1, false, PView.camxf(g).transpose().trim3(), 0);
+        g.gl.glUniform1i(g.st.prog.uniform(csky), tsky.id);
+        g.gl.glUniform3fv(g.st.prog.uniform(ccol), 1, col, 0);
+        g.gl.glUniformMatrix3fv(g.st.prog.uniform(icam), 1, false, PView.camxf(g).transpose().trim3(), 0);
     }
 
     public void apply(GOut g) {
-	BGL gl = g.gl;
-	(tsky = g.st.texalloc()).act(g);
-	gl.glBindTexture(GL.GL_TEXTURE_CUBE_MAP, sky.glid(g));
-	reapply(g);
+        BGL gl = g.gl;
+        (tsky = g.st.texalloc()).act(g);
+        gl.glBindTexture(GL.GL_TEXTURE_CUBE_MAP, sky.glid(g));
+        reapply(g);
     }
 
     public void unapply(GOut g) {
-	tsky.act(g);
-	g.gl.glBindTexture(GL.GL_TEXTURE_CUBE_MAP, null);
-	tsky.free(); tsky = null;
+        tsky.act(g);
+        g.gl.glBindTexture(GL.GL_TEXTURE_CUBE_MAP, null);
+        tsky.free();
+        tsky = null;
     }
 
     public void prep(Buffer buf) {
-	buf.put(slot, this);
+        buf.put(slot, this);
     }
 }

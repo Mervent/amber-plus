@@ -378,7 +378,6 @@ public class MapFile {
         public final Resource.Spec res;
         public final int prio;
 
-
         public TileInfo(Resource.Spec res, int prio) {
             this.res = res;
             this.prio = prio;
@@ -397,224 +396,7 @@ public class MapFile {
         }
 
         public int gettile(Coord c) {
-            return(tiles[c.x + (c.y * cmaps.x)] & 0xff);
-        }
-
-        private BufferedImage tiletex(int t, BufferedImage[] texes, boolean[] cached) {
-            if(!cached[t]) {
-                Resource r = null;
-                try {
-                    r = loadsaved(Resource.remote(), tilesets[t].res);
-                } catch(Loading l) {
-                    throw(l);
-                } catch(Exception e) {
-                    Debug.log.printf("mapfile warning: could not load tileset resource %s(v%d): %s\n", tilesets[t].res.name, tilesets[t].res.ver, e);
-                }
-                if(r != null) {
-                    Resource.Image ir = r.layer(Resource.imgc);
-                    if(ir != null) {
-                        texes[t] = ir.img;
-                    }
-                }
-                cached[t] = true;
-            }
-            return(texes[t]);
-        }
-
-        public BufferedImage render(Coord off) {
-            BufferedImage[] texes = new BufferedImage[256];
-            boolean[] cached = new boolean[256];
-            WritableRaster buf = PUtils.imgraster(cmaps);
-            Coord c = new Coord();
-            for(c.y = 0; c.y < cmaps.y; c.y++) {
-                for(c.x = 0; c.x < cmaps.x; c.x++) {
-                    int t = gettile(c);
-                    BufferedImage tex = tiletex(t, texes, cached);
-                    int rgb = 0;
-                    if(tex != null)
-                        rgb = tex.getRGB(Utils.floormod(c.x + off.x, tex.getWidth()),
-                                Utils.floormod(c.y + off.y, tex.getHeight()));
-                    buf.setSample(c.x, c.y, 0, (rgb & 0x00ff0000) >>> 16);
-                    buf.setSample(c.x, c.y, 1, (rgb & 0x0000ff00) >>>  8);
-                    buf.setSample(c.x, c.y, 2, (rgb & 0x000000ff) >>>  0);
-                    buf.setSample(c.x, c.y, 3, (rgb & 0xff000000) >>> 24);
-                }
-            }
-            for(c.y = 1; c.y < cmaps.y - 1; c.y++) {
-                for(c.x = 1; c.x < cmaps.x - 1; c.x++) {
-                    int p = tilesets[gettile(c)].prio;
-                    if((tilesets[gettile(c.add(-1, 0))].prio > p) ||
-                            (tilesets[gettile(c.add( 1, 0))].prio > p) ||
-                            (tilesets[gettile(c.add(0, -1))].prio > p) ||
-                            (tilesets[gettile(c.add(0,  1))].prio > p))
-                    {
-                        buf.setSample(c.x, c.y, 0, 0);
-                        buf.setSample(c.x, c.y, 1, 0);
-                        buf.setSample(c.x, c.y, 2, 0);
-                        buf.setSample(c.x, c.y, 3, 255);
-                    }
-                }
-            }
-            return(PUtils.rasterimg(buf));
-        }
-
-        public static final Resource.Spec notile = new Resource.Spec(Resource.remote(), "gfx/tiles/notile", -1);
-        public static final DataGrid nogrid;
-        static {
-            nogrid = new DataGrid(new TileInfo[] {new TileInfo(notile, 0)}, new byte[cmaps.x * cmaps.y], 0);
-        }
-    }
-
-    public static class Grid extends DataGrid {
-        public final long id;
-        private boolean[] norepl;
-        private int useq = -1;
-
-        public Grid(long id, TileInfo[] tilesets, byte[] tiles, long mtime) {
-            super(tilesets, tiles, mtime);
-            this.id = id;
-        }
-
-        public static Grid from(MCache map, MCache.Grid cg) {
-            int oseq = cg.seq;
-            int nt = 0;
-            Resource.Spec[] sets = new Resource.Spec[256];
-            int[] tmap = new int[256];
-            int[] rmap = new int[256];
-            boolean[] norepl = new boolean[256];
-            Arrays.fill(tmap, -1);
-            for (int tn : cg.tiles) {
-                if (tmap[tn] == -1) {
-                    tmap[tn] = nt;
-                    rmap[nt] = tn;
-                    sets[nt] = map.nsets[tn];
-                    try {
-                        for(String tag : map.tileset(tn).tags) {
-                            if(tag.equals("norepl"))
-                                norepl[nt] = true;
-                        }
-                    } catch(Loading l) {
-                    }
-                    nt++;
-                }
-            }
-            int[] prios = new int[nt];
-            for (int i = 0, tn = 0; i < 256; i++) {
-                if (tmap[i] != -1)
-                    prios[tmap[i]] = tn++;
-            }
-            TileInfo[] infos = new TileInfo[nt];
-            for (int i = 0; i < nt; i++)
-                infos[i] = new TileInfo(sets[i], prios[i]);
-            byte[] tiles = new byte[cmaps.x * cmaps.y];
-            for (int i = 0; i < cg.tiles.length; i++)
-                tiles[i] = (byte) (tmap[cg.tiles[i]]);
-            Grid g = new Grid(cg.id, infos, tiles, System.currentTimeMillis());
-            g.norepl = norepl;
-            g.useq = oseq;
-            return (g);
-        }
-
-        public Grid mergeprev(Grid prev) {
-            if((norepl == null) || (prev.tiles.length != this.tiles.length))
-                return(this);
-            boolean[] used = new boolean[prev.tilesets.length];
-            boolean any = false;
-            int[] tmap = new int[prev.tilesets.length];
-            for(int i = 0; i < tmap.length; i++)
-                tmap[i] = -1;
-            for(int i = 0; i < this.tiles.length; i++) {
-                if(norepl[this.tiles[i]]) {
-                    used[prev.tiles[i]] = true;
-                    any = true;
-                }
-            }
-            if(!any)
-                return(this);
-            TileInfo[] ntilesets = this.tilesets;
-            for(int i = 0; i < used.length; i++) {
-                if(used[i] && (tmap[i] < 0)) {
-                    dedup: {
-                        for(int o = 0; o < this.tilesets.length; o++) {
-                            if(this.tilesets[o].res.name.equals(prev.tilesets[i].res.name)) {
-                                tmap[i] = o;
-                                break dedup;
-                            }
-                        }
-                        tmap[i] = ntilesets.length;
-                        ntilesets = Utils.extend(ntilesets, prev.tilesets[i]);
-                    }
-                }
-            }
-            byte[] ntiles = new byte[this.tiles.length];
-            for(int i = 0; i < this.tiles.length; i++) {
-                if(norepl[this.tiles[i]])
-                    ntiles[i] = (byte)tmap[prev.tiles[i]];
-                else
-                    ntiles[i] = this.tiles[i];
-            }
-            Grid g = new Grid(this.id, ntilesets, ntiles, this.mtime);
-            g.useq = this.useq;
-            return(g);
-        }
-
-        public void save(Message fp) {
-            fp.adduint8(2);
-            ZMessage z = new ZMessage(fp);
-            z.addint64(id);
-            z.addint64(mtime);
-            z.adduint8(tilesets.length);
-            for(int i = 0; i < tilesets.length; i++) {
-                z.addstring(tilesets[i].res.name);
-                z.adduint16(tilesets[i].res.ver);
-                z.adduint8(tilesets[i].prio);
-            }
-            z.addbytes(tiles);
-            z.finish();
-        }
-
-        public void save(MapFile file) {
-            OutputStream fp;
-            try {
-                fp = file.sstore("grid-%x", id);
-            } catch(IOException e) {
-                //throw (new StreamMessage.IOError(e));
-                // ignore IOE to prevent crashing when running multiple clients on Windows.
-                return;
-            }
-            try(StreamMessage out = new StreamMessage(fp)) {
-                save(out);
-            }
-        }
-
-        public static Grid load(MapFile file, long id) {
-            InputStream fp;
-            try {
-                fp = file.sfetch("grid-%x", id);
-            } catch (IOException e) {
-                Debug.log.printf("mapfile warning: error when locating grid %x: %s\n", id, e);
-                return (null);
-            }
-            try (StreamMessage data = new StreamMessage(fp)) {
-                int ver = data.uint8();
-                if ((ver >= 1) && (ver <= 2)) {
-                    ZMessage z = new ZMessage(data);
-                    long storedid = z.int64();
-                    if (storedid != id)
-                        throw (new Message.FormatError(String.format("Grid ID mismatch: expected %s, got %s", id, storedid)));
-                    long mtime = (ver >= 2) ? z.int64() : System.currentTimeMillis();
-                    List<TileInfo> tilesets = new ArrayList<TileInfo>();
-                    for (int i = 0, no = z.uint8(); i < no; i++)
-                        tilesets.add(new TileInfo(new Resource.Spec(Resource.remote(), z.string(), z.uint16()), z.uint8()));
-                    byte[] tiles = z.bytes(cmaps.x * cmaps.y);
-                    return (new Grid(id, tilesets.toArray(new TileInfo[0]), tiles, mtime));
-                } else {
-                    throw (new Message.FormatError(String.format("Unknown grid data version for %x: %d", id, ver)));
-                }
-            } catch (Message.BinError e) {
-                Debug.log.printf("mapfile warning: error when loading grid %x: %s\n", id, e);
-                return (null);
-            }
+            return (tiles[c.x + (c.y * cmaps.x)] & 0xff);
         }
 
         private BufferedImage tiletex(int t, BufferedImage[] texes, boolean[] cached) {
@@ -625,7 +407,8 @@ public class MapFile {
                 } catch (Loading l) {
                     throw (l);
                 } catch (Exception e) {
-                    Debug.log.printf("mapfile warning: could not load tileset resource %s(v%d): %s\n", tilesets[t].res.name, tilesets[t].res.ver, e);
+                    Debug.log.printf("mapfile warning: could not load tileset resource %s(v%d): %s\n",
+                            tilesets[t].res.name, tilesets[t].res.ver, e);
                 }
                 if (r != null) {
                     Resource.Image ir = r.layer(Resource.imgc);
@@ -660,10 +443,227 @@ public class MapFile {
             for (c.y = 1; c.y < cmaps.y - 1; c.y++) {
                 for (c.x = 1; c.x < cmaps.x - 1; c.x++) {
                     int p = tilesets[gettile(c)].prio;
-                    if ((tilesets[gettile(c.add(-1, 0))].prio > p) ||
-                            (tilesets[gettile(c.add(1, 0))].prio > p) ||
-                            (tilesets[gettile(c.add(0, -1))].prio > p) ||
-                            (tilesets[gettile(c.add(0, 1))].prio > p)) {
+                    if ((tilesets[gettile(c.add(-1, 0))].prio > p) || (tilesets[gettile(c.add(1, 0))].prio > p)
+                            || (tilesets[gettile(c.add(0, -1))].prio > p)
+                            || (tilesets[gettile(c.add(0, 1))].prio > p)) {
+                        buf.setSample(c.x, c.y, 0, 0);
+                        buf.setSample(c.x, c.y, 1, 0);
+                        buf.setSample(c.x, c.y, 2, 0);
+                        buf.setSample(c.x, c.y, 3, 255);
+                    }
+                }
+            }
+            return (PUtils.rasterimg(buf));
+        }
+
+        public static final Resource.Spec notile = new Resource.Spec(Resource.remote(), "gfx/tiles/notile", -1);
+        public static final DataGrid nogrid;
+        static {
+            nogrid = new DataGrid(new TileInfo[] { new TileInfo(notile, 0) }, new byte[cmaps.x * cmaps.y], 0);
+        }
+    }
+
+    public static class Grid extends DataGrid {
+        public final long id;
+        private boolean[] norepl;
+        private int useq = -1;
+
+        public Grid(long id, TileInfo[] tilesets, byte[] tiles, long mtime) {
+            super(tilesets, tiles, mtime);
+            this.id = id;
+        }
+
+        public static Grid from(MCache map, MCache.Grid cg) {
+            int oseq = cg.seq;
+            int nt = 0;
+            Resource.Spec[] sets = new Resource.Spec[256];
+            int[] tmap = new int[256];
+            int[] rmap = new int[256];
+            boolean[] norepl = new boolean[256];
+            Arrays.fill(tmap, -1);
+            for (int tn : cg.tiles) {
+                if (tmap[tn] == -1) {
+                    tmap[tn] = nt;
+                    rmap[nt] = tn;
+                    sets[nt] = map.nsets[tn];
+                    try {
+                        for (String tag : map.tileset(tn).tags) {
+                            if (tag.equals("norepl"))
+                                norepl[nt] = true;
+                        }
+                    } catch (Loading l) {
+                    }
+                    nt++;
+                }
+            }
+            int[] prios = new int[nt];
+            for (int i = 0, tn = 0; i < 256; i++) {
+                if (tmap[i] != -1)
+                    prios[tmap[i]] = tn++;
+            }
+            TileInfo[] infos = new TileInfo[nt];
+            for (int i = 0; i < nt; i++)
+                infos[i] = new TileInfo(sets[i], prios[i]);
+            byte[] tiles = new byte[cmaps.x * cmaps.y];
+            for (int i = 0; i < cg.tiles.length; i++)
+                tiles[i] = (byte) (tmap[cg.tiles[i]]);
+            Grid g = new Grid(cg.id, infos, tiles, System.currentTimeMillis());
+            g.norepl = norepl;
+            g.useq = oseq;
+            return (g);
+        }
+
+        public Grid mergeprev(Grid prev) {
+            if ((norepl == null) || (prev.tiles.length != this.tiles.length))
+                return (this);
+            boolean[] used = new boolean[prev.tilesets.length];
+            boolean any = false;
+            int[] tmap = new int[prev.tilesets.length];
+            for (int i = 0; i < tmap.length; i++)
+                tmap[i] = -1;
+            for (int i = 0; i < this.tiles.length; i++) {
+                if (norepl[this.tiles[i]]) {
+                    used[prev.tiles[i]] = true;
+                    any = true;
+                }
+            }
+            if (!any)
+                return (this);
+            TileInfo[] ntilesets = this.tilesets;
+            for (int i = 0; i < used.length; i++) {
+                if (used[i] && (tmap[i] < 0)) {
+                    dedup: {
+                        for (int o = 0; o < this.tilesets.length; o++) {
+                            if (this.tilesets[o].res.name.equals(prev.tilesets[i].res.name)) {
+                                tmap[i] = o;
+                                break dedup;
+                            }
+                        }
+                        tmap[i] = ntilesets.length;
+                        ntilesets = Utils.extend(ntilesets, prev.tilesets[i]);
+                    }
+                }
+            }
+            byte[] ntiles = new byte[this.tiles.length];
+            for (int i = 0; i < this.tiles.length; i++) {
+                if (norepl[this.tiles[i]])
+                    ntiles[i] = (byte) tmap[prev.tiles[i]];
+                else
+                    ntiles[i] = this.tiles[i];
+            }
+            Grid g = new Grid(this.id, ntilesets, ntiles, this.mtime);
+            g.useq = this.useq;
+            return (g);
+        }
+
+        public void save(Message fp) {
+            fp.adduint8(2);
+            ZMessage z = new ZMessage(fp);
+            z.addint64(id);
+            z.addint64(mtime);
+            z.adduint8(tilesets.length);
+            for (int i = 0; i < tilesets.length; i++) {
+                z.addstring(tilesets[i].res.name);
+                z.adduint16(tilesets[i].res.ver);
+                z.adduint8(tilesets[i].prio);
+            }
+            z.addbytes(tiles);
+            z.finish();
+        }
+
+        public void save(MapFile file) {
+            OutputStream fp;
+            try {
+                fp = file.sstore("grid-%x", id);
+            } catch (IOException e) {
+                // throw (new StreamMessage.IOError(e));
+                // ignore IOE to prevent crashing when running multiple clients on Windows.
+                return;
+            }
+            try (StreamMessage out = new StreamMessage(fp)) {
+                save(out);
+            }
+        }
+
+        public static Grid load(MapFile file, long id) {
+            InputStream fp;
+            try {
+                fp = file.sfetch("grid-%x", id);
+            } catch (IOException e) {
+                Debug.log.printf("mapfile warning: error when locating grid %x: %s\n", id, e);
+                return (null);
+            }
+            try (StreamMessage data = new StreamMessage(fp)) {
+                int ver = data.uint8();
+                if ((ver >= 1) && (ver <= 2)) {
+                    ZMessage z = new ZMessage(data);
+                    long storedid = z.int64();
+                    if (storedid != id)
+                        throw (new Message.FormatError(
+                                String.format("Grid ID mismatch: expected %s, got %s", id, storedid)));
+                    long mtime = (ver >= 2) ? z.int64() : System.currentTimeMillis();
+                    List<TileInfo> tilesets = new ArrayList<TileInfo>();
+                    for (int i = 0, no = z.uint8(); i < no; i++)
+                        tilesets.add(
+                                new TileInfo(new Resource.Spec(Resource.remote(), z.string(), z.uint16()), z.uint8()));
+                    byte[] tiles = z.bytes(cmaps.x * cmaps.y);
+                    return (new Grid(id, tilesets.toArray(new TileInfo[0]), tiles, mtime));
+                } else {
+                    throw (new Message.FormatError(String.format("Unknown grid data version for %x: %d", id, ver)));
+                }
+            } catch (Message.BinError e) {
+                Debug.log.printf("mapfile warning: error when loading grid %x: %s\n", id, e);
+                return (null);
+            }
+        }
+
+        private BufferedImage tiletex(int t, BufferedImage[] texes, boolean[] cached) {
+            if (!cached[t]) {
+                Resource r = null;
+                try {
+                    r = loadsaved(Resource.remote(), tilesets[t].res);
+                } catch (Loading l) {
+                    throw (l);
+                } catch (Exception e) {
+                    Debug.log.printf("mapfile warning: could not load tileset resource %s(v%d): %s\n",
+                            tilesets[t].res.name, tilesets[t].res.ver, e);
+                }
+                if (r != null) {
+                    Resource.Image ir = r.layer(Resource.imgc);
+                    if (ir != null) {
+                        texes[t] = ir.img;
+                    }
+                }
+                cached[t] = true;
+            }
+            return (texes[t]);
+        }
+
+        public BufferedImage render(Coord off) {
+            BufferedImage[] texes = new BufferedImage[256];
+            boolean[] cached = new boolean[256];
+            WritableRaster buf = PUtils.imgraster(cmaps);
+            Coord c = new Coord();
+            for (c.y = 0; c.y < cmaps.y; c.y++) {
+                for (c.x = 0; c.x < cmaps.x; c.x++) {
+                    int t = gettile(c);
+                    BufferedImage tex = tiletex(t, texes, cached);
+                    int rgb = 0;
+                    if (tex != null)
+                        rgb = tex.getRGB(Utils.floormod(c.x + off.x, tex.getWidth()),
+                                Utils.floormod(c.y + off.y, tex.getHeight()));
+                    buf.setSample(c.x, c.y, 0, (rgb & 0x00ff0000) >>> 16);
+                    buf.setSample(c.x, c.y, 1, (rgb & 0x0000ff00) >>> 8);
+                    buf.setSample(c.x, c.y, 2, (rgb & 0x000000ff) >>> 0);
+                    buf.setSample(c.x, c.y, 3, (rgb & 0xff000000) >>> 24);
+                }
+            }
+            for (c.y = 1; c.y < cmaps.y - 1; c.y++) {
+                for (c.x = 1; c.x < cmaps.x - 1; c.x++) {
+                    int p = tilesets[gettile(c)].prio;
+                    if ((tilesets[gettile(c.add(-1, 0))].prio > p) || (tilesets[gettile(c.add(1, 0))].prio > p)
+                            || (tilesets[gettile(c.add(0, -1))].prio > p)
+                            || (tilesets[gettile(c.add(0, 1))].prio > p)) {
                         buf.setSample(c.x, c.y, 0, 0);
                         buf.setSample(c.x, c.y, 1, 0);
                         buf.setSample(c.x, c.y, 2, 0);
@@ -787,7 +787,8 @@ public class MapFile {
                 ZMessage z = new ZMessage(data);
                 long storedid = z.int64();
                 if (storedid != id)
-                    throw (new Message.FormatError(String.format("Segment ID mismatch: expected %x, got %x", id, storedid)));
+                    throw (new Message.FormatError(
+                            String.format("Segment ID mismatch: expected %x, got %x", id, storedid)));
                 for (int i = 0, no = z.int32(); i < no; i++)
                     seg.map.put(z.coord(), z.int64());
                 return (seg);
@@ -867,11 +868,15 @@ public class MapFile {
                 if (moff == null) {
                     Coord psc = seg.map.reverse().get(g.id);
                     if (psc == null) {
-                        if (debug) Debug.log.printf("mapfile warning: grid %x is oddly gone from segment %x; was at %s\n", g.id, seg.id, info.sc);
+                        if (debug)
+                            Debug.log.printf("mapfile warning: grid %x is oddly gone from segment %x; was at %s\n",
+                                    g.id, seg.id, info.sc);
                         missing.add(g);
                         continue;
                     } else if (!psc.equals(info.sc)) {
-                        Debug.log.printf("mapfile warning: segment-offset mismatch for grid %x in segment %x: segment has %s, gridinfo has %s\n", g.id, seg.id, psc, info.sc);
+                        Debug.log.printf(
+                                "mapfile warning: segment-offset mismatch for grid %x in segment %x: segment has %s, gridinfo has %s\n",
+                                g.id, seg.id, psc, info.sc);
                         missing.add(g);
                         continue;
                     }
@@ -882,9 +887,9 @@ public class MapFile {
                 if (!((cur != null) && (cur.useq == g.seq))) {
                     Grid sg = Grid.from(map, g);
                     Grid prev = cur;
-                    if(prev == null)
+                    if (prev == null)
                         prev = Grid.load(MapFile.this, sg.id);
-                    if(prev != null)
+                    if (prev != null)
                         sg = sg.mergeprev(prev);
                     sg.save(MapFile.this);
                 }
@@ -900,7 +905,8 @@ public class MapFile {
                 if (mseg == -1) {
                     seg = new Segment(Utils.el(missing).id);
                     moff = Coord.z;
-                    if (debug) Debug.log.printf("mapfile: creating new segment %x\n", seg.id);
+                    if (debug)
+                        Debug.log.printf("mapfile: creating new segment %x\n", seg.id);
                 } else {
                     seg = segments.get(mseg);
                 }
@@ -933,21 +939,21 @@ public class MapFile {
                         soff = ab.inv();
                     }
                     if (debug)
-                        Debug.log.printf("mapfile: merging segment %x (%d) into %x (%d) at %s\n", src.id, src.map.size(), dst.id, dst.map.size(), soff);
+                        Debug.log.printf("mapfile: merging segment %x (%d) into %x (%d) at %s\n", src.id,
+                                src.map.size(), dst.id, dst.map.size(), soff);
                     merge(dst, src, soff);
                 }
             }
         } finally {
             lock.writeLock().unlock();
         }
-        if (debug) Debug.log.printf("mapfile: update completed\n");
+        if (debug)
+            Debug.log.printf("mapfile: update completed\n");
     }
 
-    private static final Coord[] inout = new Coord[]{
-            new Coord(0, 0),
-            new Coord(0, -1), new Coord(1, 0), new Coord(0, 1), new Coord(-1, 0),
-            new Coord(1, -1), new Coord(1, 1), new Coord(-1, 1), new Coord(-1, -1),
-    };
+    private static final Coord[] inout = new Coord[] { new Coord(0, 0), new Coord(0, -1), new Coord(1, 0),
+            new Coord(0, 1), new Coord(-1, 0), new Coord(1, -1), new Coord(1, 1), new Coord(-1, 1),
+            new Coord(-1, -1), };
 
     public void update(MCache map, Coord cgc) {
         Collection<MCache.Grid> grids = new ArrayList<>();

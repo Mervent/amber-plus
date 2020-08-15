@@ -12,7 +12,6 @@ import java.util.List;
 
 import static haven.OCache.posres;
 
-
 public class SteelRefueler extends Window implements GobSelectCallback {
     private static final Text.Foundry infof = new Text.Foundry(Text.sans, 10).aa(true);
     private List<Gob> crucibles = new ArrayList<>();
@@ -95,8 +94,7 @@ public class SteelRefueler extends Window implements GobSelectCallback {
         public void run() {
             GameUI gui = gameui();
             while (!terminate) {
-                cloop:
-                for (Gob c : crucibles) {
+                cloop: for (Gob c : crucibles) {
                     // take fuel from stockpiles if we don't have enough in the inventory
                     int availableFuelCoal = gui.maininv.getItemPartialCount("Coal");
                     int availableFuelBlock = gui.maininv.getItemPartialCount("Block");
@@ -169,7 +167,8 @@ public class SteelRefueler extends Window implements GobSelectCallback {
                         if (terminate)
                             return;
 
-                        gui.map.wdgmsg("itemact", Coord.z, c.rc.floor(posres), fueltoload == 1 ? 0 : 1, 0, (int) c.id, c.rc.floor(posres), 0, -1);
+                        gui.map.wdgmsg("itemact", Coord.z, c.rc.floor(posres), fueltoload == 1 ? 0 : 1, 0, (int) c.id,
+                                c.rc.floor(posres), 0, -1);
                         timeout = 0;
                         while (true) {
                             WItem newfuel = gui.vhand;
@@ -244,7 +243,8 @@ public class SteelRefueler extends Window implements GobSelectCallback {
                     crucibles.add(gob);
                     lblc.settext(crucibles.size() + "");
                 }
-            } else if (res.name.equals("gfx/terobjs/stockpile-coal") || res.name.equals("gfx/terobjs/stockpile-wblock") || res.name.equals("gfx/terobjs/stockpile-branch")) {
+            } else if (res.name.equals("gfx/terobjs/stockpile-coal") || res.name.equals("gfx/terobjs/stockpile-wblock")
+                    || res.name.equals("gfx/terobjs/stockpile-branch")) {
                 if (!stockpiles.contains(gob)) {
                     stockpiles.add(gob);
                     lbls.settext(stockpiles.size() + "");

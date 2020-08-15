@@ -33,7 +33,7 @@ public class SpotLight extends PosLight {
     public float[] dir;
     public float exp, cut;
 
-    private static final float[] defdir = {0.0f, 0.0f, -1.0f};
+    private static final float[] defdir = { 0.0f, 0.0f, -1.0f };
 
     public SpotLight(FColor col, Coord3f pos, Coord3f dir, float exp) {
         super(col, pos);

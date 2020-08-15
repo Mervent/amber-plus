@@ -68,7 +68,8 @@ public class HashedMap<K, V> extends AbstractMap<K, V> {
             Object key = ctab[i];
             if (key != null) {
                 int idx = hashidx(ntab, keynull(key));
-                for (; ntab[idx] != null; idx = nextidx(ntab, idx)) ;
+                for (; ntab[idx] != null; idx = nextidx(ntab, idx))
+                    ;
                 ntab[idx] = key;
                 ntab[idx + 1] = ctab[i + 1];
             }
@@ -170,7 +171,8 @@ public class HashedMap<K, V> extends AbstractMap<K, V> {
 
         public boolean hasNext() {
             if (st != 1) {
-                for (idx += 2; (idx < tab.length) && (tab[idx] == null); idx += 2) ;
+                for (idx += 2; (idx < tab.length) && (tab[idx] == null); idx += 2)
+                    ;
                 st = 1;
             }
             return (idx < tab.length);

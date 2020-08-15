@@ -42,7 +42,8 @@ import java.awt.Color;
 
 public class WaterTile extends Tiler {
     public final int depth;
-    private static final Material.Colors bcol = new Material.Colors(new Color(128, 128, 128), new Color(255, 255, 255), new Color(0, 0, 0), new Color(0, 0, 0));
+    private static final Material.Colors bcol = new Material.Colors(new Color(128, 128, 128), new Color(255, 255, 255),
+            new Color(0, 0, 0), new Color(0, 0, 0));
     public final Tiler.MCons bottom;
 
     public static class Bottom extends MapMesh.Hooks {
@@ -94,9 +95,8 @@ public class WaterTile extends Tiler {
                         if (s[ss.o(x, y)]) {
                             sd[ss.o(x, y)] = ed[ss.o(x, y)];
                         } else {
-                            sd[ss.o(x, y)] = ((ed[ss.o(x, y)] * 4) +
-                                    ed[ss.o(x - 1, y)] + ed[ss.o(x + 1, y)] +
-                                    ed[ss.o(x, y - 1)] + ed[ss.o(x, y + 1)]) / 8;
+                            sd[ss.o(x, y)] = ((ed[ss.o(x, y)] * 4) + ed[ss.o(x - 1, y)] + ed[ss.o(x + 1, y)]
+                                    + ed[ss.o(x, y - 1)] + ed[ss.o(x, y + 1)]) / 8;
                         }
                     }
                 }
@@ -110,7 +110,8 @@ public class WaterTile extends Tiler {
             }
             for (int y = ts.ul.y; y < ts.br.y; y++) {
                 for (int x = ts.ul.x; x < ts.br.x; x++) {
-                    split[ts.o(x, y)] = Math.abs(surf[vs.o(x, y)].z - surf[vs.o(x + 1, y + 1)].z) > Math.abs(surf[vs.o(x + 1, y)].z - surf[vs.o(x, y + 1)].z);
+                    split[ts.o(x, y)] = Math.abs(surf[vs.o(x, y)].z - surf[vs.o(x + 1, y + 1)].z) > Math
+                            .abs(surf[vs.o(x + 1, y)].z - surf[vs.o(x, y + 1)].z);
                 }
             }
         }
@@ -133,12 +134,8 @@ public class WaterTile extends Tiler {
         }
 
         public Vertex[] fortilea(Coord c) {
-            return (new Vertex[]{
-                    surf[vs.o(c.x, c.y)],
-                    surf[vs.o(c.x, c.y + 1)],
-                    surf[vs.o(c.x + 1, c.y + 1)],
-                    surf[vs.o(c.x + 1, c.y)],
-            });
+            return (new Vertex[] { surf[vs.o(c.x, c.y)], surf[vs.o(c.x, c.y + 1)], surf[vs.o(c.x + 1, c.y + 1)],
+                    surf[vs.o(c.x + 1, c.y)], });
         }
 
         public void calcnrm() {
@@ -162,18 +159,11 @@ public class WaterTile extends Tiler {
         Bottom b = m.data(Bottom.id);
         MapMesh.MapSurface s = m.data(MapMesh.gnd);
         if (b.split[s.ts.o(lc)]) {
-            s.new Face(b.surf[b.vs.o(lc.x, lc.y)],
-                    b.surf[b.vs.o(lc.x, lc.y + 1)],
-                    b.surf[b.vs.o(lc.x + 1, lc.y + 1)]);
-            s.new Face(b.surf[b.vs.o(lc.x, lc.y)],
-                    b.surf[b.vs.o(lc.x + 1, lc.y + 1)],
-                    b.surf[b.vs.o(lc.x + 1, lc.y)]);
+            s.new Face(b.surf[b.vs.o(lc.x, lc.y)], b.surf[b.vs.o(lc.x, lc.y + 1)], b.surf[b.vs.o(lc.x + 1, lc.y + 1)]);
+            s.new Face(b.surf[b.vs.o(lc.x, lc.y)], b.surf[b.vs.o(lc.x + 1, lc.y + 1)], b.surf[b.vs.o(lc.x + 1, lc.y)]);
         } else {
-            s.new Face(b.surf[b.vs.o(lc.x, lc.y)],
-                    b.surf[b.vs.o(lc.x, lc.y + 1)],
-                    b.surf[b.vs.o(lc.x + 1, lc.y)]);
-            s.new Face(b.surf[b.vs.o(lc.x, lc.y + 1)],
-                    b.surf[b.vs.o(lc.x + 1, lc.y + 1)],
+            s.new Face(b.surf[b.vs.o(lc.x, lc.y)], b.surf[b.vs.o(lc.x, lc.y + 1)], b.surf[b.vs.o(lc.x + 1, lc.y)]);
+            s.new Face(b.surf[b.vs.o(lc.x, lc.y + 1)], b.surf[b.vs.o(lc.x + 1, lc.y + 1)],
                     b.surf[b.vs.o(lc.x + 1, lc.y)]);
         }
     }
@@ -186,7 +176,8 @@ public class WaterTile extends Tiler {
         nrm.magfilter(GL.GL_LINEAR);
     }
 
-    private static final GLState.Slot<GLState> surfslot = new GLState.Slot<GLState>(GLState.Slot.Type.DRAW, GLState.class, PView.cam, HavenPanel.global);
+    private static final GLState.Slot<GLState> surfslot = new GLState.Slot<GLState>(GLState.Slot.Type.DRAW,
+            GLState.class, PView.cam, HavenPanel.global);
     private static final States.DepthOffset surfoff = new States.DepthOffset(2, 2);
 
     public static class BetterSurface extends GLState {
@@ -209,67 +200,64 @@ public class WaterTile extends Tiler {
                 MiscLib.fragedir(prog.fctx);
                 final ValBlock.Value nmod = prog.fctx.uniform.new Value(Type.VEC3) {
                     public Expression root() {
-                /*
-				return(mul(sub(mix(pick(texture2D(snrm.ref(),
-								  add(mul(pick(MiscLib.fragmapv.ref(), "st"), vec2(l(0.01), l(0.012))),
-								      mul(Cons.mod(MiscLib.time.ref(), l(2.0)), vec2(l(0.025), l(0.035))))),
-							"rgb"),
-						   pick(texture2D(snrm.ref(),
-								  add(mul(pick(MiscLib.fragmapv.ref(), "st"), vec2(l(0.019), l(0.018))),
-								      mul(Cons.mod(add(MiscLib.time.ref(), l(1.0)), l(2.0)), vec2(l(-0.035), l(-0.025))))),
-							"rgb"),
-						   abs(sub(Cons.mod(MiscLib.time.ref(), l(2.0)), l(1.0)))),
-					       l(0.5)), vec3(l(1.0 / 16), l(1.0 / 16), l(1.0))));
-				*/
-                        return (mul(sub(mix(add(pick(texture2D(snrm.ref(),
-                                add(mul(pick(MiscLib.fragmapv.ref(), "st"), vec2(l(0.01), l(0.012))),
-                                        mul(MiscLib.time.ref(), vec2(l(0.025), l(0.035))))),
-                                "rgb"),
-                                pick(texture2D(snrm.ref(),
-                                        add(mul(pick(MiscLib.fragmapv.ref(), "st"), vec2(l(0.019), l(0.018))),
-                                                mul(MiscLib.time.ref(), vec2(l(-0.035), l(-0.025))))),
-                                        "rgb")),
-                                add(pick(texture2D(snrm.ref(),
-                                        add(mul(pick(MiscLib.fragmapv.ref(), "st"), vec2(l(0.01), l(0.012))),
-                                                add(mul(MiscLib.time.ref(), vec2(l(0.025), l(0.035))), vec2(l(0.5), l(0.5))))),
-                                        "rgb"),
+                        /*
+                         * return(mul(sub(mix(pick(texture2D(snrm.ref(),
+                         * add(mul(pick(MiscLib.fragmapv.ref(), "st"), vec2(l(0.01), l(0.012))),
+                         * mul(Cons.mod(MiscLib.time.ref(), l(2.0)), vec2(l(0.025), l(0.035))))),
+                         * "rgb"), pick(texture2D(snrm.ref(), add(mul(pick(MiscLib.fragmapv.ref(),
+                         * "st"), vec2(l(0.019), l(0.018))), mul(Cons.mod(add(MiscLib.time.ref(),
+                         * l(1.0)), l(2.0)), vec2(l(-0.035), l(-0.025))))), "rgb"),
+                         * abs(sub(Cons.mod(MiscLib.time.ref(), l(2.0)), l(1.0)))), l(0.5)), vec3(l(1.0
+                         * / 16), l(1.0 / 16), l(1.0))));
+                         */
+                        return (mul(
+                                sub(mix(add(
+                                        pick(texture2D(snrm.ref(),
+                                                add(mul(pick(MiscLib.fragmapv.ref(), "st"), vec2(l(0.01), l(0.012))),
+                                                        mul(MiscLib.time.ref(), vec2(l(0.025), l(0.035))))),
+                                                "rgb"),
                                         pick(texture2D(snrm.ref(),
                                                 add(mul(pick(MiscLib.fragmapv.ref(), "st"), vec2(l(0.019), l(0.018))),
-                                                        add(mul(MiscLib.time.ref(), vec2(l(-0.035), l(-0.025))), vec2(l(0.5), l(0.5))))),
+                                                        mul(MiscLib.time.ref(), vec2(l(-0.035), l(-0.025))))),
                                                 "rgb")),
-                                abs(sub(Cons.mod(MiscLib.time.ref(), l(2.0)), l(1.0)))),
-                                l(0.5 * 2)), vec3(l(1.0 / 16), l(1.0 / 16), l(1.0))));
-				/*
-				return(mul(sub(add(pick(texture2D(snrm.ref(),
-								  add(mul(pick(MiscLib.fragmapv.ref(), "st"), vec2(l(0.01), l(0.012))),
-								      mul(MiscLib.time.ref(), vec2(l(0.025), l(0.035))))),
-							"rgb"),
-						   pick(texture2D(snrm.ref(),
-								  add(mul(pick(MiscLib.fragmapv.ref(), "st"), vec2(l(0.019), l(0.018))),
-								      mul(MiscLib.time.ref(), vec2(l(-0.035), l(-0.025))))),
-							"rgb")),
-					       l(0.5 * 2)), vec3(l(1.0 / 16), l(1.0 / 16), l(1.0))));
-				*/
-				/*
-				return(mul(sub(pick(texture2D(snrm.ref(),
-							      mul(pick(MiscLib.fragmapv.ref(), "st"), l(0.005))),
-						    "rgb"),
-					       l(0.5)), vec3(l(1.0 / 32), l(1.0 / 32), l(1.0))));
-				*/
+                                        add(pick(texture2D(snrm.ref(), add(
+                                                mul(pick(MiscLib.fragmapv.ref(), "st"), vec2(l(0.01), l(0.012))),
+                                                add(mul(MiscLib.time.ref(), vec2(l(0.025), l(0.035))),
+                                                        vec2(l(0.5), l(0.5))))),
+                                                "rgb"),
+                                                pick(texture2D(snrm.ref(),
+                                                        add(mul(pick(MiscLib.fragmapv.ref(), "st"),
+                                                                vec2(l(0.019), l(0.018))),
+                                                                add(mul(MiscLib.time.ref(), vec2(l(-0.035), l(-0.025))),
+                                                                        vec2(l(0.5), l(0.5))))),
+                                                        "rgb")),
+                                        abs(sub(Cons.mod(MiscLib.time.ref(), l(2.0)), l(1.0)))), l(0.5 * 2)),
+                                vec3(l(1.0 / 16), l(1.0 / 16), l(1.0))));
+                        /*
+                         * return(mul(sub(add(pick(texture2D(snrm.ref(),
+                         * add(mul(pick(MiscLib.fragmapv.ref(), "st"), vec2(l(0.01), l(0.012))),
+                         * mul(MiscLib.time.ref(), vec2(l(0.025), l(0.035))))), "rgb"),
+                         * pick(texture2D(snrm.ref(), add(mul(pick(MiscLib.fragmapv.ref(), "st"),
+                         * vec2(l(0.019), l(0.018))), mul(MiscLib.time.ref(), vec2(l(-0.035),
+                         * l(-0.025))))), "rgb")), l(0.5 * 2)), vec3(l(1.0 / 16), l(1.0 / 16),
+                         * l(1.0))));
+                         */
+                        /*
+                         * return(mul(sub(pick(texture2D(snrm.ref(), mul(pick(MiscLib.fragmapv.ref(),
+                         * "st"), l(0.005))), "rgb"), l(0.5)), vec3(l(1.0 / 32), l(1.0 / 32), l(1.0))));
+                         */
                     }
                 };
                 nmod.force();
                 MiscLib.frageyen(prog.fctx).mod(in -> {
                     Expression m = nmod.ref();
                     return (add(mul(pick(m, "x"), vec3(l(1.0), l(0.0), l(0.0))),
-                            mul(pick(m, "y"), vec3(l(0.0), l(1.0), l(0.0))),
-                            mul(pick(m, "z"), in)));
+                            mul(pick(m, "y"), vec3(l(0.0), l(1.0), l(0.0))), mul(pick(m, "z"), in)));
                 }, -10);
-                prog.fctx.fragcol.mod(in -> mul(in, textureCube(ssky.ref(),
-                        neg(mul(icam.ref(), reflect(MiscLib.fragedir(prog.fctx).depref(),
-                                MiscLib.frageyen(prog.fctx).depref())))),
-                        l(0.4))
-                        , 0);
+                prog.fctx.fragcol.mod(in -> mul(in,
+                        textureCube(ssky.ref(), neg(mul(icam.ref(),
+                                reflect(MiscLib.fragedir(prog.fctx).depref(), MiscLib.frageyen(prog.fctx).depref())))),
+                        l(0.4)), 0);
             }
         };
 
@@ -329,13 +317,16 @@ public class WaterTile extends Tiler {
     public static class BottomFog extends GLState.StandAlone {
         public static final double maxdepth = 25;
         public static final Color fogcolor = new Color(13, 38, 25);
-        public static final Expression mfogcolor = mul(col3(fogcolor), pick(fref(idx(ProgramContext.gl_LightSource.ref(), MapView.amblight.ref()), "diffuse"), "rgb"));
-        public static Function rgbmix = new Function.Def(Type.VEC4) {{
-            Expression a = param(PDir.IN, Type.VEC4).ref();
-            Expression b = param(PDir.IN, Type.VEC3).ref();
-            Expression m = param(PDir.IN, Type.FLOAT).ref();
-            code.add(new Return(vec4(mix(pick(a, "rgb"), b, m), pick(a, "a"))));
-        }};
+        public static final Expression mfogcolor = mul(col3(fogcolor),
+                pick(fref(idx(ProgramContext.gl_LightSource.ref(), MapView.amblight.ref()), "diffuse"), "rgb"));
+        public static Function rgbmix = new Function.Def(Type.VEC4) {
+            {
+                Expression a = param(PDir.IN, Type.VEC4).ref();
+                Expression b = param(PDir.IN, Type.VEC3).ref();
+                Expression m = param(PDir.IN, Type.FLOAT).ref();
+                code.add(new Return(vec4(mix(pick(a, "rgb"), b, m), pick(a, "a"))));
+            }
+        };
         public static final Attribute depth = new Attribute(Type.FLOAT);
         public static final AutoVarying fragd = new AutoVarying(Type.FLOAT) {
             protected Expression root(VertexContext vctx) {
@@ -387,7 +378,8 @@ public class WaterTile extends Tiler {
         };
 
         final ShaderMacro shader = prog -> {
-            prog.fctx.fragcol.mod(in -> BottomFog.rgbmix.call(in, BottomFog.mfogcolor, clamp(div(fragd.ref(), l(BottomFog.maxdepth)), l(0.0), l(1.0))), 1000);
+            prog.fctx.fragcol.mod(in -> BottomFog.rgbmix.call(in, BottomFog.mfogcolor,
+                    clamp(div(fragd.ref(), l(BottomFog.maxdepth)), l(0.0), l(1.0))), 1000);
         };
 
         public void apply(GOut g) {

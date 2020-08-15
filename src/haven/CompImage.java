@@ -57,8 +57,7 @@ public class CompImage {
     public CompImage add(Image img, Coord c) {
         cont.add(new Placed(img, c));
         Coord imsz = img.sz();
-        sz = new Coord(Math.max(sz.x, c.x + imsz.x),
-                Math.max(sz.y, c.y + imsz.y));
+        sz = new Coord(Math.max(sz.x, c.x + imsz.x), Math.max(sz.y, c.y + imsz.y));
         return (this);
     }
 

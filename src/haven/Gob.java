@@ -45,13 +45,14 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     Map<Class<? extends GAttrib>, GAttrib> attr = new HashMap<Class<? extends GAttrib>, GAttrib>();
     public Collection<Overlay> ols = new LinkedList<Overlay>() {
         public boolean add(Overlay item) {
-	        /* XXX: Remove me once local code is changed to use addol(). */
-            if(glob.oc.getgob(id) != null) {
-                // FIXME: extend ols with a method for adding sprites without triggering changed.
+            /* XXX: Remove me once local code is changed to use addol(). */
+            if (glob.oc.getgob(id) != null) {
+                // FIXME: extend ols with a method for adding sprites without triggering
+                // changed.
                 if (item.id != Sprite.GROWTH_STAGE_ID && item != animalradius)
                     glob.oc.changed(Gob.this);
             }
-            return(super.add(item));
+            return (super.add(item));
         }
     };
 
@@ -63,14 +64,15 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     private static final Material.Colors dframeEmpty = new Material.Colors(new Color(87, 204, 73, 255));
     private static final Material.Colors dframeDone = new Material.Colors(new Color(209, 42, 42, 255));
     private static final Material.Colors potDOne = new Material.Colors(new Color(0, 0, 0, 255));
-    private static final Gob.Overlay animalradius = new Gob.Overlay(new BPRadSprite(100.0F, -10.0F, BPRadSprite.smatDanger));
-    public Boolean knocked = null;  // knocked will be null if pose update request hasn't been received yet
+    private static final Gob.Overlay animalradius = new Gob.Overlay(
+            new BPRadSprite(100.0F, -10.0F, BPRadSprite.smatDanger));
+    public Boolean knocked = null; // knocked will be null if pose update request hasn't been received yet
     public Type type = null;
 
     public enum Type {
-        OTHER(0), DFRAME(1), TREE(2), BUSH(3), BOULDER(4), PLAYER(5), SIEGE_MACHINE(6), MAMMOTH(7), BAT(8), OLDTRUNK(9), GARDENPOT(10), MUSSEL(11), LOC_RESOURCE(12), FU_YE_CURIO(13), SEAL(14), EAGLE(15),
-        PLANT(16), MULTISTAGE_PLANT(17), PLANT_FALLOW(18),
-        MOB(32), WOLF(33), BEAR(34), LYNX(35), TROLL(38), WALRUS(39),
+        OTHER(0), DFRAME(1), TREE(2), BUSH(3), BOULDER(4), PLAYER(5), SIEGE_MACHINE(6), MAMMOTH(7), BAT(8), OLDTRUNK(9),
+        GARDENPOT(10), MUSSEL(11), LOC_RESOURCE(12), FU_YE_CURIO(13), SEAL(14), EAGLE(15), PLANT(16),
+        MULTISTAGE_PLANT(17), PLANT_FALLOW(18), MOB(32), WOLF(33), BEAR(34), LYNX(35), TROLL(38), WALRUS(39),
         WOODEN_SUPPORT(64), STONE_SUPPORT(65), METAL_SUPPORT(66), TROUGH(67), BEEHIVE(68);
 
         public final int value;
@@ -138,15 +140,16 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
         }
 
         public Object staticp() {
-            return((spr == null)?null:spr.staticp());
+            return ((spr == null) ? null : spr.staticp());
         }
     }
 
-    /* XXX: This whole thing didn't turn out quite as nice as I had
-     * hoped, but hopefully it can at least serve as a source of
-     * inspiration to redo attributes properly in the future. There
-     * have already long been arguments for remaking GAttribs as
-     * well. */
+    /*
+     * XXX: This whole thing didn't turn out quite as nice as I had hoped, but
+     * hopefully it can at least serve as a source of inspiration to redo attributes
+     * properly in the future. There have already long been arguments for remaking
+     * GAttribs as well.
+     */
     public static class ResAttr {
         public boolean update(Message dat) {
             return (false);
@@ -193,7 +196,8 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                     return (cl.asSubclass(Factory.class).newInstance());
                 if (ResAttr.class.isAssignableFrom(cl)) {
                     try {
-                        final java.lang.reflect.Constructor<? extends ResAttr> cons = cl.asSubclass(ResAttr.class).getConstructor(Gob.class, Message.class);
+                        final java.lang.reflect.Constructor<? extends ResAttr> cons = cl.asSubclass(ResAttr.class)
+                                .getConstructor(Gob.class, Message.class);
                         return (new Factory() {
                             public ResAttr mkattr(Gob gob, Message dat) {
                                 return (Utils.construct(cons, gob, dat));
@@ -207,8 +211,11 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
         }
     }
 
-    public static class Static {}
-    public static class SemiStatic {}
+    public static class Static {
+    }
+
+    public static class SemiStatic {
+    }
 
     public Gob(Glob glob, Coord2d c, long id, int frame) {
         this.glob = glob;
@@ -229,7 +236,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     public void ctick(int dt) {
         for (GAttrib a : attr.values())
             a.ctick(dt);
-        for (Iterator<Overlay> i = ols.iterator(); i.hasNext(); ) {
+        for (Iterator<Overlay> i = ols.iterator(); i.hasNext();) {
             Overlay ol = i.next();
             if (ol.spr == null) {
                 try {
@@ -250,6 +257,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     public void addol(Overlay ol) {
         ols.add(ol);
     }
+
     public void addol(Sprite ol) {
         addol(new Overlay(ol));
     }
@@ -283,8 +291,10 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
             m.move(c);
         this.rc = c;
         if (isplayer()) {
-            if(Config.mapperEnabled) Navigation.setPlayerCoordinates(c);
-            if(Config.vendanMapv4) MappingClient.getInstance().CheckGridCoord(c);
+            if (Config.mapperEnabled)
+                Navigation.setPlayerCoordinates(c);
+            if (Config.vendanMapv4)
+                MappingClient.getInstance().CheckGridCoord(c);
         }
         this.a = a;
     }
@@ -299,7 +309,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     }
 
     public Coord3f getrc() {
-        return(glob.map.getzp(rc));
+        return (glob.map.getzp(rc));
     }
 
     public double geta() {
@@ -323,8 +333,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
             Gob pl = glob.oc.getgob(MapView.plgob);
             if (pl != null) {
                 Following follow = pl.getattr(Following.class);
-                if (pl == this ||
-                        (follow != null && follow.tgt() == this)) {
+                if (pl == this || (follow != null && follow.tgt() == this)) {
                     gobpath = new Overlay(new GobPath(this));
                     ols.add(gobpath);
                 }
@@ -376,7 +385,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
 
     private void loadrattr() {
         boolean upd = false;
-        for (Iterator<ResAttr.Load> i = lrdata.iterator(); i.hasNext(); ) {
+        for (Iterator<ResAttr.Load> i = lrdata.iterator(); i.hasNext();) {
             ResAttr.Load rd = i.next();
             ResAttr attr;
             try {
@@ -388,20 +397,21 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
             if (rc.resid == null)
                 rc.resid = rd.resid;
             else if (rc.resid != rd.resid)
-                throw (new RuntimeException("Conflicting resattr resource IDs on " + rc.clsid + ": " + rc.resid + " -> " + rd.resid));
+                throw (new RuntimeException(
+                        "Conflicting resattr resource IDs on " + rc.clsid + ": " + rc.resid + " -> " + rd.resid));
             rc.odat = rd.dat;
             rc.set(attr);
             i.remove();
             upd = true;
         }
-        if(upd) {
-            if(glob.oc.getgob(id) != null)
+        if (upd) {
+            if (glob.oc.getgob(id) != null)
                 glob.oc.changed(this);
         }
     }
 
     public void setrattr(Indir<Resource> resid, Message dat) {
-        for (Iterator<ResAttr.Cell<?>> i = rdata.iterator(); i.hasNext(); ) {
+        for (Iterator<ResAttr.Cell<?>> i = rdata.iterator(); i.hasNext();) {
             ResAttr.Cell<?> rd = i.next();
             if (rd.resid == resid) {
                 if (dat.equals(rd.odat))
@@ -411,7 +421,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                 break;
             }
         }
-        for (Iterator<ResAttr.Load> i = lrdata.iterator(); i.hasNext(); ) {
+        for (Iterator<ResAttr.Load> i = lrdata.iterator(); i.hasNext();) {
             ResAttr.Load rd = i.next();
             if (rd.resid == resid) {
                 i.remove();
@@ -423,7 +433,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     }
 
     public void delrattr(Indir<Resource> resid) {
-        for (Iterator<ResAttr.Cell<?>> i = rdata.iterator(); i.hasNext(); ) {
+        for (Iterator<ResAttr.Cell<?>> i = rdata.iterator(); i.hasNext();) {
             ResAttr.Cell<?> rd = i.next();
             if (rd.resid == resid) {
                 i.remove();
@@ -431,7 +441,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                 break;
             }
         }
-        for (Iterator<ResAttr.Load> i = lrdata.iterator(); i.hasNext(); ) {
+        for (Iterator<ResAttr.Load> i = lrdata.iterator(); i.hasNext();) {
             ResAttr.Load rd = i.next();
             if (rd.resid == resid) {
                 i.remove();
@@ -449,7 +459,8 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
             type = Type.TREE;
         else if (name.endsWith("oldtrunk"))
             type = Type.OLDTRUNK;
-        else if (name.endsWith("terobjs/plants/carrot") || name.endsWith("terobjs/plants/hemp") || name.endsWith("terobjs/plants/turnip"))
+        else if (name.endsWith("terobjs/plants/carrot") || name.endsWith("terobjs/plants/hemp")
+                || name.endsWith("terobjs/plants/turnip"))
             type = Type.MULTISTAGE_PLANT;
         else if (name.endsWith("/fallowplant"))
             type = Type.PLANT_FALLOW;
@@ -461,7 +472,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
             type = Type.PLAYER;
         else if (name.startsWith("gfx/terobjs/bumlings"))
             type = Type.BOULDER;
-        else  if (name.endsWith("vehicle/bram") || name.endsWith("vehicle/catapult"))
+        else if (name.endsWith("vehicle/bram") || name.endsWith("vehicle/catapult"))
             type = Type.SIEGE_MACHINE;
         else if (name.endsWith("/bear"))
             type = Type.BEAR;
@@ -479,12 +490,8 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
             type = Type.TROLL;
         else if (name.endsWith("/bat"))
             type = Type.BAT;
-        else if (name.endsWith("/boar") ||
-                name.endsWith("/badger") ||
-                name.endsWith("/wolverine") ||
-                name.endsWith("/adder") ||
-                name.endsWith("/wolf") ||
-                name.endsWith("/wildgoat"))
+        else if (name.endsWith("/boar") || name.endsWith("/badger") || name.endsWith("/wolverine")
+                || name.endsWith("/adder") || name.endsWith("/wolf") || name.endsWith("/wildgoat"))
             type = Type.MOB;
         else if (name.endsWith("/minesupport") || name.endsWith("/ladder"))
             type = Type.WOODEN_SUPPORT;
@@ -537,7 +544,8 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                         empty = false;
                         Resource olres = olires.get();
                         if (olres != null) {
-                            if (olres.name.endsWith("-blood") || olres.name.endsWith("-windweed") || olres.name.endsWith("-fishraw")) {
+                            if (olres.name.endsWith("-blood") || olres.name.endsWith("-windweed")
+                                    || olres.name.endsWith("-fishraw")) {
                                 done = false;
                                 break;
                             }
@@ -596,7 +604,8 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                             addol(new Gob.Overlay(Sprite.GROWTH_STAGE_ID, new PlantStageSprite(stage, -1, false)));
                     } else {
                         if (ol == null && (stage == cropstgmaxval || stage > 0 && stage < 6)) {
-                            addol(new Gob.Overlay(Sprite.GROWTH_STAGE_ID, new PlantStageSprite(stage, cropstgmaxval, type == Type.MULTISTAGE_PLANT)));
+                            addol(new Gob.Overlay(Sprite.GROWTH_STAGE_ID,
+                                    new PlantStageSprite(stage, cropstgmaxval, type == Type.MULTISTAGE_PLANT)));
                         } else if (stage <= 0 || (stage != cropstgmaxval && stage >= 6)) {
                             ols.remove(ol);
                         } else if (((PlantStageSprite) ol.spr).stg != stage) {
@@ -635,7 +644,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                 Gob followGob = null;
                 Moving moving = getattr(Moving.class);
                 if (moving != null && moving instanceof Following)
-                    followGob = ((Following)moving).tgt();
+                    followGob = ((Following) moving).tgt();
 
                 for (Composited.ED ed : ((Composite) d).comp.cequ) {
                     try {
@@ -669,38 +678,45 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
 
     private static final Object DYNAMIC = new Object();
     private Object seq = null;
+
     public Object staticp() {
-        if(seq == null) {
+        if (seq == null) {
             int rs = 0;
-            for(GAttrib attr : attr.values()) {
+            for (GAttrib attr : attr.values()) {
                 Object as = attr.staticp();
-                if(as == Rendered.CONSTANS) {
-                } else if(as instanceof Static) {
-                } else if(as == SemiStatic.class) {
+                if (as == Rendered.CONSTANS) {
+                } else if (as instanceof Static) {
+                } else if (as == SemiStatic.class) {
                     rs = Math.max(rs, 1);
                 } else {
                     rs = 2;
                     break;
                 }
             }
-            for(Overlay ol : ols) {
+            for (Overlay ol : ols) {
                 Object os = ol.staticp();
-                if(os == Rendered.CONSTANS) {
-                } else if(os instanceof Static) {
-                } else if(os == SemiStatic.class) {
+                if (os == Rendered.CONSTANS) {
+                } else if (os instanceof Static) {
+                } else if (os == SemiStatic.class) {
                     rs = Math.max(rs, 1);
                 } else {
                     rs = 2;
                     break;
                 }
             }
-            switch(rs) {
-                case 0: seq = new Static(); break;
-                case 1: seq = new SemiStatic(); break;
-                default: seq = null; break;
+            switch (rs) {
+                case 0:
+                    seq = new Static();
+                    break;
+                case 1:
+                    seq = new SemiStatic();
+                    break;
+                default:
+                    seq = null;
+                    break;
             }
         }
-        return((seq == DYNAMIC)?null:seq);
+        return ((seq == DYNAMIC) ? null : seq);
     }
 
     void changed() {
@@ -718,13 +734,17 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
         return (null);
     }
 
-    private static final ClassResolver<Gob> ctxr = new ClassResolver<Gob>()
-            .add(Glob.class, g -> g.glob)
+    private static final ClassResolver<Gob> ctxr = new ClassResolver<Gob>().add(Glob.class, g -> g.glob)
             .add(Session.class, g -> g.glob.sess);
-    public <T> T context(Class<T> cl) {return(ctxr.context(cl, this));}
+
+    public <T> T context(Class<T> cl) {
+        return (ctxr.context(cl, this));
+    }
 
     @Deprecated
-    public Glob glob() {return(context(Glob.class));}
+    public Glob glob() {
+        return (context(Glob.class));
+    }
 
     /* Because generic functions are too nice a thing for Java. */
     public double getv() {
@@ -751,8 +771,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     };
 
     public class Save extends GLState.Abstract {
-        public Matrix4f cam = new Matrix4f(), wxf = new Matrix4f(),
-                mv = new Matrix4f();
+        public Matrix4f cam = new Matrix4f(), wxf = new Matrix4f(), mv = new Matrix4f();
         public Projection proj = null;
         boolean debug = false;
 
@@ -833,7 +852,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
         }
 
         KinInfo kininfo = getattr(KinInfo.class);
-        if (kininfo == null || kininfo.group == 2 /*red*/)
+        if (kininfo == null || kininfo.group == 2 /* red */)
             return false;
 
         return true;

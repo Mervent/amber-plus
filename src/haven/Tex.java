@@ -42,7 +42,10 @@ public abstract class Tex {
         return ((h == in) ? h : (h * 2));
     }
 
-    /* Render texture coordinates from ul to br at c to c + sz, scaling if necessary. */
+    /*
+     * Render texture coordinates from ul to br at c to c + sz, scaling if
+     * necessary.
+     */
     public abstract void render(GOut g, Coord c, Coord ul, Coord br, Coord sz);
 
     public abstract float tcx(int x);
@@ -57,12 +60,14 @@ public abstract class Tex {
         render(g, c, Coord.z, dim, dim);
     }
 
-    /* Render texture at c, scaled to tsz, clipping everything outside ul to ul + sz. */
+    /*
+     * Render texture at c, scaled to tsz, clipping everything outside ul to ul +
+     * sz.
+     */
     public void crender(GOut g, Coord c, Coord ul, Coord sz, Coord tsz) {
         if ((tsz.x == 0) || (tsz.y == 0))
             return;
-        if ((c.x >= ul.x + sz.x) || (c.y >= ul.y + sz.y) ||
-                (c.x + tsz.x <= ul.x) || (c.y + tsz.y <= ul.y))
+        if ((c.x >= ul.x + sz.x) || (c.y >= ul.y + sz.y) || (c.x + tsz.x <= ul.x) || (c.y + tsz.y <= ul.y))
             return;
         Coord t = new Coord(c);
         Coord uld = new Coord(0, 0);
@@ -93,7 +98,10 @@ public abstract class Tex {
         render(g, t, uld, brd, szd);
     }
 
-    /* Render texture at c at normal size, clipping everything outside ul to ul + sz. */
+    /*
+     * Render texture at c at normal size, clipping everything outside ul to ul +
+     * sz.
+     */
     public void crender(GOut g, Coord c, Coord ul, Coord sz) {
         crender(g, c, ul, sz, dim);
     }

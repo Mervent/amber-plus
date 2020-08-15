@@ -36,9 +36,7 @@ public abstract class GSprite implements Drawn {
     public static final List<Factory> factories;
 
     static {
-        factories = Arrays.asList(new Factory[]{
-                StaticGSprite.fact,
-        });
+        factories = Arrays.asList(new Factory[] { StaticGSprite.fact, });
     }
 
     public interface Owner extends OwnerContext {
@@ -63,7 +61,8 @@ public abstract class GSprite implements Drawn {
     public static class FactMaker implements Resource.PublishedCode.Instancer {
         private static Factory dynfact(Class<? extends GSprite> cl) {
             try {
-                final Constructor<? extends GSprite> cons = cl.getConstructor(Owner.class, Resource.class, Message.class);
+                final Constructor<? extends GSprite> cons = cl.getConstructor(Owner.class, Resource.class,
+                        Message.class);
                 return (new Factory() {
                     public GSprite create(Owner owner, Resource res, Message sdt) {
                         return (Utils.construct(cons, owner, res, sdt));
@@ -113,7 +112,7 @@ public abstract class GSprite implements Drawn {
         Class cl = this.getClass();
         try {
             Field name = cl.getDeclaredField("name");
-            return (String)name.get(this);
+            return (String) name.get(this);
         } catch (NoSuchFieldException nsfe) {
         } catch (ClassCastException cce) {
         } catch (IllegalAccessException iae) {

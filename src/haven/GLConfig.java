@@ -43,22 +43,22 @@ public class GLConfig implements java.io.Serializable, Console.Directory {
     }
 
     private static int glgeti(GL gl, int param) {
-        int[] buf = {0};
+        int[] buf = { 0 };
         gl.glGetIntegerv(param, buf, 0);
         GOut.checkerr(gl);
         return (buf[0]);
     }
 
     private static int glcondi(GL gl, int param, int def) {
-        int[] buf = {0};
+        int[] buf = { 0 };
         gl.glGetIntegerv(param, buf, 0);
         if (GOut.glerror && gl.glGetError() != 0)
-	        return(def);
+            return (def);
         return (buf[0]);
     }
 
     private static float glgetf(GL gl, int param) {
-        float[] buf = {0};
+        float[] buf = { 0 };
         gl.glGetFloatv(param, buf, 0);
         GOut.checkerr(gl);
         return (buf[0]);
@@ -123,7 +123,8 @@ public class GLConfig implements java.io.Serializable, Console.Directory {
     }
 
     public boolean haveglsl() {
-        return (exts.contains("GL_ARB_fragment_shader") && exts.contains("GL_ARB_vertex_shader") && (glslver >= 0x0114));
+        return (exts.contains("GL_ARB_fragment_shader") && exts.contains("GL_ARB_vertex_shader")
+                && (glslver >= 0x0114));
     }
 
     public boolean havefbo() {

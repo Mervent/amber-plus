@@ -9,8 +9,8 @@ public class TraversableObstacle {
     public Coord clra, clrb, clrc, clrd;
     public HashMap<Integer, Utils.MinMax> raster;
 
-    public TraversableObstacle(Coord wa, Coord wb, Coord wc, Coord wd,
-                               Coord clra, Coord clrb, Coord clrc, Coord clrd, HashMap<Integer, Utils.MinMax> raster) {
+    public TraversableObstacle(Coord wa, Coord wb, Coord wc, Coord wd, Coord clra, Coord clrb, Coord clrc, Coord clrd,
+            HashMap<Integer, Utils.MinMax> raster) {
         this.wa = wa;
         this.wb = wb;
         this.wc = wc;

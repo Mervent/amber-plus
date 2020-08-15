@@ -94,8 +94,6 @@ public class Tex2D {
     public static final ShaderMacro clip = prog -> {
         final Value tex2d = tex2d(prog.fctx);
         tex2d.force();
-        prog.fctx.mainmod(blk -> blk.add(new If(lt(pick(tex2d.ref(), "a"), l(0.5)),
-                        new Discard())),
-                -100);
+        prog.fctx.mainmod(blk -> blk.add(new If(lt(pick(tex2d.ref(), "a"), l(0.5)), new Discard())), -100);
     };
 }

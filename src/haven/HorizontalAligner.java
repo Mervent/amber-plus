@@ -15,10 +15,8 @@ public class HorizontalAligner {
             return children.get(1).c.x + children.get(1).sz.x;
         }
         final Widget widest = Collections.max(children, (lhs, rhs) -> Integer.compare(lhs.sz.x, rhs.sz.x));
-        final float width = children.get(0).sz.x
-                + widest.sz.x * (children.size() - 2)
-                + children.get(children.size() - 1).sz.x
-                + space * (children.size() - 1);
+        final float width = children.get(0).sz.x + widest.sz.x * (children.size() - 2)
+                + children.get(children.size() - 1).sz.x + space * (children.size() - 1);
         final float elementWidth = width / children.size();
         int index = 0;
         for (final Widget child : children) {

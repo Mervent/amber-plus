@@ -54,10 +54,10 @@ public class Material extends GLState {
         }
     }
 
-    public static final float[] defamb = {0.2f, 0.2f, 0.2f, 1.0f};
-    public static final float[] defdif = {0.8f, 0.8f, 0.8f, 1.0f};
-    public static final float[] defspc = {0.0f, 0.0f, 0.0f, 1.0f};
-    public static final float[] defemi = {0.0f, 0.0f, 0.0f, 1.0f};
+    public static final float[] defamb = { 0.2f, 0.2f, 0.2f, 1.0f };
+    public static final float[] defdif = { 0.8f, 0.8f, 0.8f, 1.0f };
+    public static final float[] defspc = { 0.0f, 0.0f, 0.0f, 1.0f };
+    public static final float[] defemi = { 0.0f, 0.0f, 0.0f, 1.0f };
 
     public static final GLState.Slot<Colors> colors = new GLState.Slot<Colors>(Slot.Type.DRAW, Colors.class);
 
@@ -82,15 +82,13 @@ public class Material extends GLState {
         }
 
         private static float[] colmul(float[] c1, float[] c2) {
-            return (new float[]{c1[0] * c2[0], c1[1] * c2[1], c1[2] * c2[2], c1[3] * c2[3]});
+            return (new float[] { c1[0] * c2[0], c1[1] * c2[1], c1[2] * c2[2], c1[3] * c2[3] });
         }
 
         private static float[] colblend(float[] in, float[] bl) {
             float f1 = bl[3], f2 = 1.0f - f1;
-            return (new float[]{(in[0] * f2) + (bl[0] * f1),
-                    (in[1] * f2) + (bl[1] * f1),
-                    (in[2] * f2) + (bl[2] * f1),
-                    in[3]});
+            return (new float[] { (in[0] * f2) + (bl[0] * f1), (in[1] * f2) + (bl[1] * f1), (in[2] * f2) + (bl[2] * f1),
+                    in[3] });
         }
 
         public Colors(Color amb, Color dif, Color spc, Color emi, float shine) {
@@ -102,11 +100,11 @@ public class Material extends GLState {
         }
 
         public Colors(Color col) {
-            this(new Color((int) (col.getRed() * defamb[0]), (int) (col.getGreen() * defamb[1]), (int) (col.getBlue() * defamb[2]), col.getAlpha()),
-                    new Color((int) (col.getRed() * defdif[0]), (int) (col.getGreen() * defdif[1]), (int) (col.getBlue() * defdif[2]), col.getAlpha()),
-                    new Color(0, 0, 0, 0),
-                    new Color(0, 0, 0, 0),
-                    0);
+            this(new Color((int) (col.getRed() * defamb[0]), (int) (col.getGreen() * defamb[1]),
+                    (int) (col.getBlue() * defamb[2]), col.getAlpha()),
+                    new Color((int) (col.getRed() * defdif[0]), (int) (col.getGreen() * defdif[1]),
+                            (int) (col.getBlue() * defdif[2]), col.getAlpha()),
+                    new Color(0, 0, 0, 0), new Color(0, 0, 0, 0), 0);
         }
 
         public Colors(Resource res, Object... args) {
@@ -151,16 +149,13 @@ public class Material extends GLState {
         }
 
         public Colors combine(Colors other) {
-            return (new Colors(colblend(other.amb, this.amb),
-                    colblend(other.dif, this.dif),
-                    colblend(other.spc, this.spc),
-                    colblend(other.emi, this.emi),
-                    other.shine));
+            return (new Colors(colblend(other.amb, this.amb), colblend(other.dif, this.dif),
+                    colblend(other.spc, this.spc), colblend(other.emi, this.emi), other.shine));
         }
 
         public String toString() {
-            return (String.format("(%.1f, %.1f, %.1f), (%.1f, %.1f, %.1f), (%.1f, %.1f, %.1f @ %.1f)",
-                    amb[0], amb[1], amb[2], dif[0], dif[1], dif[2], spc[0], spc[1], spc[2], shine));
+            return (String.format("(%.1f, %.1f, %.1f), (%.1f, %.1f, %.1f), (%.1f, %.1f, %.1f @ %.1f)", amb[0], amb[1],
+                    amb[2], dif[0], dif[1], dif[2], spc[0], spc[1], spc[2], shine));
         }
     }
 
@@ -248,9 +243,9 @@ public class Material extends GLState {
             return (f.create(owner, res, sdt));
         }
         Res mat = res.layer(Material.Res.class);
-        if(mat == null)
-            return(null);
-        return(mat.get());
+        if (mat == null)
+            return (null);
+        return (mat.get());
     }
 
     private static class LegacyOwner implements Owner {
@@ -261,8 +256,7 @@ public class Material extends GLState {
         }
 
         private static final ClassResolver<LegacyOwner> ctxr = new ClassResolver<LegacyOwner>()
-                .add(Glob.class, o -> o.glob)
-                .add(Session.class, o -> o.glob.sess);
+                .add(Glob.class, o -> o.glob).add(Session.class, o -> o.glob.sess);
 
         public <T> T context(Class<T> cl) {
             return (ctxr.context(cl, this));
@@ -293,7 +287,7 @@ public class Material extends GLState {
         public Material get() {
             synchronized (this) {
                 if (m == null) {
-                    for (Iterator<Resolver> i = left.iterator(); i.hasNext(); ) {
+                    for (Iterator<Resolver> i = left.iterator(); i.hasNext();) {
                         Resolver r = i.next();
                         r.resolve(states);
                         i.remove();
@@ -326,10 +320,8 @@ public class Material extends GLState {
     @Resource.LayerName("mat")
     public static class OldMat implements Resource.LayerFactory<Res> {
         private static Color col(Message buf) {
-            return (new Color((int) (buf.cpfloat() * 255.0),
-                    (int) (buf.cpfloat() * 255.0),
-                    (int) (buf.cpfloat() * 255.0),
-                    (int) (buf.cpfloat() * 255.0)));
+            return (new Color((int) (buf.cpfloat() * 255.0), (int) (buf.cpfloat() * 255.0),
+                    (int) (buf.cpfloat() * 255.0), (int) (buf.cpfloat() * 255.0)));
         }
 
         public Res cons(final Resource res, Message buf) {
@@ -362,7 +354,8 @@ public class Material extends GLState {
                                     return;
                                 }
                             }
-                            throw (new RuntimeException(String.format("Specified texture %d not found in %s", tid, res)));
+                            throw (new RuntimeException(
+                                    String.format("Specified texture %d not found in %s", tid, res)));
                         }
                     });
                 } else if (thing == "texlink") {
@@ -379,7 +372,8 @@ public class Material extends GLState {
                                     return;
                                 }
                             }
-                            throw (new RuntimeException(String.format("Specified texture %d for %s not found in %s", tid, res, tres)));
+                            throw (new RuntimeException(
+                                    String.format("Specified texture %d for %s not found in %s", tid, res, tres)));
                         }
                     });
                 } else if (thing == "light") {
@@ -408,24 +402,24 @@ public class Material extends GLState {
         public Res.Resolver cons(final Resource res, Object... args) {
             final Indir<Resource> lres;
             final int id;
-            if(args[0] instanceof String) {
-                lres = res.pool.load((String)args[0], (Integer)args[1]);
-                id = (args.length > 2)?(Integer)args[2]:-1;
+            if (args[0] instanceof String) {
+                lres = res.pool.load((String) args[0], (Integer) args[1]);
+                id = (args.length > 2) ? (Integer) args[2] : -1;
             } else {
                 lres = res.indir();
-                id = (Integer)args[0];
+                id = (Integer) args[0];
             }
             return (new Res.Resolver() {
                 public void resolve(Collection<GLState> buf) {
                     if (id >= 0) {
                         Res mat = lres.get().layer(Res.class, id);
                         if (mat == null)
-                            throw(new Resource.LoadException("No such material in " + lres.get() + ": " + id, res));
+                            throw (new Resource.LoadException("No such material in " + lres.get() + ": " + id, res));
                         buf.add(mat.get());
                     } else {
-                        Material mat = fromres((Owner)null, lres.get(), Message.nil);
+                        Material mat = fromres((Owner) null, lres.get(), Message.nil);
                         if (mat == null)
-                            throw(new Resource.LoadException("No material in " + lres.get(), res));
+                            throw (new Resource.LoadException("No material in " + lres.get(), res));
                         buf.add(mat);
                     }
                 }
@@ -512,9 +506,10 @@ public class Material extends GLState {
                 String nm = buf.string();
                 Object[] args = buf.list();
                 if (nm.equals("linear")) {
-            /* XXX: These should very much be removed and
-             * specified directly in the texture layer
-		     * instead. */
+                    /*
+                     * XXX: These should very much be removed and specified directly in the texture
+                     * layer instead.
+                     */
                     ret.linear = true;
                 } else if (nm.equals("mipmap")) {
                     ret.mipmap = true;

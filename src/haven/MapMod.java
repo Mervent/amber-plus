@@ -75,7 +75,6 @@ public class MapMod extends Window implements MapView.Grabber {
         super.destroy();
     }
 
-
     public boolean mmousedown(Coord mc, int button) {
         if (button != 1)
             return (false);

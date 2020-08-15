@@ -58,10 +58,9 @@ public class MapWnd extends Window {
     private int markerseq = -1;
     private boolean domark = false;
     private final Collection<Runnable> deferred = new LinkedList<>();
-    private static final Tex plx = Text.renderstroked("\u2716",  Color.red, Color.BLACK, Text.num12boldFnd).tex();
-    private  Predicate<Marker> filter = (m -> true);
+    private static final Tex plx = Text.renderstroked("\u2716", Color.red, Color.BLACK, Text.num12boldFnd).tex();
+    private Predicate<Marker> filter = (m -> true);
     private final static Comparator<Marker> namecmp = ((a, b) -> a.nm.compareTo(b.nm));
-
 
     public MapWnd(MapFile file, MapView mv, Coord sz, String title) {
         super(sz, title, true);
@@ -165,7 +164,8 @@ public class MapWnd extends Window {
 
         public boolean clickloc(Location loc, int button) {
             if (domark && (button == 1)) {
-                Marker nm = new PMarker(loc.seg.id, loc.tc, "New marker", BuddyWnd.gc[new Random().nextInt(BuddyWnd.gc.length)]);
+                Marker nm = new PMarker(loc.seg.id, loc.tc, "New marker",
+                        BuddyWnd.gc[new Random().nextInt(BuddyWnd.gc.length)]);
                 file.add(nm);
                 list.change2(nm);
                 list.display(nm);
@@ -209,7 +209,7 @@ public class MapWnd extends Window {
     public void tick(double dt) {
         super.tick(dt);
         synchronized (deferred) {
-            for (Iterator<Runnable> i = deferred.iterator(); i.hasNext(); ) {
+            for (Iterator<Runnable> i = deferred.iterator(); i.hasNext();) {
                 Runnable task = i.next();
                 try {
                     task.run();
@@ -222,7 +222,8 @@ public class MapWnd extends Window {
         if (visible && (markerseq != view.file.markerseq)) {
             if (view.file.lock.readLock().tryLock()) {
                 try {
-                    List<Marker> markers = view.file.markers.stream().filter(filter).collect(java.util.stream.Collectors.toList());
+                    List<Marker> markers = view.file.markers.stream().filter(filter)
+                            .collect(java.util.stream.Collectors.toList());
                     markers.sort(mcmp);
                     this.markers = markers;
                     markerseq = view.file.markerseq;
@@ -233,32 +234,24 @@ public class MapWnd extends Window {
         }
     }
 
-    public static final Color every = new Color(255, 255, 255, 16), other = new Color(255, 255, 255, 32), found = new Color(255, 255, 0, 32);
+    public static final Color every = new Color(255, 255, 255, 16), other = new Color(255, 255, 255, 32),
+            found = new Color(255, 255, 0, 32);
 
-    private static final Pair[] filters = new Pair[] {
-            new Pair<>("-- All --", null),
-            new Pair<>("--- Custom ---", "flg"),
-            new Pair<>("Abyssal Chasm", "abyssalchasm"),
-            new Pair<>("Ancient Windthrow", "windthrow"),
-            new Pair<>("Clay Pit", "claypit"),
-            new Pair<>("Crystal Rock", "crystalpatch"),
-            new Pair<>("Fairy Stone", "fairystone"),
-            new Pair<>("Geyser", "geyser"),
-            new Pair<>("Great Cave Organ", "caveorgan"),
-            new Pair<>("Guano Pile", "guanopile"),
-            new Pair<>("Headwaters", "headwaters"),
-            new Pair<>("Heart of the Woods", "woodheart"),
-            new Pair<>("Ice Spire", "icespire"),
-            new Pair<>("Jotun Mussel", "jotunmussel"),
-            new Pair<>("Lilypad Lotus", "lilypadlotus"),
-            new Pair<>("Quest Givers", "qst"),
-            new Pair<>("Salt Basin", "saltbasin"),
-            new Pair<>("Swirling Vortex", "watervortex")
-    };
+    private static final Pair[] filters = new Pair[] { new Pair<>("-- All --", null),
+            new Pair<>("--- Custom ---", "flg"), new Pair<>("Abyssal Chasm", "abyssalchasm"),
+            new Pair<>("Ancient Windthrow", "windthrow"), new Pair<>("Clay Pit", "claypit"),
+            new Pair<>("Crystal Rock", "crystalpatch"), new Pair<>("Fairy Stone", "fairystone"),
+            new Pair<>("Geyser", "geyser"), new Pair<>("Great Cave Organ", "caveorgan"),
+            new Pair<>("Guano Pile", "guanopile"), new Pair<>("Headwaters", "headwaters"),
+            new Pair<>("Heart of the Woods", "woodheart"), new Pair<>("Ice Spire", "icespire"),
+            new Pair<>("Jotun Mussel", "jotunmussel"), new Pair<>("Lilypad Lotus", "lilypadlotus"),
+            new Pair<>("Quest Givers", "qst"), new Pair<>("Salt Basin", "saltbasin"),
+            new Pair<>("Swirling Vortex", "watervortex") };
 
     @SuppressWarnings("unchecked")
     private Dropbox<Pair<String, String>> markersFilter() {
-        Dropbox<Pair<String, String>> modes = new Dropbox<Pair<String, String>>(200 - 10, filters.length, Math.max(Text.render(filters[0].a.toString()).sz().y, 16)) {
+        Dropbox<Pair<String, String>> modes = new Dropbox<Pair<String, String>>(200 - 10, filters.length,
+                Math.max(Text.render(filters[0].a.toString()).sz().y, 16)) {
             @Override
             protected Pair<String, String> listitem(int i) {
                 return filters[i];
@@ -282,9 +275,9 @@ public class MapWnd extends Window {
                 else if (item.b.equals("flg"))
                     filter = (m -> m instanceof PMarker);
                 else if (item.b.equals("qst"))
-                    filter = (m -> m instanceof SMarker && ((SMarker)m).res.name.startsWith("gfx/invobjs/small"));
+                    filter = (m -> m instanceof SMarker && ((SMarker) m).res.name.startsWith("gfx/invobjs/small"));
                 else
-                    filter = (m -> m instanceof SMarker && ((SMarker)m).res.name.endsWith(item.b));
+                    filter = (m -> m instanceof SMarker && ((SMarker) m).res.name.endsWith(item.b));
                 markerseq = -1;
                 // reset scrollbar
                 if (list != null)
@@ -305,7 +298,10 @@ public class MapWnd extends Window {
         public int listitems() {
             return (markers.size());
         }
-        public boolean searchmatch(int idx, String txt) {return(markers.get(idx).nm.toLowerCase().indexOf(txt.toLowerCase()) >= 0);}
+
+        public boolean searchmatch(int idx, String txt) {
+            return (markers.get(idx).nm.toLowerCase().indexOf(txt.toLowerCase()) >= 0);
+        }
 
         public MarkerList(int w, int n) {
             super(w, n, 20);
@@ -317,7 +313,7 @@ public class MapWnd extends Window {
         }
 
         public void drawitem(GOut g, Marker mark, int idx) {
-            if(soughtitem(idx)) {
+            if (soughtitem(idx)) {
                 g.chcolor(found);
                 g.frect(Coord.z, g.sz);
             }
@@ -504,7 +500,8 @@ public class MapWnd extends Window {
                         Coord sc = tc.add(info.sc.sub(obg.gc).mul(cmaps));
                         SMarker prev = view.file.smarkers.get(oid);
                         if (prev == null) {
-                            view.file.add(new SMarker(info.seg, sc, rnm, oid, new Resource.Spec(Resource.remote(), res.name, res.ver)));
+                            view.file.add(new SMarker(info.seg, sc, rnm, oid,
+                                    new Resource.Spec(Resource.remote(), res.name, res.ver)));
                         } else {
                             if ((prev.seg != info.seg) || !prev.tc.equals(sc)) {
                                 prev.seg = info.seg;

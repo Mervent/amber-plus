@@ -231,7 +231,9 @@ public abstract class Function {
         public static final Builtin texelFetch = new Builtin(Type.VEC4, new Symbol.Fix("texelFetch"), 3);
     }
 
-    public enum PDir {IN, OUT, INOUT;}
+    public enum PDir {
+        IN, OUT, INOUT;
+    }
 
     public static class Parameter extends Variable {
         public final PDir dir;
@@ -263,11 +265,13 @@ public abstract class Function {
 
     void ckparams(Expression... params) {
         if (params.length != pars.size())
-            throw (new RuntimeException(String.format("Wrong number of arguments to %s; expected %d, got %d", name, pars.size(), params.length)));
+            throw (new RuntimeException(String.format("Wrong number of arguments to %s; expected %d, got %d", name,
+                    pars.size(), params.length)));
         int i = 0;
         for (Parameter par : pars) {
             if (((par.dir == PDir.OUT) || (par.dir == PDir.INOUT)) && !(params[i] instanceof LValue))
-                throw (new RuntimeException(String.format("Must have l-value for %s parameter %d to %s", par.dir, i, name)));
+                throw (new RuntimeException(
+                        String.format("Must have l-value for %s parameter %d to %s", par.dir, i, name)));
             i++;
         }
     }

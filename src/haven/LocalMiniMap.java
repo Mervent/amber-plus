@@ -48,7 +48,7 @@ public class LocalMiniMap extends Widget {
     private UI.Grab dragging;
     private Coord doff = Coord.z;
     private Coord delta = Coord.z;
-	private static final Resource alarmplayersfx = Resource.local().loadwait("sfx/alarmplayer");
+    private static final Resource alarmplayersfx = Resource.local().loadwait("sfx/alarmplayer");
     private static final Resource foragablesfx = Resource.local().loadwait("sfx/awwyeah");
     private static final Resource bearsfx = Resource.local().loadwait("sfx/bear");
     private static final Resource lynxfx = Resource.local().loadwait("sfx/lynx");
@@ -60,11 +60,11 @@ public class LocalMiniMap extends Widget {
     private static final Resource doomedsfx = Resource.local().loadwait("sfx/doomed");
     private static final Resource swagsfx = Resource.local().loadwait("sfx/swag");
     private static final Resource wolfsfx = Resource.local().loadwait("sfx/wolf");
-	private final HashSet<Long> sgobs = new HashSet<Long>();
-	
-	private float zoom = 1f; //zoom multiplier
-	private float iconZoom = 1f; //zoom multiplier for minimap icons
-	
+    private final HashSet<Long> sgobs = new HashSet<Long>();
+
+    private float zoom = 1f; // zoom multiplier
+    private float iconZoom = 1f; // zoom multiplier for minimap icons
+
     private final Map<Coord, Tex> maptiles = new LinkedHashMap<Coord, Tex>(100, 0.75f, false) {
         @Override
         protected boolean removeEldestEntry(Map.Entry<Coord, Tex> eldest) {
@@ -84,7 +84,8 @@ public class LocalMiniMap extends Widget {
             super.clear();
         }
     };
-    private final Map<Pair<MCache.Grid, Integer>, Defer.Future<MapTile>> cache = new LinkedHashMap<Pair<MCache.Grid, Integer>, Defer.Future<MapTile>>(7, 0.75f, true) {
+    private final Map<Pair<MCache.Grid, Integer>, Defer.Future<MapTile>> cache = new LinkedHashMap<Pair<MCache.Grid, Integer>, Defer.Future<MapTile>>(
+            7, 0.75f, true) {
         protected boolean removeEldestEntry(Map.Entry<Pair<MCache.Grid, Integer>, Defer.Future<MapTile>> eldest) {
             return size() > 7;
         }
@@ -95,7 +96,6 @@ public class LocalMiniMap extends Widget {
     private Map<Color, Tex> xmap = new HashMap<Color, Tex>(6);
     public static Coord plcrel = null;
     public long lastnewgid;
-
 
     public static class MapTile {
         public MCache.Grid grid;
@@ -138,10 +138,8 @@ public class LocalMiniMap extends Widget {
                 buf.setRGB(c.x, c.y, rgb);
                 if (!Config.minimapsmooth) {
                     try {
-                        if ((m.gettile(ul.add(c).add(-1, 0)) > t) ||
-                                (m.gettile(ul.add(c).add(1, 0)) > t) ||
-                                (m.gettile(ul.add(c).add(0, -1)) > t) ||
-                                (m.gettile(ul.add(c).add(0, 1)) > t)) {
+                        if ((m.gettile(ul.add(c).add(-1, 0)) > t) || (m.gettile(ul.add(c).add(1, 0)) > t)
+                                || (m.gettile(ul.add(c).add(0, -1)) > t) || (m.gettile(ul.add(c).add(0, 1)) > t)) {
                             buf.setRGB(c.x, c.y, Color.BLACK.getRGB());
                         }
                     } catch (Exception e) {
@@ -160,7 +158,8 @@ public class LocalMiniMap extends Widget {
                             for (int y = c.y - 1; y <= c.y + 1; y++) {
                                 for (int x = c.x - 1; x <= c.x + 1; x++) {
                                     Color cc = new Color(buf.getRGB(x, y));
-                                    buf.setRGB(x, y, Utils.blendcol(cc, Color.BLACK, ((x == c.x) && (y == c.y)) ? 1 : 0.1).getRGB());
+                                    buf.setRGB(x, y, Utils
+                                            .blendcol(cc, Color.BLACK, ((x == c.x) && (y == c.y)) ? 1 : 0.1).getRGB());
                                 }
                             }
                         }
@@ -183,7 +182,7 @@ public class LocalMiniMap extends Widget {
     }
 
     public Coord p2c(Coord2d pc) {
-    	return (pc.floor(tilesz).sub(cc).mul(zoom).add(sz.div(2)));
+        return (pc.floor(tilesz).sub(cc).mul(zoom).add(sz.div(2)));
     }
 
     public Coord2d c2p(Coord c) {
@@ -214,7 +213,8 @@ public class LocalMiniMap extends Widget {
                                     tex = gob.knocked == Boolean.TRUE ? icon.texgrey() : icon.tex();
                                 else
                                     tex = Config.additonalicons.get(res.name);
-                                g.image(tex, p2c(gob.rc).sub(tex.sz().mul(iconZoom).div(2)).add(delta), tex.dim.mul(iconZoom));
+                                g.image(tex, p2c(gob.rc).sub(tex.sz().mul(iconZoom).div(2)).add(delta),
+                                        tex.dim.mul(iconZoom));
                             }
                         }
                     } else if (gob.type == Gob.Type.PLAYER && player != null && gob.id != player.id) {
@@ -363,7 +363,7 @@ public class LocalMiniMap extends Widget {
 
     public void tick(double dt) {
         Gob pl = ui.sess.glob.oc.getgob(MapView.plgob);
-        if(pl == null)
+        if (pl == null)
             this.cc = mv.cc.floor(tilesz);
         else
             this.cc = pl.rc.floor(tilesz);
@@ -371,7 +371,8 @@ public class LocalMiniMap extends Widget {
         if (Config.playerposfile != null && MapGridSave.gul != null) {
             try {
                 // instead of synchronizing MapGridSave.gul we just handle NPE
-             //   plcrel = pl.rc.sub((MapGridSave.gul.x + 50) * tilesz.x, (MapGridSave.gul.y + 50) * tilesz.y);
+                // plcrel = pl.rc.sub((MapGridSave.gul.x + 50) * tilesz.x, (MapGridSave.gul.y +
+                // 50) * tilesz.y);
             } catch (NullPointerException npe) {
             }
         }
@@ -381,8 +382,7 @@ public class LocalMiniMap extends Widget {
         if (cc == null)
             return;
 
-        map:
-        {
+        map: {
             final MCache.Grid plg;
             try {
                 plg = ui.sess.glob.map.getgrid(cc.div(cmaps));
@@ -390,7 +390,7 @@ public class LocalMiniMap extends Widget {
                 break map;
             }
             final int seq = plg.seq;
-            
+
             if (cur == null || plg != cur.grid || seq != cur.seq) {
                 Defer.Future<MapTile> f;
                 synchronized (cache) {
@@ -425,23 +425,23 @@ public class LocalMiniMap extends Widget {
                 if (f.done()) {
                     cur = f.get();
                     MapFile save = this.save;
-                    if(save != null)
+                    if (save != null)
                         save.update(ui.sess.glob.map, cur.grid.gc);
                 }
             }
         }
-        if (cur != null) {        	
-    		int tileSize = (int)(100 * zoom);
-    		Coord ts = new Coord(tileSize, tileSize);
-    		int hhalf = sz.x / 2;
+        if (cur != null) {
+            int tileSize = (int) (100 * zoom);
+            Coord ts = new Coord(tileSize, tileSize);
+            int hhalf = sz.x / 2;
             int vhalf = sz.y / 2;
             int ht = (hhalf / tileSize) + 2;
             int vt = (vhalf / tileSize) + 2;
-            int pox = (int)((cur.grid.gc.x * 100 - cc.x) * zoom) + hhalf + delta.x;
-            int poy = (int)((cur.grid.gc.y * 100 - cc.y) * zoom) + vhalf + delta.y;
+            int pox = (int) ((cur.grid.gc.x * 100 - cc.x) * zoom) + hhalf + delta.x;
+            int poy = (int) ((cur.grid.gc.y * 100 - cc.y) * zoom) + vhalf + delta.y;
             int tox = pox / 100 - 1;
             int toy = poy / 100 - 1;
-            
+
             if (maptiles.size() >= 9) {
                 for (int x = -ht; x < ht + ht; x++) {
                     for (int y = -vt; y < vt + vt; y++) {
@@ -459,13 +459,14 @@ public class LocalMiniMap extends Widget {
                     }
                 }
             }
-        	
+
             g.image(resize, sz.sub(resize.sz()));
 
             if (Config.mapshowviewdist) {
                 Gob player = mv.player();
                 if (player != null)
-                    g.image(gridblue, p2c(player.rc).add(delta).sub((int)(44 * zoom), (int)(44 * zoom)), gridblue.dim.mul(zoom));
+                    g.image(gridblue, p2c(player.rc).add(delta).sub((int) (44 * zoom), (int) (44 * zoom)),
+                            gridblue.dim.mul(zoom));
             }
         }
         drawicons(g);
@@ -487,7 +488,7 @@ public class LocalMiniMap extends Widget {
                     if (gob == null) {
                         Tex tex = xmap.get(m.col);
                         if (tex == null) {
-                            tex = Text.renderstroked("\u2716",  m.col, Color.BLACK, Text.num12boldFnd).tex();
+                            tex = Text.renderstroked("\u2716", m.col, Color.BLACK, Text.num12boldFnd).tex();
                             xmap.put(m.col, tex);
                         }
                         g.image(tex, ptc.sub(6, 6));
@@ -528,7 +529,8 @@ public class LocalMiniMap extends Widget {
             if (gob == null) {
                 mv.wdgmsg("click", rootpos().add(csd), mc.floor(posres), button, ui.modflags());
             } else {
-                mv.wdgmsg("click", rootpos().add(csd), mc.floor(posres), button, ui.modflags(), 0, (int) gob.id, gob.rc.floor(posres), 0, -1);
+                mv.wdgmsg("click", rootpos().add(csd), mc.floor(posres), button, ui.modflags(), 0, (int) gob.id,
+                        gob.rc.floor(posres), 0, -1);
                 if (Config.autopickmussels && gob.type == Gob.Type.MUSSEL)
                     mv.startMusselsPicker(gob);
             }
@@ -540,7 +542,7 @@ public class LocalMiniMap extends Widget {
     }
 
     public void mousemove(Coord c) {
-    	if (this.dragging != null) {
+        if (this.dragging != null) {
             if (this.tooltip != null) {
                 this.tooltip = null;
             }
@@ -556,32 +558,33 @@ public class LocalMiniMap extends Widget {
                 GobHealth gh = null;
                 for (Map.Entry<Class<? extends GAttrib>, GAttrib> entry : gob.attr.entrySet()) {
                     if (entry.getValue() instanceof Composite) {
-                        cmp = (Composite)entry.getValue();
+                        cmp = (Composite) entry.getValue();
                         continue;
                     }
                     if (entry.getValue() instanceof GobIcon) {
-                        gi = (GobIcon)entry.getValue();
+                        gi = (GobIcon) entry.getValue();
                         continue;
                     }
-                    if (!(entry.getValue() instanceof GobHealth)) continue;
-                    gh = (GobHealth)entry.getValue();
+                    if (!(entry.getValue() instanceof GobHealth))
+                        continue;
+                    gh = (GobHealth) entry.getValue();
                 }
                 Resource.Tooltip tt = null;
                 if (cmp != null) {
-                    tt = (Resource.Tooltip)((Resource)cmp.base.get()).layer(Resource.Tooltip.class);
+                    tt = (Resource.Tooltip) ((Resource) cmp.base.get()).layer(Resource.Tooltip.class);
                 }
                 if (tt != null) {
                     sb.append(tt.t);
                 } else {
                     if (gi != null) {
-                        tt = (Resource.Tooltip)((Resource)gi.res.get()).layer(Resource.Tooltip.class);
+                        tt = (Resource.Tooltip) ((Resource) gi.res.get()).layer(Resource.Tooltip.class);
                     }
                     if (tt != null) {
                         sb.append(tt.t);
                     } else if (cmp != null) {
-                        sb.append(((Resource)cmp.base.get()).basename());
+                        sb.append(((Resource) cmp.base.get()).basename());
                     } else if (gi != null) {
-                        sb.append(((Resource)gi.res.get()).basename());
+                        sb.append(((Resource) gi.res.get()).basename());
                     }
                 }
                 if (sb.toString().length() > 0 && gh != null) {
@@ -599,14 +602,14 @@ public class LocalMiniMap extends Widget {
         }
         return (true);
     }
-    
+
     public boolean mousewheel(Coord c, int amount) {
-    	if (amount > 0 && zoom > 1)
-    		zoom = Math.round(zoom * 100 - 20) / 100f;
-    	else if (amount < 0 && zoom < 3) 
-    		zoom = Math.round(zoom * 100 + 20) / 100f;
-    	
-    	iconZoom = Math.round((zoom - 1) * 100 / 2) / 100f + 1;
-    	return true;
+        if (amount > 0 && zoom > 1)
+            zoom = Math.round(zoom * 100 - 20) / 100f;
+        else if (amount < 0 && zoom < 3)
+            zoom = Math.round(zoom * 100 + 20) / 100f;
+
+        iconZoom = Math.round((zoom - 1) * 100 / 2) / 100f + 1;
+        return true;
     }
 }

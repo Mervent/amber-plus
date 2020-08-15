@@ -81,7 +81,8 @@ public class HashBMap<K, V> extends AbstractMap<K, V> implements BMap<K, V> {
                             }
 
                             public boolean equals(Object o) {
-                                return ((o instanceof IteredEntry) && (((IteredEntry) o).k == k) && (((IteredEntry) o).v == v));
+                                return ((o instanceof IteredEntry) && (((IteredEntry) o).k == k)
+                                        && (((IteredEntry) o).v == v));
                             }
 
                             public int hashCode() {

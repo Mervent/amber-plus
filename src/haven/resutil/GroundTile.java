@@ -33,7 +33,8 @@ import haven.*;
 import haven.Surface.MeshVertex;
 
 public class GroundTile extends Tiler implements Tiler.MCons, Tiler.CTrans {
-    private static final Material.Colors gcol = new Material.Colors(new Color(128, 128, 128), new Color(255, 255, 255), new Color(0, 0, 0), new Color(0, 0, 0));
+    private static final Material.Colors gcol = new Material.Colors(new Color(128, 128, 128), new Color(255, 255, 255),
+            new Color(0, 0, 0), new Color(0, 0, 0));
     public final Tileset set;
 
     @ResName("gnd")
@@ -64,9 +65,10 @@ public class GroundTile extends Tiler implements Tiler.MCons, Tiler.CTrans {
         return (ret);
     }
 
-    /* XXX: Some strange javac bug seems to make it resolve the
-     * trans() references to the wrong signature, thus the name
-     * distinction. */
+    /*
+     * XXX: Some strange javac bug seems to make it resolve the trans() references
+     * to the wrong signature, thus the name distinction.
+     */
     public void _faces(MapMesh m, Tileset.Tile t, int z, Surface.Vertex[] v, float[] tcx, float[] tcy, int[] f) {
         Tex tex = t.tex();
         float tl = tex.tcx(0), tt = tex.tcy(0), tw = tex.tcx(tex.sz().x) - tl, th = tex.tcy(tex.sz().y) - tt;

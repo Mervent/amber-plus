@@ -168,7 +168,8 @@ public abstract class Profile {
         for (int i = 0; i < vsum.length; i++)
             vsum[i] = Math.sqrt(vsum[i] / n);
         for (int i = 0; i < parts.length; i++)
-            out.println(String.format("%s: %.2f\u00b1%.2f (%.2f-%.2f)", parts[i], avg[i] * 1000, vsum[i] * 1000, min[i] * 1000, max[i] * 1000));
+            out.println(String.format("%s: %.2f\u00b1%.2f (%.2f-%.2f)", parts[i], avg[i] * 1000, vsum[i] * 1000,
+                    min[i] * 1000, max[i] * 1000));
         out.println();
     }
 }

@@ -36,8 +36,8 @@ public class Speedget extends Widget {
     public boolean runonloginset;
 
     static {
-        String[] names = {"crawl", "walk", "run", "sprint"};
-        String[] vars = {"dis", "off", "on"};
+        String[] names = { "crawl", "walk", "run", "sprint" };
+        String[] vars = { "dis", "off", "on" };
         imgs = new Tex[names.length][vars.length];
         int w = 0;
         for (int i = 0; i < names.length; i++) {

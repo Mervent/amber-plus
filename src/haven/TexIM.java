@@ -45,7 +45,8 @@ public class TexIM extends TexI {
 
     public Graphics2D graphics() {
         if (cg != null)
-            throw (new RuntimeException("Multiple TexIM Graphics created (" + Thread.currentThread().getName() + ")", cgc));
+            throw (new RuntimeException("Multiple TexIM Graphics created (" + Thread.currentThread().getName() + ")",
+                    cgc));
         cgc = new Throwable("Current Graphics created (on " + Thread.currentThread().getName() + ")");
         return (cg = back.createGraphics());
     }

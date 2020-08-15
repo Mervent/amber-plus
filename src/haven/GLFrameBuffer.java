@@ -29,7 +29,8 @@ package haven;
 import javax.media.opengl.*;
 
 public class GLFrameBuffer extends GLState {
-    public static final Slot<GLFrameBuffer> slot = new Slot<GLFrameBuffer>(Slot.Type.SYS, GLFrameBuffer.class, HavenPanel.global);
+    public static final Slot<GLFrameBuffer> slot = new Slot<GLFrameBuffer>(Slot.Type.SYS, GLFrameBuffer.class,
+            HavenPanel.global);
     private final Attachment[] color;
     private final Attachment depth;
     private final RenderBuffer altdepth;
@@ -52,7 +53,7 @@ public class GLFrameBuffer extends GLState {
         }
 
         protected void delete(BGL gl) {
-            BGL.ID[] buf = {this};
+            BGL.ID[] buf = { this };
             gl.glDeleteFramebuffers(1, buf, 0);
         }
 
@@ -117,7 +118,7 @@ public class GLFrameBuffer extends GLState {
             }
 
             protected void delete(BGL gl) {
-                BGL.ID[] buf = {this};
+                BGL.ID[] buf = { this };
                 gl.glDeleteRenderbuffers(1, buf, 0);
             }
 
@@ -225,7 +226,7 @@ public class GLFrameBuffer extends GLState {
     }
 
     public GLFrameBuffer(TexGL color, TexGL depth) {
-        this((color == null) ? (new TexGL[0]) : (new TexGL[]{color}), depth);
+        this((color == null) ? (new TexGL[0]) : (new TexGL[] { color }), depth);
     }
 
     public Coord sz() {
@@ -256,7 +257,8 @@ public class GLFrameBuffer extends GLState {
                     public void run(GL2 gl) {
                         int st = gl.glCheckFramebufferStatus(GL.GL_FRAMEBUFFER);
                         if (st != GL.GL_FRAMEBUFFER_COMPLETE)
-                            throw (new RuntimeException("FBO failed completeness test: " + GOut.GLException.constname(st)));
+                            throw (new RuntimeException(
+                                    "FBO failed completeness test: " + GOut.GLException.constname(st)));
                     }
                 });
             } else {

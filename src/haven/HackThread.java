@@ -30,8 +30,10 @@ import java.util.*;
 
 public class HackThread extends Thread {
     public HackThread(ThreadGroup tg, Runnable target, String name) {
-    /* Hack #1: Override stupid security-managers' whims to move
-     * threads into whimsical thread-groups. */
+        /*
+         * Hack #1: Override stupid security-managers' whims to move threads into
+         * whimsical thread-groups.
+         */
         super((tg == null) ? tg() : tg, target, name);
     }
 
@@ -47,10 +49,11 @@ public class HackThread extends Thread {
         return (Thread.currentThread().getThreadGroup());
     }
 
-    /* Hack #2: Allow hooking into thread interruptions to as to
-     * interrupt normally uninterruptible stuff like Sockets. For a
-     * more thorough explanation why this is necessary, see
-     * HackSocket. */
+    /*
+     * Hack #2: Allow hooking into thread interruptions to as to interrupt normally
+     * uninterruptible stuff like Sockets. For a more thorough explanation why this
+     * is necessary, see HackSocket.
+     */
     private Set<Runnable> ils = new HashSet<Runnable>();
 
     public void addil(Runnable r) {

@@ -35,8 +35,7 @@ public class MinimapImageGenerator {
                 BufferedImage tex = tileimg(grid.gettile(c), texes, map);
                 int rgb = 0;
                 if (tex != null)
-                    rgb = tex.getRGB(Utils.floormod(c.x, tex.getWidth()),
-                            Utils.floormod(c.y, tex.getHeight()));
+                    rgb = tex.getRGB(Utils.floormod(c.x, tex.getWidth()), Utils.floormod(c.y, tex.getHeight()));
                 buf.setRGB(c.x, c.y, rgb);
             }
         }
@@ -49,7 +48,8 @@ public class MinimapImageGenerator {
                         for (int y = c.y - 1; y <= c.y + 1; y++) {
                             for (int x = c.x - 1; x <= c.x + 1; x++) {
                                 Color cc = new Color(buf.getRGB(x, y));
-                                buf.setRGB(x, y, Utils.blendcol(cc, Color.BLACK, ((x == c.x) && (y == c.y)) ? 1 : 0.1).getRGB());
+                                buf.setRGB(x, y,
+                                        Utils.blendcol(cc, Color.BLACK, ((x == c.x) && (y == c.y)) ? 1 : 0.1).getRGB());
                             }
                         }
                     }
@@ -61,10 +61,8 @@ public class MinimapImageGenerator {
                 try {
                     int t = grid.gettile(c);
                     Coord r = c.add(grid.ul);
-                    if ((map.gettile(r.add(-1, 0)) > t) ||
-                            (map.gettile(r.add(1, 0)) > t) ||
-                            (map.gettile(r.add(0, -1)) > t) ||
-                            (map.gettile(r.add(0, 1)) > t)) {
+                    if ((map.gettile(r.add(-1, 0)) > t) || (map.gettile(r.add(1, 0)) > t)
+                            || (map.gettile(r.add(0, -1)) > t) || (map.gettile(r.add(0, 1)) > t)) {
                         buf.setRGB(c.x, c.y, Color.BLACK.getRGB());
                     }
                 } catch (Exception e) {

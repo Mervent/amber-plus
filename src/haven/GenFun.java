@@ -37,7 +37,7 @@ public class GenFun<T> {
 
     public GenFun(Class<T> iface) {
         this.iface = iface;
-        this.call = iface.cast(Proxy.newProxyInstance(iface.getClassLoader(), new Class<?>[]{iface}, new Handler()));
+        this.call = iface.cast(Proxy.newProxyInstance(iface.getClassLoader(), new Class<?>[] { iface }, new Handler()));
     }
 
     public GenFun<T> register(Class<?> cl, T impl) {
@@ -64,7 +64,8 @@ public class GenFun<T> {
 
     public static class MissingImplementationException extends RuntimeException {
         public MissingImplementationException(GenFun function, Object target) {
-            super("Missing implementation for genfun on " + function.iface.getName() + " for " + target.getClass().getName());
+            super("Missing implementation for genfun on " + function.iface.getName() + " for "
+                    + target.getClass().getName());
         }
     }
 
@@ -74,7 +75,8 @@ public class GenFun<T> {
             T impl = cache.get(cl);
             if (impl == null) {
                 if (iface.isAssignableFrom(cl)) {
-                    impl = iface.cast(Proxy.newProxyInstance(iface.getClassLoader(), new Class<?>[]{iface}, passthrough));
+                    impl = iface.cast(
+                            Proxy.newProxyInstance(iface.getClassLoader(), new Class<?>[] { iface }, passthrough));
                 } else {
                     synchronized (registry) {
                         for (Class<?> scl = cl; scl != null; scl = scl.getSuperclass()) {

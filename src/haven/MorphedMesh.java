@@ -31,7 +31,8 @@ import java.nio.*;
 import java.lang.ref.*;
 
 public class MorphedMesh extends FastMesh {
-    private static Map<Morpher.Factory, Collection<MorphedBuf>> bufs = new CacheMap<Morpher.Factory, Collection<MorphedBuf>>(CacheMap.RefType.WEAK);
+    private static Map<Morpher.Factory, Collection<MorphedBuf>> bufs = new CacheMap<Morpher.Factory, Collection<MorphedBuf>>(
+            CacheMap.RefType.WEAK);
 
     private static MorphedBuf buf(VertexBuf buf, Morpher.Factory morph) {
         Collection<MorphedBuf> bl;
@@ -113,7 +114,8 @@ public class MorphedMesh extends FastMesh {
         private static AttribArray[] ohBitterSweetJavaDays(VertexBuf from, Collection<Pair> pos, Collection<Pair> dir) {
             AttribArray[] ret = new AttribArray[from.bufs.length];
             for (int i = 0; i < from.bufs.length; i++) {
-                MorphType type = (from.bufs[i] instanceof MorphArray) ? ((MorphArray) from.bufs[i]).morphtype() : MorphType.NONE;
+                MorphType type = (from.bufs[i] instanceof MorphArray) ? ((MorphArray) from.bufs[i]).morphtype()
+                        : MorphType.NONE;
                 if (type != MorphType.NONE) {
                     ret[i] = ((MorphArray) from.bufs[i]).dup();
                     if (type == MorphType.POS) {

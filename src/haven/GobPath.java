@@ -21,7 +21,7 @@ public class GobPath extends Sprite {
         Coord2d mc = MapView.pllastcc;
         if (mc == null)
             return;
-        
+
         Gob gob = (Gob) owner;
         Coord3f pc = gob.getc();
         double lcx = mc.x;

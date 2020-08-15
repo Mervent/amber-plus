@@ -319,9 +319,7 @@ public class MeshBuf {
         }
         for (int i = 0; i < src.num; i++) {
             int o = i * 3;
-            new Face(vmap[src.indb.get(o) - min],
-                    vmap[src.indb.get(o + 1) - min],
-                    vmap[src.indb.get(o + 2) - min]);
+            new Face(vmap[src.indb.get(o) - min], vmap[src.indb.get(o + 1) - min], vmap[src.indb.get(o + 2) - min]);
         }
         Vertex[] vl = new Vertex[nv];
         int n = 0;

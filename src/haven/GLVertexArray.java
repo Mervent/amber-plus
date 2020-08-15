@@ -43,7 +43,7 @@ public class GLVertexArray extends GLObject implements BGL.ID {
     }
 
     protected void delete(BGL gl) {
-        BGL.ID[] buf = {this};
+        BGL.ID[] buf = { this };
         gl.glDeleteVertexArrays(1, buf, 0);
     }
 

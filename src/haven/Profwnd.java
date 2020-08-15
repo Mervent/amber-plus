@@ -63,11 +63,11 @@ public class Profwnd extends Window {
     }
 
     public boolean keydown(java.awt.event.KeyEvent ev) {
-        if(ev.getKeyChar() == 'd') {
+        if (ev.getKeyChar() == 'd') {
             prof.dump(System.err);
             return (true);
         }
-        return(super.keydown(ev));
+        return (super.keydown(ev));
     }
 
     public String tooltip(Coord c, Widget prev) {

@@ -3,7 +3,6 @@ package haven;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-
 public class ToggleButton extends SIWidget {
     BufferedImage up, down;
     boolean pressed;
@@ -35,8 +34,8 @@ public class ToggleButton extends SIWidget {
         return (up.getRaster().getSample(c.x, c.y, 3) >= 128);
     }
 
-   public void click() {
-       wdgmsg("activate");
+    public void click() {
+        wdgmsg("activate");
     }
 
     public boolean mousedown(Coord c, int button) {

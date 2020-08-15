@@ -10,12 +10,11 @@ import java.util.List;
 import java.util.Random;
 
 public class Spec implements Owner, SpriteOwner {
-    private static final Object[] definfo = new Object[]{new Object[]{new DefName()}};
+    private static final Object[] definfo = new Object[] { new Object[] { new DefName() } };
     public final Object[] info;
     public final ResData res;
     public final OwnerContext ctx;
-    public static final ClassResolver<UI> uictx = new ClassResolver<UI>()
-            .add(Glob.class, var0 -> var0.sess.glob)
+    public static final ClassResolver<UI> uictx = new ClassResolver<UI>().add(Glob.class, var0 -> var0.sess.glob)
             .add(Session.class, var0 -> var0.sess);
     private Random rnd = null;
     private GSprite spr = null;

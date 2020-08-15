@@ -1,6 +1,5 @@
 package haven.timers;
 
-
 import haven.*;
 import haven.Label;
 
@@ -73,7 +72,6 @@ public class TimerWdg extends Widget {
         lbltime.settext(timeFormat(duration));
     }
 
-
     public void updateName() {
         lblname.settext(name.length() > 21 ? name.substring(0, 20) : name);
     }
@@ -84,7 +82,7 @@ public class TimerWdg extends Widget {
     }
 
     public void start() {
-        start = (long)(ui.sess.glob.globtime() * 1000 / Glob.SERVER_TIME_RATIO);
+        start = (long) (ui.sess.glob.globtime() * 1000 / Glob.SERVER_TIME_RATIO);
         btnstart.hide();
         btnstop.show();
         active = true;
@@ -130,7 +128,8 @@ public class TimerWdg extends Widget {
 
     public void edit() {
         GameUI gui = ((TimersWnd) parent.parent.parent).gui;
-        gui.add(new TimerEditWnd("Edit Timer", gui, name, duration, this), new Coord(gui.sz.x / 2 - 200, gui.sz.y / 2 - 200));
+        gui.add(new TimerEditWnd("Edit Timer", gui, name, duration, this),
+                new Coord(gui.sz.x / 2 - 200, gui.sz.y / 2 - 200));
     }
 
     private class TimerDoneWindow extends haven.Window {

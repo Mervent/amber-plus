@@ -31,21 +31,20 @@ import java.util.*;
 import haven.Audio.CS;
 
 public class AudioSprite {
-    public static List<Resource.Audio> clips(Resource res, String id)
-    {
+    public static List<Resource.Audio> clips(Resource res, String id) {
         List<Resource.Audio> cl = new ArrayList<Resource.Audio>();
         for (Resource.Audio clip : res.layers(Resource.audio)) {
             if (clip.id == id)
                 cl.add(clip);
         }
-        return(cl);
+        return (cl);
     }
 
     public static Resource.Audio randoom(Resource res, String id) {
         List<Resource.Audio> cl = clips(res, id);
         if (!cl.isEmpty()) {
             int rnd = (int) (Math.random() * cl.size());
-            if (rnd == 1 && "sfx/items/pickaxe".equals(res.name) )
+            if (rnd == 1 && "sfx/items/pickaxe".equals(res.name))
                 rnd = 0;
             return cl.get(rnd);
         }
@@ -101,19 +100,19 @@ public class AudioSprite {
         }
 
         public boolean tick(int dt) {
-            /* XXX: This is slightly bad, because virtual sprites that
-             * are stuck as loading (by getting outside the map, for
-             * instance), never play and therefore never get done,
-             * effectively leaking. For now, this is seldom a problem
-             * because in practive most (all?) virtual audio-sprites
-             * come from Skeleton.FxTrack which memoizes its origin
-             * instead of asking the map for it, but also see comment
-             * in glsl.MiscLib.maploc. Solve pl0x. */
+            /*
+             * XXX: This is slightly bad, because virtual sprites that are stuck as loading
+             * (by getting outside the map, for instance), never play and therefore never
+             * get done, effectively leaking. For now, this is seldom a problem because in
+             * practive most (all?) virtual audio-sprites come from Skeleton.FxTrack which
+             * memoizes its origin instead of asking the map for it, but also see comment in
+             * glsl.MiscLib.maploc. Solve pl0x.
+             */
             return (done);
         }
 
         public Object staticp() {
-            return(CONSTANS);
+            return (CONSTANS);
         }
     }
 
@@ -121,18 +120,19 @@ public class AudioSprite {
         private ActAudio.PosClip clip;
         private final Resource.Audio end;
 
-        public RepeatSprite(Owner owner, Resource res, final Resource.Audio beg, final List<Resource.Audio> clips, Resource.Audio end) {
+        public RepeatSprite(Owner owner, Resource res, final Resource.Audio beg, final List<Resource.Audio> clips,
+                Resource.Audio end) {
             super(owner, res);
             this.end = end;
             CS rep = new Audio.Repeater() {
                 private boolean f = true;
 
                 public CS cons() {
-                    if(f && (beg != null)) {
+                    if (f && (beg != null)) {
                         f = false;
-                        return(beg.stream());
+                        return (beg.stream());
                     }
-                    return(clips.get((int)(Math.random() * clips.size())).stream());
+                    return (clips.get((int) (Math.random() * clips.size())).stream());
                 }
             };
 
@@ -165,7 +165,7 @@ public class AudioSprite {
         }
 
         public Object staticp() {
-            return(CONSTANS);
+            return (CONSTANS);
         }
     }
 
@@ -191,7 +191,7 @@ public class AudioSprite {
         }
 
         public Object staticp() {
-            return(CONSTANS);
+            return (CONSTANS);
         }
     }
 }

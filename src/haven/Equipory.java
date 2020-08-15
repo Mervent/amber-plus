@@ -39,25 +39,10 @@ public class Equipory extends Widget implements DTarget {
     private static final int acx = 34 + bg.sz().x / 2;
     private static final Text.Foundry acf = new Text.Foundry(Text.sans, Text.cfg.def).aa(true);
     private Tex armorclass = null;
-    public static final Coord ecoords[] = {
-            new Coord(0, 0),
-            new Coord(rx, 0),
-            new Coord(0, 33),
-            new Coord(rx, 33),
-            new Coord(0, 66),
-            new Coord(rx, 66),
-            new Coord(0, 99),
-            new Coord(rx, 99),
-            new Coord(0, 132),
-            new Coord(rx, 132),
-            new Coord(0, 165),
-            new Coord(rx, 165),
-            new Coord(0, 198),
-            new Coord(rx, 198),
-            new Coord(0, 231),
-            new Coord(rx, 231),
-            new Coord(34, 0),
-    };
+    public static final Coord ecoords[] = { new Coord(0, 0), new Coord(rx, 0), new Coord(0, 33), new Coord(rx, 33),
+            new Coord(0, 66), new Coord(rx, 66), new Coord(0, 99), new Coord(rx, 99), new Coord(0, 132),
+            new Coord(rx, 132), new Coord(0, 165), new Coord(rx, 165), new Coord(0, 198), new Coord(rx, 198),
+            new Coord(0, 231), new Coord(rx, 231), new Coord(34, 0), };
     public static final Tex[] ebgs = new Tex[ecoords.length];
     public static final Text[] etts = new Text[ecoords.length];
     static Coord isz;
@@ -70,10 +55,10 @@ public class Equipory extends Widget implements DTarget {
             if (ec.y + invsq.sz().y > isz.y)
                 isz.y = ec.y + invsq.sz().y;
         }
-        for(int i = 0; i < ebgs.length; i++) {
+        for (int i = 0; i < ebgs.length; i++) {
             Resource bgres = Resource.local().loadwait("gfx/hud/equip/ep" + i);
             Resource.Image img = bgres.layer(Resource.imgc);
-            if(img != null) {
+            if (img != null) {
                 ebgs[i] = bgres.layer(Resource.imgc).tex();
                 etts[i] = Text.render(bgres.layer(Resource.tooltip).t);
             }
@@ -88,13 +73,13 @@ public class Equipory extends Widget implements DTarget {
     public static class $_ implements Factory {
         public Widget create(UI ui, Object[] args) {
             long gobid;
-            if(args.length < 1)
+            if (args.length < 1)
                 gobid = -2;
-            else if(args[0] == null)
+            else if (args[0] == null)
                 gobid = -1;
             else
-                gobid = Utils.uint32((Integer)args[0]);
-            return(new Equipory(gobid));
+                gobid = Utils.uint32((Integer) args[0]);
+            return (new Equipory(gobid));
         }
     }
 
@@ -188,7 +173,7 @@ public class Equipory extends Widget implements DTarget {
     }
 
     public void uimsg(String msg, Object... args) {
-        if(msg == "pop") {
+        if (msg == "pop") {
             ava.avadesc = Composited.Desc.decode(ui.sess, args);
         } else {
             super.uimsg(msg, args);
@@ -253,14 +238,15 @@ public class Equipory extends Widget implements DTarget {
                     if (itm != null) {
                         for (ItemInfo info : itm.item.info()) {
                             if (info instanceof Armor) {
-                                h += ((Armor)info).hard;
-                                s += ((Armor)info).soft;
+                                h += ((Armor) info).hard;
+                                s += ((Armor) info).soft;
                                 break;
                             }
                         }
                     }
                 }
-                armorclass = Text.render(Resource.getLocString(Resource.BUNDLE_LABEL, "Armor Class: ") + h + "/" + s, Color.BLACK, acf).tex();
+                armorclass = Text.render(Resource.getLocString(Resource.BUNDLE_LABEL, "Armor Class: ") + h + "/" + s,
+                        Color.BLACK, acf).tex();
             } catch (Exception e) { // fail silently
             }
         }

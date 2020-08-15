@@ -1,6 +1,5 @@
 package haven.automation;
 
-
 import haven.*;
 
 public class ButcherFish implements Runnable, WItemDestroyCallback {

@@ -37,7 +37,8 @@ import static haven.glsl.Function.PDir.*;
 import static haven.glsl.Type.*;
 
 public class CloudShadow extends GLState {
-    public static final Slot<CloudShadow> slot = new Slot<CloudShadow>(Slot.Type.DRAW, CloudShadow.class, Light.lighting);
+    public static final Slot<CloudShadow> slot = new Slot<CloudShadow>(Slot.Type.DRAW, CloudShadow.class,
+            Light.lighting);
     public final TexGL tex;
     public DirLight light;
     public Coord3f vel;
@@ -62,9 +63,10 @@ public class CloudShadow extends GLState {
             return;
         final ValBlock.Value shval = prog.fctx.uniform.new Value(FLOAT) {
             public Expression root() {
-                Expression tc = add(mul(add(pick(MiscLib.fragmapv.ref(), "xy"),
-                        mul(pick(MiscLib.fragmapv.ref(), "z"), cdir.ref())),
-                        cscl.ref()), mul(cvel.ref(), MiscLib.globtime.ref()));
+                Expression tc = add(
+                        mul(add(pick(MiscLib.fragmapv.ref(), "xy"), mul(pick(MiscLib.fragmapv.ref(), "z"), cdir.ref())),
+                                cscl.ref()),
+                        mul(cvel.ref(), MiscLib.globtime.ref()));
                 Expression cl = pick(texture2D(tsky.ref(), tc), "r");
                 Expression th = cthr.ref();
                 return (add(mul(smoothstep(pick(th, "x"), pick(th, "y"), cl), pick(th, "w")), pick(th, "z")));
@@ -78,8 +80,8 @@ public class CloudShadow extends GLState {
         shval.force();
         ph.dolight.mod(new Runnable() {
             public void run() {
-                ph.dolight.dcalc.add(new If(eq(MapView.amblight.ref(), ph.dolight.i),
-                                stmt(amul(ph.dolight.dl.tgt, shval.ref()))),
+                ph.dolight.dcalc.add(
+                        new If(eq(MapView.amblight.ref(), ph.dolight.i), stmt(amul(ph.dolight.dl.tgt, shval.ref()))),
                         ph.dolight.dcurs);
             }
         }, 0);

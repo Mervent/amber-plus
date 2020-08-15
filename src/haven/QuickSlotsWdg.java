@@ -2,7 +2,7 @@ package haven;
 
 public class QuickSlotsWdg extends Widget implements DTarget {
     private static final Tex sbg = Resource.loadtex("gfx/hud/slots");
-    public static final Coord lc =  new Coord(6, 6);
+    public static final Coord lc = new Coord(6, 6);
     public static final Coord rc = new Coord(56, 6);
     private static final Coord ssz = new Coord(44, 44);
     private UI.Grab dragging;
@@ -93,7 +93,7 @@ public class QuickSlotsWdg extends Widget implements DTarget {
 
     @Override
     public boolean mousedown(Coord c, int button) {
-       if (ui.modmeta)
+        if (ui.modmeta)
             return true;
         Equipory e = gameui().getequipory();
         if (e != null) {

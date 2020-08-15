@@ -1,6 +1,5 @@
 package haven.livestock;
 
-
 import haven.*;
 
 import java.util.*;
@@ -40,10 +39,8 @@ public class LivestockManager extends Window {
     }
 
     private void createHeader(Panel panel, Map<String, Column> columns) {
-        List<Map.Entry<String, Column>> cols = columns.entrySet()
-                .stream()
-                .sorted(Comparator.comparingInt(c -> c.getValue().index))
-                .collect(Collectors.toList());
+        List<Map.Entry<String, Column>> cols = columns.entrySet().stream()
+                .sorted(Comparator.comparingInt(c -> c.getValue().index)).collect(Collectors.toList());
 
         int offx = LivestockManager.COLUMN_TITLE_X - LivestockManager.ENTRY_X;
 
@@ -100,7 +97,7 @@ public class LivestockManager extends Window {
         }
 
         public void delete(Animal animal) {
-            for (Iterator<Animal> iterator = list.iterator(); iterator.hasNext(); ) {
+            for (Iterator<Animal> iterator = list.iterator(); iterator.hasNext();) {
                 if (iterator.next() == animal) {
                     iterator.remove();
                     break;
@@ -123,9 +120,8 @@ public class LivestockManager extends Window {
         }
     }
 
-
     public void initPendingAnimal(long wdgid, String type) {
-       switch (type) {
+        switch (type) {
             case "Bull":
             case "Cow":
                 pendingAnimal = new Cattle(wdgid, type);
@@ -142,10 +138,10 @@ public class LivestockManager extends Window {
             case "Sow":
                 pendingAnimal = new Pigs(wdgid, type);
                 break;
-           case "Nanny":
-           case "Billy":
-               pendingAnimal = new Goat(wdgid, type);
-               break;
+            case "Nanny":
+            case "Billy":
+                pendingAnimal = new Goat(wdgid, type);
+                break;
         }
     }
 

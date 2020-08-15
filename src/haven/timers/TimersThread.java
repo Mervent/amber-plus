@@ -1,6 +1,5 @@
 package haven.timers;
 
-
 import haven.Glob;
 import haven.Session;
 import haven.Utils;
@@ -30,7 +29,7 @@ public class TimersThread extends Thread {
                     if (!sess.state.equals("") || sess.glob.serverEpoch == 0)
                         continue;
 
-                    timer.elapsed = (long)(sess.glob.globtime() * 1000 / Glob.SERVER_TIME_RATIO) - timer.start;
+                    timer.elapsed = (long) (sess.glob.globtime() * 1000 / Glob.SERVER_TIME_RATIO) - timer.start;
                     timer.updateRemaining();
 
                     if (timer.elapsed >= timer.duration) {
@@ -71,10 +70,8 @@ public class TimersThread extends Thread {
             JSONObject[] timersjson = new JSONObject[timers.size()];
             for (int i = 0; i < timers.size(); i++) {
                 final TimerWdg timer = timers.get(i);
-                timersjson[i] = new JSONObject()
-                        .put("name", timer.name)
-                        .put("duration", timer.duration)
-                        .put("start", timer.active ? timer.start : 0);
+                timersjson[i] = new JSONObject().put("name", timer.name).put("duration", timer.duration).put("start",
+                        timer.active ? timer.start : 0);
             }
             Utils.setprefjsona("timers", timersjson);
         }
@@ -95,4 +92,3 @@ public class TimersThread extends Thread {
         }
     }
 }
-

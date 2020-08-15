@@ -120,16 +120,16 @@ public class Server extends Thread {
                             if (cc != null)
                                 reply = cc.run(this, args);
                             else
-                                reply = new Object[]{"nocmd"};
+                                reply = new Object[] { "nocmd" };
                         } else {
                             if (cmd.equals("nonce")) {
-                                reply = new Object[]{nonce};
+                                reply = new Object[] { nonce };
                             } else if (cmd.equals("auth")) {
                                 if (Arrays.equals((byte[]) args[0], ckey)) {
-                                    reply = new Object[]{"ok"};
+                                    reply = new Object[] { "ok" };
                                     auth = true;
                                 } else {
-                                    reply = new Object[]{"no"};
+                                    reply = new Object[] { "no" };
                                 }
                             } else {
                                 return;

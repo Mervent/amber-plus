@@ -2,10 +2,9 @@ package haven;
 
 import java.awt.*;
 
-
 public class TreeStageSprite extends Sprite {
     private static final Tex[] treestg = new Tex[90];
-    private static final Color stagecolor = new Color(255, 227, 168);//new Color(235, 235, 235);
+    private static final Color stagecolor = new Color(255, 227, 168);// new Color(235, 235, 235);
     public int val;
     private Tex tex;
     private static Matrix4f mv = new Matrix4f();

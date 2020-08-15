@@ -91,7 +91,8 @@ public class PUtils {
         for (int i = 0; i <= rad; i++)
             gk[rad + i] = gk[rad - i] = Math.exp(-0.5 * Math.pow(i / var, 2.0));
         double s = 0;
-        for (double cw : gk) s += cw;
+        for (double cw : gk)
+            s += cw;
         s = 1.0 / s;
         for (int i = 0; i <= rad * 2; i++)
             gk[i] *= s;
@@ -162,7 +163,8 @@ public class PUtils {
             soff = soff.add(0, -doff.x);
             doff = doff.add(0, -doff.x);
         }
-        int w = Math.min(src.getWidth() - soff.x, dst.getWidth() - doff.x), h = Math.min(src.getHeight() - soff.y, dst.getHeight() - doff.y);
+        int w = Math.min(src.getWidth() - soff.x, dst.getWidth() - doff.x),
+                h = Math.min(src.getHeight() - soff.y, dst.getHeight() - doff.y);
         for (int y = 0; y < h; y++) {
             int sy = y + soff.y, dy = y + doff.y;
             for (int x = 0; x < w; x++) {
@@ -194,7 +196,8 @@ public class PUtils {
             for (int x = 0; x < w; x++) {
                 for (int b = 0; b < nb; b++) {
                     int dx = x + off.x, dy = y + off.y;
-                    dst.setSample(dx, dy, b, ((src.getSample(x, y, b) * a) + (dst.getSample(dx, dy, b) * (255 - a))) / 255);
+                    dst.setSample(dx, dy, b,
+                            ((src.getSample(x, y, b) * a) + (dst.getSample(dx, dy, b) * (255 - a))) / 255);
                 }
             }
         }
@@ -208,7 +211,8 @@ public class PUtils {
             for (int x = 0; x < w; x++) {
                 int tx = Utils.floormod(x - off.x, tw), ty = Utils.floormod(y - off.y, th);
                 for (int i = 0; i < b; i++)
-                    dst.setSample(x, y, i, (dst.getSample(x, y, i) * ((i < tb) ? tile.getSample(tx, ty, i) : 255)) / 255);
+                    dst.setSample(x, y, i,
+                            (dst.getSample(x, y, i) * ((i < tb) ? tile.getSample(tx, ty, i) : 255)) / 255);
             }
         }
         return (dst);
@@ -216,7 +220,7 @@ public class PUtils {
 
     public static WritableRaster colmul(WritableRaster img, Color col) {
         int w = img.getWidth(), h = img.getHeight();
-        int[] bm = {col.getRed(), col.getGreen(), col.getBlue(), col.getAlpha()};
+        int[] bm = { col.getRed(), col.getGreen(), col.getBlue(), col.getAlpha() };
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
                 for (int b = 0; b < 4; b++)
@@ -226,8 +230,10 @@ public class PUtils {
         return (img);
     }
 
-    public static WritableRaster copyband(WritableRaster dst, int dband, Coord doff, Raster src, int sband, Coord soff, Coord sz) {
-        dst.setSamples(doff.x, doff.y, sz.x, sz.y, dband, src.getSamples(soff.x, soff.y, sz.x, sz.y, sband, (int[]) null));
+    public static WritableRaster copyband(WritableRaster dst, int dband, Coord doff, Raster src, int sband, Coord soff,
+            Coord sz) {
+        dst.setSamples(doff.x, doff.y, sz.x, sz.y, dband,
+                src.getSamples(soff.x, soff.y, sz.x, sz.y, sband, (int[]) null));
         return (dst);
     }
 
@@ -241,7 +247,8 @@ public class PUtils {
 
     public static WritableRaster blurmask(Raster img, int grad, int brad, Color col) {
         Coord marg = new Coord(grad + brad, grad + brad), sz = imgsz(img).add(marg.mul(2));
-        return (alphadraw(imgraster(sz), imgblur(imggrow(copyband(alpharaster(sz), 0, marg, img, 3), grad), brad, brad), Coord.z, col));
+        return (alphadraw(imgraster(sz), imgblur(imggrow(copyband(alpharaster(sz), 0, marg, img, 3), grad), brad, brad),
+                Coord.z, col));
     }
 
     public static WritableRaster blurmask2(Raster img, int grad, int brad, Color col) {
@@ -332,12 +339,9 @@ public class PUtils {
         boolean hasalpha = (src.getNumBands() == 4);
         for (int y = 0; y < sz.y; y++) {
             for (int x = 0; x < sz.x; x++) {
-                int r = src.getSample(x, y, 0),
-                        g = src.getSample(x, y, 1),
-                        b = src.getSample(x, y, 2);
+                int r = src.getSample(x, y, 0), g = src.getSample(x, y, 1), b = src.getSample(x, y, 2);
                 int a = hasalpha ? src.getSample(x, y, 3) : 255;
-                int max = Math.max(r, Math.max(g, b)),
-                        min = Math.min(r, Math.min(g, b));
+                int max = Math.max(r, Math.max(g, b)), min = Math.min(r, Math.min(g, b));
                 int val = (max + min) / 2;
                 dst.setSample(x, y, 0, (col.getRed() * val) / 255);
                 dst.setSample(x, y, 1, (col.getGreen() * val) / 255);
@@ -509,15 +513,9 @@ public class PUtils {
     }
 
     public static void main(String[] args) throws Exception {
-        Convolution[] filters = {
-                box,
-                new Hanning(1),
-                new Hanning(2),
-                new Hamming(1),
-                new Lanczos(2),
-                new Lanczos(3),
-        };
-        //BufferedImage in = Resource.loadimg("gfx/invobjs/herbs/crowberry");
+        Convolution[] filters = { box, new Hanning(1), new Hanning(2), new Hamming(1), new Lanczos(2),
+                new Lanczos(3), };
+        // BufferedImage in = Resource.loadimg("gfx/invobjs/herbs/crowberry");
         BufferedImage in = javax.imageio.ImageIO.read(new java.io.File("/tmp/e.jpg"));
         Coord tsz = new Coord(300, 300);
         for (int i = 0; i < filters.length; i++) {

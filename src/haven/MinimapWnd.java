@@ -30,9 +30,8 @@ public class MinimapWnd extends Widget {
     private boolean resizing;
     private Coord doff;
     private static final Coord minsz = new Coord(215, 130);
-    private static final BufferedImage[] cbtni = new BufferedImage[]{
-            Resource.loadimg("gfx/hud/wndmap/lg/cbtnu"),
-            Resource.loadimg("gfx/hud/wndmap/lg/cbtnh")};
+    private static final BufferedImage[] cbtni = new BufferedImage[] { Resource.loadimg("gfx/hud/wndmap/lg/cbtnu"),
+            Resource.loadimg("gfx/hud/wndmap/lg/cbtnh") };
     private final IButton cbtn;
     private Coord wsz, asz;
     private UI.Grab dm = null;
@@ -139,7 +138,7 @@ public class MinimapWnd extends Widget {
                 }
                 if (Config.vendanMapv4) {
                     MapRef mr = MappingClient.getInstance().lastMapRef;
-                    if(mr != null) {
+                    if (mr != null) {
                         tooltip = Text.render("Coordinates: " + mr);
                     }
                 }
@@ -150,7 +149,7 @@ public class MinimapWnd extends Widget {
             public void click() {
                 if (Config.vendanMapv4) {
                     MapRef mr = MappingClient.getInstance().GetMapRef(true);
-                    if(mr != null) {
+                    if (mr != null) {
                         MappingClient.getInstance().OpenMap(mr);
                         return;
                     }
@@ -193,7 +192,8 @@ public class MinimapWnd extends Widget {
                         redraw = true;
                     }
                 }
-                if (redraw) this.redraw();
+                if (redraw)
+                    this.redraw();
                 super.draw(g);
             }
 

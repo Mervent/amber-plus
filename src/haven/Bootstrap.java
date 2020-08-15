@@ -79,8 +79,7 @@ public class Bootstrap implements UI.Receiver, UI.Runner {
         String authserver = (Config.authserv == null) ? hostname : Config.authserv;
         int authport = Config.authport;
         AuthClient.Credentials creds = null;
-        retry:
-        do {
+        retry: do {
             byte[] cookie;
             String acctname, tokenname;
             if (initcookie != null) {
@@ -216,17 +215,17 @@ public class Bootstrap implements UI.Receiver, UI.Runner {
         } while (true);
 
         if (creds != null) {
-            LoginData ld = new LoginData(creds.name(), ((AuthClient.NativeCred)creds).pass);
+            LoginData ld = new LoginData(creds.name(), ((AuthClient.NativeCred) creds).pass);
             synchronized (Config.logins) {
                 if (!Config.logins.contains(ld)) {
-                    Config.logins.add(new LoginData(creds.name(), ((AuthClient.NativeCred)creds).pass));
+                    Config.logins.add(new LoginData(creds.name(), ((AuthClient.NativeCred) creds).pass));
                     Config.saveLogins();
                 }
             }
         }
 
         return (sess);
-        //(new RemoteUI(sess, ui)).start();
+        // (new RemoteUI(sess, ui)).start();
     }
 
     public void rcvmsg(int widget, String msg, Object... args) {

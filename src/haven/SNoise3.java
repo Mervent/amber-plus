@@ -32,11 +32,8 @@ import static java.lang.Math.*;
 
 public class SNoise3 {
     private final byte[] ptab = new byte[256];
-    private final double[][] gtab = {
-            {1, 1, 0}, {-1, 1, 0}, {1, -1, 0}, {-1, -1, 0},
-            {1, 0, 1}, {-1, 0, 1}, {1, 0, -1}, {-1, 0, -1},
-            {0, 1, 1}, {0, -1, 1}, {0, 1, -1}, {0, -1, -1},
-    };
+    private final double[][] gtab = { { 1, 1, 0 }, { -1, 1, 0 }, { 1, -1, 0 }, { -1, -1, 0 }, { 1, 0, 1 }, { -1, 0, 1 },
+            { 1, 0, -1 }, { -1, 0, -1 }, { 0, 1, 1 }, { 0, -1, 1 }, { 0, 1, -1 }, { 0, -1, -1 }, };
 
     public SNoise3(Random rnd) {
         for (int i = 0; i < 256; i++)
@@ -128,10 +125,14 @@ public class SNoise3 {
         double x3 = dx - 0.5, y3 = dy - 0.5, z3 = dz - 0.5;
 
         int ip = (int) i, jp = (int) j, kp = (int) k;
-        double[] g0 = gtab[((int) ptab[(int) (ip + ptab[(int) (jp + ptab[(int) kp & 0xff]) & 0xff]) & 0xff] & 0xff) % 12];
-        double[] g1 = gtab[((int) ptab[(int) (ip + i1 + ptab[(int) (jp + j1 + ptab[(int) (kp + k1) & 0xff]) & 0xff]) & 0xff] & 0xff) % 12];
-        double[] g2 = gtab[((int) ptab[(int) (ip + i2 + ptab[(int) (jp + j2 + ptab[(int) (kp + k2) & 0xff]) & 0xff]) & 0xff] & 0xff) % 12];
-        double[] g3 = gtab[((int) ptab[(int) (ip + 1 + ptab[(int) (jp + 1 + ptab[(int) (kp + 1) & 0xff]) & 0xff]) & 0xff] & 0xff) % 12];
+        double[] g0 = gtab[((int) ptab[(int) (ip + ptab[(int) (jp + ptab[(int) kp & 0xff]) & 0xff]) & 0xff] & 0xff)
+                % 12];
+        double[] g1 = gtab[((int) ptab[(int) (ip + i1 + ptab[(int) (jp + j1 + ptab[(int) (kp + k1) & 0xff]) & 0xff])
+                & 0xff] & 0xff) % 12];
+        double[] g2 = gtab[((int) ptab[(int) (ip + i2 + ptab[(int) (jp + j2 + ptab[(int) (kp + k2) & 0xff]) & 0xff])
+                & 0xff] & 0xff) % 12];
+        double[] g3 = gtab[((int) ptab[(int) (ip + 1 + ptab[(int) (jp + 1 + ptab[(int) (kp + 1) & 0xff]) & 0xff])
+                & 0xff] & 0xff) % 12];
 
         double n0 = 0.6 - (dx * dx) - (dy * dy) - (dz * dz);
         double n1 = 0.6 - (x1 * x1) - (y1 * y1) - (z1 * z1);
@@ -139,10 +140,14 @@ public class SNoise3 {
         double n3 = 0.6 - (x3 * x3) - (y3 * y3) - (z3 * z3);
 
         double v = 0.0;
-        if (n0 > 0) v += n0 * n0 * n0 * n0 * ((g0[0] * dx) + (g0[1] * dy) + (g0[2] * dz));
-        if (n1 > 0) v += n1 * n1 * n1 * n1 * ((g1[0] * x1) + (g1[1] * y1) + (g1[2] * z1));
-        if (n2 > 0) v += n2 * n2 * n2 * n2 * ((g2[0] * x2) + (g2[1] * y2) + (g2[2] * z2));
-        if (n3 > 0) v += n3 * n3 * n3 * n3 * ((g3[0] * x3) + (g3[1] * y3) + (g3[2] * z3));
+        if (n0 > 0)
+            v += n0 * n0 * n0 * n0 * ((g0[0] * dx) + (g0[1] * dy) + (g0[2] * dz));
+        if (n1 > 0)
+            v += n1 * n1 * n1 * n1 * ((g1[0] * x1) + (g1[1] * y1) + (g1[2] * z1));
+        if (n2 > 0)
+            v += n2 * n2 * n2 * n2 * ((g2[0] * x2) + (g2[1] * y2) + (g2[2] * z2));
+        if (n3 > 0)
+            v += n3 * n3 * n3 * n3 * ((g3[0] * x3) + (g3[1] * y3) + (g3[2] * z3));
 
         return (min(max(v * 32, -1.0), 1.0));
     }

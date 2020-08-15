@@ -2,7 +2,6 @@ package haven.automation;
 
 import haven.*;
 
-
 public class Utils {
     private static final int HAND_DELAY = 5;
     private static final int PROG_ACT_DELAY = 8;
@@ -71,7 +70,8 @@ public class Utils {
         return true;
     }
 
-    public static boolean waitForOccupiedEquiporySlot(GameUI gui, int slot, int timeout, String error) throws InterruptedException {
+    public static boolean waitForOccupiedEquiporySlot(GameUI gui, int slot, int timeout, String error)
+            throws InterruptedException {
         Equipory e = gui.getequipory();
         int t = 0;
         while (e.quickslots[slot] == null) {

@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 
 import static haven.Text.num10Fnd;
 
-
 public class QBuff extends ItemInfo.Tip {
     public final BufferedImage icon;
     public final String name;

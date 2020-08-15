@@ -45,7 +45,8 @@ public class OptWnd extends Window {
     public static final int VERTICAL_MARGIN = 10;
     public static final int HORIZONTAL_MARGIN = 5;
     public static final int VERTICAL_AUDIO_MARGIN = 5;
-    public final Panel main, video, audio, display, map, general, combat, control, mapping, uis, quality, flowermenus, soundalarms, keybind;
+    public final Panel main, video, audio, display, map, general, combat, control, mapping, uis, quality, flowermenus,
+            soundalarms, keybind;
     public Panel current;
 
     public void chpanel(Panel p) {
@@ -69,7 +70,7 @@ public class OptWnd extends Window {
         }
 
         public boolean keydown(java.awt.event.KeyEvent ev) {
-            if((this.key != -1) && (ev.getKeyChar() == this.key)) {
+            if ((this.key != -1) && (ev.getKeyChar() == this.key)) {
                 click();
                 return (true);
             }
@@ -96,7 +97,8 @@ public class OptWnd extends Window {
 
             public CPanel(GLSettings gcf) {
                 this.cf = gcf;
-                final WidgetVerticalAppender appender = new WidgetVerticalAppender(withScrollport(this, new Coord(620, 350)));
+                final WidgetVerticalAppender appender = new WidgetVerticalAppender(
+                        withScrollport(this, new Coord(620, 350)));
                 appender.setVerticalMargin(VERTICAL_MARGIN);
                 appender.setHorizontalMargin(HORIZONTAL_MARGIN);
                 appender.add(new CheckBox("Per-fragment lighting") {
@@ -166,36 +168,36 @@ public class OptWnd extends Window {
                     appender.add(new Label("(Not supported)"));
                 } else {
                     final Label dpy = new Label("");
-                    appender.addRow(
-                            new HSlider(160, (int) (cf.anisotex.min() * 2), (int) (cf.anisotex.max() * 2), (int) (cf.anisotex.val * 2)) {
-                                protected void added() {
-                                    dpy();
-                                }
+                    appender.addRow(new HSlider(160, (int) (cf.anisotex.min() * 2), (int) (cf.anisotex.max() * 2),
+                            (int) (cf.anisotex.val * 2)) {
+                        protected void added() {
+                            dpy();
+                        }
 
-                                void dpy() {
-                                    if (val < 2)
-                                        dpy.settext("Off");
-                                    else
-                                        dpy.settext(String.format("%.1f\u00d7", (val / 2.0)));
-                                }
+                        void dpy() {
+                            if (val < 2)
+                                dpy.settext("Off");
+                            else
+                                dpy.settext(String.format("%.1f\u00d7", (val / 2.0)));
+                        }
 
-                                public void changed() {
-                                    try {
-                                        cf.anisotex.set(val / 2.0f);
-                                    } catch (GLSettings.SettingException e) {
-                                        getparent(GameUI.class).error(e.getMessage());
-                                        return;
-                                    }
-                                    dpy();
-                                    cf.dirty = true;
-                                }
-                            },
-                            dpy);
+                        public void changed() {
+                            try {
+                                cf.anisotex.set(val / 2.0f);
+                            } catch (GLSettings.SettingException e) {
+                                getparent(GameUI.class).error(e.getMessage());
+                                return;
+                            }
+                            dpy();
+                            cf.dirty = true;
+                        }
+                    }, dpy);
                 }
                 appender.add(new CheckBox("Disable biome tile transitions (requires logout)") {
                     {
                         a = Config.disabletiletrans;
                     }
+
                     public void set(boolean val) {
                         Config.disabletiletrans = val;
                         Utils.setprefb("disabletiletrans", val);
@@ -206,6 +208,7 @@ public class OptWnd extends Window {
                     {
                         a = Config.disableterrainsmooth;
                     }
+
                     public void set(boolean val) {
                         Config.disableterrainsmooth = val;
                         Utils.setprefb("disableterrainsmooth", val);
@@ -216,6 +219,7 @@ public class OptWnd extends Window {
                     {
                         a = Config.disableelev;
                     }
+
                     public void set(boolean val) {
                         Config.disableelev = val;
                         Utils.setprefb("disableelev", val);
@@ -301,7 +305,8 @@ public class OptWnd extends Window {
                 });
 
                 appender.add(new Label("Disable animations (req. restart):"));
-                CheckListbox disanimlist = new CheckListbox(320, Math.min(8, Config.disableanim.values().size()), 18 + Config.fontadd) {
+                CheckListbox disanimlist = new CheckListbox(320, Math.min(8, Config.disableanim.values().size()),
+                        18 + Config.fontadd) {
                     @Override
                     protected void itemclick(CheckListboxItem itm, int button) {
                         super.itemclick(itm, button);
@@ -544,7 +549,8 @@ public class OptWnd extends Window {
     }
 
     private void initDisplayFirstColumn() {
-        final WidgetVerticalAppender appender = new WidgetVerticalAppender(withScrollport(display, new Coord(620, 350)));
+        final WidgetVerticalAppender appender = new WidgetVerticalAppender(
+                withScrollport(display, new Coord(620, 350)));
         appender.setVerticalMargin(VERTICAL_MARGIN);
         appender.add(new CheckBox("Display kin names") {
             {
@@ -710,7 +716,8 @@ public class OptWnd extends Window {
     }
 
     private void initGeneral() {
-        final WidgetVerticalAppender appender = new WidgetVerticalAppender(withScrollport(general, new Coord(620, 350)));
+        final WidgetVerticalAppender appender = new WidgetVerticalAppender(
+                withScrollport(general, new Coord(620, 350)));
 
         appender.setVerticalMargin(VERTICAL_MARGIN);
         appender.setHorizontalMargin(HORIZONTAL_MARGIN);
@@ -860,7 +867,7 @@ public class OptWnd extends Window {
             }
 
             public void set(boolean val) {
-                //Utils.setprefb("dropEverything", val);
+                // Utils.setprefb("dropEverything", val);
                 Config.dropEverything = val;
                 a = val;
             }
@@ -1002,23 +1009,23 @@ public class OptWnd extends Window {
     }
 
     private void initControl() {
-        final WidgetVerticalAppender appender = new WidgetVerticalAppender(withScrollport(control, new Coord(620, 350)));
+        final WidgetVerticalAppender appender = new WidgetVerticalAppender(
+                withScrollport(control, new Coord(620, 350)));
 
         appender.setVerticalMargin(VERTICAL_MARGIN);
         appender.setHorizontalMargin(HORIZONTAL_MARGIN);
 
-        appender.addRow(new Label("Bad camera scrolling sensitivity"),
-                new HSlider(50, 0, 50, 0) {
-                    protected void attach(UI ui) {
-                        super.attach(ui);
-                        val = Config.badcamsensitivity;
-                    }
+        appender.addRow(new Label("Bad camera scrolling sensitivity"), new HSlider(50, 0, 50, 0) {
+            protected void attach(UI ui) {
+                super.attach(ui);
+                val = Config.badcamsensitivity;
+            }
 
-                    public void changed() {
-                        Config.badcamsensitivity = val;
-                        Utils.setprefi("badcamsensitivity", val);
-                    }
-                });
+            public void changed() {
+                Config.badcamsensitivity = val;
+                Utils.setprefi("badcamsensitivity", val);
+            }
+        });
         appender.add(new CheckBox("Use French (AZERTY) keyboard layout") {
             {
                 a = Config.userazerty;
@@ -1205,25 +1212,23 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
-        appender.addRow(new Label("Tree bounding box color (6-digit HEX):"),
-                new TextEntry(85, Config.treeboxclr) {
-                    @Override
-                    public boolean keydown(KeyEvent ev) {
-                        if (!parent.visible)
-                            return false;
+        appender.addRow(new Label("Tree bounding box color (6-digit HEX):"), new TextEntry(85, Config.treeboxclr) {
+            @Override
+            public boolean keydown(KeyEvent ev) {
+                if (!parent.visible)
+                    return false;
 
-                        boolean ret = buf.key(ev);
-                        if (text.length() == 6) {
-                            Color clr = Utils.hex2rgb(text);
-                            if (clr != null) {
-                                GobHitbox.fillclrstate = new States.ColState(clr);
-                                Utils.setpref("treeboxclr", text);
-                            }
-                        }
-                        return ret;
+                boolean ret = buf.key(ev);
+                if (text.length() == 6) {
+                    Color clr = Utils.hex2rgb(text);
+                    if (clr != null) {
+                        GobHitbox.fillclrstate = new States.ColState(clr);
+                        Utils.setpref("treeboxclr", text);
                     }
                 }
-        );
+                return ret;
+            }
+        });
         appender.addRow(new Label("Chat font size (req. restart):"), makeFontSizeChatDropdown());
         appender.add(new CheckBox("Font antialiasing") {
             {
@@ -1249,23 +1254,21 @@ public class OptWnd extends Window {
         }, makeFontsDropdown());
 
         final Label fontAdd = new Label("");
-        appender.addRow(
-                new Label("Increase font size by (req. restart):"),
-                new HSlider(160, 0, 3, Config.fontadd) {
-                    public void added() {
-                        updateLabel();
-                    }
-                    public void changed() {
-                        Utils.setprefi("fontadd", val);
-                        Config.fontadd = val;
-                        updateLabel();
-                    }
-                    private void updateLabel() {
-                        fontAdd.settext(String.format("%d", val));
-                    }
-                },
-                fontAdd
-        );
+        appender.addRow(new Label("Increase font size by (req. restart):"), new HSlider(160, 0, 3, Config.fontadd) {
+            public void added() {
+                updateLabel();
+            }
+
+            public void changed() {
+                Utils.setprefi("fontadd", val);
+                Config.fontadd = val;
+                updateLabel();
+            }
+
+            private void updateLabel() {
+                fontAdd.settext(String.format("%d", val));
+            }
+        }, fontAdd);
 
         Button resetWndBtn = new Button(220, "Reset Windows (req. logout)") {
             @Override
@@ -1288,13 +1291,14 @@ public class OptWnd extends Window {
                 Utils.delpref("fbelt_vertical");
             }
         };
-        uis.add(resetWndBtn, new Coord(620 / 2 - resetWndBtn.sz.x / 2 , 320));
+        uis.add(resetWndBtn, new Coord(620 / 2 - resetWndBtn.sz.x / 2, 320));
         uis.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
         uis.pack();
     }
 
     private void initQuality() {
-        final WidgetVerticalAppender appender = new WidgetVerticalAppender(withScrollport(quality, new Coord(620, 350)));
+        final WidgetVerticalAppender appender = new WidgetVerticalAppender(
+                withScrollport(quality, new Coord(620, 350)));
         appender.setVerticalMargin(VERTICAL_MARGIN);
         appender.setHorizontalMargin(HORIZONTAL_MARGIN);
         appender.add(new CheckBox("Show item quality") {
@@ -1330,21 +1334,21 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
-        appender.addRow(
-            new Label("Background transparency (req. restart):"),
-            new HSlider(200, 0, 255, Config.qualitybgtransparency) {
-                public void changed() {
-                    Utils.setprefi("qualitybgtransparency", val);
-                    Config.qualitybgtransparency = val;
-                }
-            });
+        appender.addRow(new Label("Background transparency (req. restart):"),
+                new HSlider(200, 0, 255, Config.qualitybgtransparency) {
+                    public void changed() {
+                        Utils.setprefi("qualitybgtransparency", val);
+                        Config.qualitybgtransparency = val;
+                    }
+                });
 
         quality.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
         quality.pack();
     }
 
     private void initFlowermenus() {
-        final WidgetVerticalAppender appender = new WidgetVerticalAppender(withScrollport(flowermenus, new Coord(620, 350)));
+        final WidgetVerticalAppender appender = new WidgetVerticalAppender(
+                withScrollport(flowermenus, new Coord(620, 350)));
 
         appender.setVerticalMargin(VERTICAL_MARGIN);
         appender.setHorizontalMargin(HORIZONTAL_MARGIN);
@@ -1380,7 +1384,8 @@ public class OptWnd extends Window {
     }
 
     private void initSoundAlarms() {
-        final WidgetVerticalAppender appender = new WidgetVerticalAppender(withScrollport(soundalarms, new Coord(620, 350)));
+        final WidgetVerticalAppender appender = new WidgetVerticalAppender(
+                withScrollport(soundalarms, new Coord(620, 350)));
 
         appender.setVerticalMargin(VERTICAL_MARGIN);
         appender.setHorizontalMargin(HORIZONTAL_MARGIN);
@@ -1401,7 +1406,7 @@ public class OptWnd extends Window {
         appender.add(new HSlider(200, 0, 1000, 0) {
             protected void attach(UI ui) {
                 super.attach(ui);
-                val = (int)(Config.alarmunknownvol * 1000);
+                val = (int) (Config.alarmunknownvol * 1000);
             }
 
             public void changed() {
@@ -1589,24 +1594,23 @@ public class OptWnd extends Window {
     }
 
     private void initMapping() {
-        final WidgetVerticalAppender appender = new WidgetVerticalAppender(withScrollport(mapping, new Coord(620, 350)));
+        final WidgetVerticalAppender appender = new WidgetVerticalAppender(
+                withScrollport(mapping, new Coord(620, 350)));
 
         appender.setVerticalMargin(VERTICAL_MARGIN);
         appender.setHorizontalMargin(HORIZONTAL_MARGIN);
 
         appender.add(new Label("Online Auto-Mapper Service:", sectionfndr));
 
-        appender.addRow(new Label("Mapping server URL (req. restart):"),
-                new TextEntry(240, Config.mapperUrl) {
-                    @Override
-                    public boolean keydown(KeyEvent ev) {
-                        if (!parent.visible)
-                            return false;
-                        Utils.setpref("mapperUrl", text);
-                        return buf.key(ev);
-                    }
-                }
-        );
+        appender.addRow(new Label("Mapping server URL (req. restart):"), new TextEntry(240, Config.mapperUrl) {
+            @Override
+            public boolean keydown(KeyEvent ev) {
+                if (!parent.visible)
+                    return false;
+                Utils.setpref("mapperUrl", text);
+                return buf.key(ev);
+            }
+        });
         appender.add(new CheckBox("Enable mapping service") {
             {
                 a = Config.mapperEnabled;
@@ -1653,46 +1657,44 @@ public class OptWnd extends Window {
         });
 
         appender.add(new Label(""));
-		appender.add(new Label("Vendan Map-v4:", sectionfndr));
+        appender.add(new Label("Vendan Map-v4:", sectionfndr));
 
-		appender.addRow(new Label("Server URL:"),
-				new TextEntry(240, Utils.getpref("vendan-mapv4-endpoint", "")) {
-					@Override
-					public boolean keydown(KeyEvent ev) {
-						if (!parent.visible)
-							return false;
-						Utils.setpref("vendan-mapv4-endpoint", text);
-                        MappingClient.getInstance().SetEndpoint(text);
-						return buf.key(ev);
-					}
-				}
-		);
+        appender.addRow(new Label("Server URL:"), new TextEntry(240, Utils.getpref("vendan-mapv4-endpoint", "")) {
+            @Override
+            public boolean keydown(KeyEvent ev) {
+                if (!parent.visible)
+                    return false;
+                Utils.setpref("vendan-mapv4-endpoint", text);
+                MappingClient.getInstance().SetEndpoint(text);
+                return buf.key(ev);
+            }
+        });
 
-		appender.add(new CheckBox("Enable mapv4 mapper") {
-			{
-				a = Config.vendanMapv4;
-			}
+        appender.add(new CheckBox("Enable mapv4 mapper") {
+            {
+                a = Config.vendanMapv4;
+            }
 
-			public void set(boolean val) {
-				Utils.setprefb("vendan-mapv4", val);
+            public void set(boolean val) {
+                Utils.setprefb("vendan-mapv4", val);
                 Config.vendanMapv4 = val;
                 MappingClient.getInstance().EnableGridUploads(Config.vendanMapv4);
                 MappingClient.getInstance().EnableTracking(Config.vendanMapv4);
-				a = val;
-			}
+                a = val;
+            }
         });
-        
-        appender.add(new CheckBox("Upload custom GREEN markers to map") {
-			{
-				a = Config.vendanGreenMarkers;
-			}
 
-			public void set(boolean val) {
-				Utils.setprefb("vendan-mapv4-green-markers", val);
+        appender.add(new CheckBox("Upload custom GREEN markers to map") {
+            {
+                a = Config.vendanGreenMarkers;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("vendan-mapv4-green-markers", val);
                 Config.vendanGreenMarkers = val;
-				a = val;
-			}
-		});
+                a = val;
+            }
+        });
 
         appender.add(new Label(""));
         appender.add(new Label("Locally saved map tiles for 3rd party tools:", sectionfndr));
@@ -1714,14 +1716,14 @@ public class OptWnd extends Window {
         mapping.pack();
     }
 
-    private static final Text kbtt = RichText.render("$col[255,255,0]{Escape}: Cancel input\n" +
-            "$col[255,255,0]{Backspace}: Revert to default\n" +
-            "$col[255,255,0]{Delete}: Disable keybinding", 0);
+    private static final Text kbtt = RichText.render("$col[255,255,0]{Escape}: Cancel input\n"
+            + "$col[255,255,0]{Backspace}: Revert to default\n" + "$col[255,255,0]{Delete}: Disable keybinding", 0);
 
     private final static int KB_NAME_W = 170;
 
     private void initKeyBind() {
-        final WidgetVerticalAppender appender = new WidgetVerticalAppender(withScrollport(keybind, new Coord(620, 350)));
+        final WidgetVerticalAppender appender = new WidgetVerticalAppender(
+                withScrollport(keybind, new Coord(620, 350)));
 
         appender.setVerticalMargin(VERTICAL_MARGIN);
         appender.setHorizontalMargin(HORIZONTAL_MARGIN);
@@ -1736,7 +1738,7 @@ public class OptWnd extends Window {
         appender.addRow(KB_NAME_W, new Label("Take screenshot & Upload "), new SetButton(175, GameUI.kb_shoot));
         appender.addRow(KB_NAME_W, new Label("Take screenshot & Save"), new SetButton(175, GameUI.kb_shoot_save));
         appender.addRow(KB_NAME_W, new Label("Combat action 1"), new SetButton(175, Fightsess.kb_acts[0]));
-        for(int i = 1; i < Fightsess.kb_acts.length; i++) {
+        for (int i = 1; i < Fightsess.kb_acts.length; i++) {
             appender.addRow(KB_NAME_W, new Label("Combat action " + (i + 1)), new SetButton(175, Fightsess.kb_acts[i]));
         }
         appender.addRow(KB_NAME_W, new Label("Switch combat opponent"), new SetButton(175, Fightsess.kb_switch));
@@ -1756,17 +1758,16 @@ public class OptWnd extends Window {
 
         public PointBind(int w) {
             super(w, msg, false);
-            tooltip = RichText.render("Bind a key to an element not listed above, such as an action-menu " +
-                            "button. Click the element to bind, and then press the key to bind to it. " +
-                            "Right-click to stop rebinding.",
-                    300);
+            tooltip = RichText.render("Bind a key to an element not listed above, such as an action-menu "
+                    + "button. Click the element to bind, and then press the key to bind to it. "
+                    + "Right-click to stop rebinding.", 300);
         }
 
         public void click() {
-            if(mg == null) {
+            if (mg == null) {
                 change("Click element...");
                 mg = ui.grabmouse(this);
-            } else if(kg != null) {
+            } else if (kg != null) {
                 kg.remove();
                 kg = null;
                 change(msg);
@@ -1774,52 +1775,55 @@ public class OptWnd extends Window {
         }
 
         private boolean handle(KeyEvent ev) {
-            switch(ev.getKeyCode()) {
-                case KeyEvent.VK_SHIFT: case KeyEvent.VK_CONTROL: case KeyEvent.VK_ALT:
-                case KeyEvent.VK_META: case KeyEvent.VK_WINDOWS:
-                    return(false);
+            switch (ev.getKeyCode()) {
+                case KeyEvent.VK_SHIFT:
+                case KeyEvent.VK_CONTROL:
+                case KeyEvent.VK_ALT:
+                case KeyEvent.VK_META:
+                case KeyEvent.VK_WINDOWS:
+                    return (false);
             }
             int code = ev.getKeyCode();
-            if(code == KeyEvent.VK_ESCAPE) {
-                return(true);
+            if (code == KeyEvent.VK_ESCAPE) {
+                return (true);
             }
-            if(code == KeyEvent.VK_BACK_SPACE) {
+            if (code == KeyEvent.VK_BACK_SPACE) {
                 cmd.set(null);
-                return(true);
+                return (true);
             }
-            if(code == KeyEvent.VK_DELETE) {
+            if (code == KeyEvent.VK_DELETE) {
                 cmd.set(KeyMatch.nil);
-                return(true);
+                return (true);
             }
             KeyMatch key = KeyMatch.forevent(ev, ~cmd.modign);
-            if(key != null)
+            if (key != null)
                 cmd.set(key);
-            return(true);
+            return (true);
         }
 
         public boolean mousedown(Coord c, int btn) {
-            if(mg == null)
-                return(super.mousedown(c, btn));
+            if (mg == null)
+                return (super.mousedown(c, btn));
             Coord gc = ui.mc;
-            if(btn == 1) {
+            if (btn == 1) {
                 this.cmd = KeyBinding.Bindable.getbinding(ui.root, gc);
-                return(true);
+                return (true);
             }
-            if(btn == 3) {
+            if (btn == 3) {
                 mg.remove();
                 mg = null;
                 change(msg);
-                return(true);
+                return (true);
             }
-            return(false);
+            return (false);
         }
 
         public boolean mouseup(Coord c, int btn) {
-            if(mg == null)
-                return(super.mouseup(c, btn));
+            if (mg == null)
+                return (super.mouseup(c, btn));
             Coord gc = ui.mc;
-            if(btn == 1) {
-                if((this.cmd != null) && (KeyBinding.Bindable.getbinding(ui.root, gc) == this.cmd)) {
+            if (btn == 1) {
+                if ((this.cmd != null) && (KeyBinding.Bindable.getbinding(ui.root, gc) == this.cmd)) {
                     mg.remove();
                     mg = null;
                     kg = ui.grabkeys(this);
@@ -1827,30 +1831,30 @@ public class OptWnd extends Window {
                 } else {
                     this.cmd = null;
                 }
-                return(true);
+                return (true);
             }
-            if(btn == 3)
-                return(true);
-            return(false);
+            if (btn == 3)
+                return (true);
+            return (false);
         }
 
         public Resource getcurs(Coord c) {
-            if(mg == null)
-                return(null);
-            return(curs);
+            if (mg == null)
+                return (null);
+            return (curs);
         }
 
         public boolean keydown(KeyEvent ev) {
-            if(kg == null)
-                return(super.keydown(ev));
-            if(handle(ev)) {
+            if (kg == null)
+                return (super.keydown(ev));
+            if (handle(ev)) {
                 kg.remove();
                 kg = null;
                 cmd = null;
                 change("Click another element...");
                 mg = ui.grabmouse(this);
             }
-            return(true);
+            return (true);
         }
     }
 
@@ -1868,7 +1872,7 @@ public class OptWnd extends Window {
         }
 
         protected KeyMatch mkmatch(KeyEvent ev) {
-            return(KeyMatch.forevent(ev, ~cmd.modign));
+            return (KeyMatch.forevent(ev, ~cmd.modign));
         }
 
         protected boolean handle(KeyEvent ev) {
@@ -1918,7 +1922,8 @@ public class OptWnd extends Window {
 
     @SuppressWarnings("unchecked")
     private Dropbox<String> makeFontsDropdown() {
-        final List<String> fonts = Arrays.asList(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
+        final List<String> fonts = Arrays
+                .asList(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
         return new Dropbox<String>(8, fonts) {
             {
                 super.change(Config.font);
@@ -2065,7 +2070,6 @@ public class OptWnd extends Window {
         for (CheckListboxItem itm : Config.icons.values())
             iconslist.items.add(itm);
         map.add(iconslist, new Coord(475, 15));
-
 
         map.pack();
     }

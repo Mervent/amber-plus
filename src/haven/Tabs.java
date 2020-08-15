@@ -57,9 +57,9 @@ public class Tabs {
             tabs.remove(this);
         }
 
-	public void showtab() {
-	    Tabs.this.showtab(this);
-	}
+        public void showtab() {
+            Tabs.this.showtab(this);
+        }
     }
 
     public Tab add() {
@@ -98,8 +98,10 @@ public class Tabs {
         Coord max = new Coord(0, 0);
         for (Tab tab : tabs) {
             Coord br = tab.contentsz();
-            if (br.x > max.x) max.x = br.x;
-            if (br.y > max.y) max.y = br.y;
+            if (br.x > max.x)
+                max.x = br.x;
+            if (br.y > max.y)
+                max.y = br.y;
         }
         return (max);
     }

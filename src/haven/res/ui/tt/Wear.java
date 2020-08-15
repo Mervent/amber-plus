@@ -17,6 +17,7 @@ public class Wear extends Tip {
     }
 
     public BufferedImage tipimg() {
-        return Text.render(String.format(Resource.getLocString(Resource.BUNDLE_LABEL, "Wear: %,d/%,d"), Integer.valueOf(this.d), Integer.valueOf(this.m))).img;
+        return Text.render(String.format(Resource.getLocString(Resource.BUNDLE_LABEL, "Wear: %,d/%,d"),
+                Integer.valueOf(this.d), Integer.valueOf(this.m))).img;
     }
 }

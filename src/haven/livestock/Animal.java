@@ -1,13 +1,11 @@
 package haven.livestock;
 
-
 import haven.*;
 import haven.Label;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-
 
 public abstract class Animal extends HashMap<String, Integer> {
     private final static int COL_SPACE;

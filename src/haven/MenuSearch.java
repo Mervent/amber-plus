@@ -115,7 +115,8 @@ public class MenuSearch extends GameUI.Hidewnd {
             try {
                 if (a.img == null) {
                     Resource res = a.pagina.res.get();
-                    a.img = new TexI(PUtils.convolvedown(res.layer(Resource.imgc).img, new Coord(itemh, itemh), CharWnd.iconfilter));
+                    a.img = new TexI(PUtils.convolvedown(res.layer(Resource.imgc).img, new Coord(itemh, itemh),
+                            CharWnd.iconfilter));
                     a.name = Text.render(res.layer(Resource.action).name).tex();
                 }
                 g.image(a.img, Coord.z);

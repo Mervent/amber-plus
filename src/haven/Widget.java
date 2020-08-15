@@ -109,38 +109,41 @@ public class Widget {
     }
 
     public static abstract class AlignPanel extends Widget {
-	protected abstract Coord getc();
+        protected abstract Coord getc();
 
-	public <T extends Widget> T add(T child) {
-	    super.add(child);
-	    pack();
-	    if(parent != null)
-		presize();
-	    return(child);
-	}
+        public <T extends Widget> T add(T child) {
+            super.add(child);
+            pack();
+            if (parent != null)
+                presize();
+            return (child);
+        }
 
-	public void cresize(Widget ch) {
-	    pack();
-	    if(parent != null)
-		presize();
-	}
+        public void cresize(Widget ch) {
+            pack();
+            if (parent != null)
+                presize();
+        }
 
-	public void presize() {
-	    c = getc();
-	}
+        public void presize() {
+            c = getc();
+        }
 
-	protected void added() {presize();}
+        protected void added() {
+            presize();
+        }
     }
+
     @RName("acnt")
     public static class $ACont implements Factory {
-	public Widget create(UI ui, final Object[] args) {
-	    final String expr = (String)args[0];
-	    return(new AlignPanel() {
-		    protected Coord getc() {
-			return(relpos(expr, this, args, 1));
-		    }
-		});
-	}
+        public Widget create(UI ui, final Object[] args) {
+            final String expr = (String) args[0];
+            return (new AlignPanel() {
+                protected Coord getc() {
+                    return (relpos(expr, this, args, 1));
+                }
+            });
+        }
     }
 
     @Resource.PublishedCode(name = "wdg", instancer = FactMaker.class)
@@ -155,13 +158,15 @@ public class Widget {
             try {
                 final Method mkm = cl.getDeclaredMethod("mkwidget", UI.class, Object[].class);
                 int mod = mkm.getModifiers();
-                if (Widget.class.isAssignableFrom(mkm.getReturnType()) && ((mod & Modifier.STATIC) != 0) && ((mod & Modifier.PUBLIC) != 0)) {
+                if (Widget.class.isAssignableFrom(mkm.getReturnType()) && ((mod & Modifier.STATIC) != 0)
+                        && ((mod & Modifier.PUBLIC) != 0)) {
                     return (new Factory() {
                         public Widget create(UI ui, Object[] args) {
                             try {
                                 return ((Widget) mkm.invoke(null, ui, args));
                             } catch (Exception e) {
-                                if (e instanceof RuntimeException) throw ((RuntimeException) e);
+                                if (e instanceof RuntimeException)
+                                    throw ((RuntimeException) e);
                                 throw (new RuntimeException(e));
                             }
                         }
@@ -214,9 +219,13 @@ public class Widget {
         try {
             f = gettype2(name);
         } catch (InterruptedException e) {
-        /* XXX: This is not proper behavior. On the other hand,
-         * InterruptedException should not be checked. :-/ */
-            throw (new RuntimeException("Interrupted while loading resource widget (took " + (System.currentTimeMillis() - start) + " ms)", e));
+            /*
+             * XXX: This is not proper behavior. On the other hand, InterruptedException
+             * should not be checked. :-/
+             */
+            throw (new RuntimeException(
+                    "Interrupted while loading resource widget (took " + (System.currentTimeMillis() - start) + " ms)",
+                    e));
         }
         if (f == null)
             throw (new RuntimeException("No such widget type: " + name));
@@ -277,7 +286,7 @@ public class Widget {
     public <T extends Widget> T add(T child, Coord c) {
         if (child instanceof Window) {
             child.c = Utils.getprefc(((Window) child).origcap + "_c", c);
-        } else if (child instanceof BeltWnd) {   // FIXME. this is ugly
+        } else if (child instanceof BeltWnd) { // FIXME. this is ugly
             child.c = Utils.getprefc(((BeltWnd) child).origcap + "_c", c);
         } else {
             child.c = c;
@@ -317,7 +326,7 @@ public class Widget {
         }
 
         public String getMessage() {
-            return(String.format("Unhandled exception at %s+%d, stack is %s", spec, pos, stack));
+            return (String.format("Unhandled exception at %s+%d, stack is %s", spec, pos, stack));
         }
     }
 
@@ -325,101 +334,102 @@ public class Widget {
         int i = 0;
         Stack<Object> st = new Stack<Object>();
         try {
-            while(i < spec.length()) {
+            while (i < spec.length()) {
                 char op = spec.charAt(i++);
-                if(Character.isDigit(op)) {
+                if (Character.isDigit(op)) {
                     int e;
-                    for(e = i; (e < spec.length()) && Character.isDigit(spec.charAt(e)); e++);
+                    for (e = i; (e < spec.length()) && Character.isDigit(spec.charAt(e)); e++)
+                        ;
                     st.push(Integer.parseInt(spec.substring(i - 1, e)));
                     i = e;
-                } else if(op == '!') {
+                } else if (op == '!') {
                     st.push(args[off++]);
-                } else if(op == '$') {
+                } else if (op == '$') {
                     st.push(self);
-                } else if(op == '@') {
+                } else if (op == '@') {
                     st.push(this);
-                } else if(op == '_') {
+                } else if (op == '_') {
                     st.push(st.peek());
-                } else if(op == '.') {
+                } else if (op == '.') {
                     st.pop();
-                } else if(op == '^') {
+                } else if (op == '^') {
                     Object a = st.pop();
                     Object b = st.pop();
                     st.push(a);
                     st.push(b);
-                } else if(op == 'c') {
-                    int y = (Integer)st.pop();
-                    int x = (Integer)st.pop();
+                } else if (op == 'c') {
+                    int y = (Integer) st.pop();
+                    int x = (Integer) st.pop();
                     st.push(new Coord(x, y));
-                } else if(op == 'o') {
-                    Widget w = (Widget)st.pop();
+                } else if (op == 'o') {
+                    Widget w = (Widget) st.pop();
                     st.push(w.c.add(w.sz));
-                } else if(op == 'p') {
-                    st.push(((Widget)st.pop()).c);
-                } else if(op == 'P') {
-                    Widget parent = (Widget)st.pop();
-                    st.push(((Widget)st.pop()).parentpos(parent));
-                } else if(op == 's') {
-                    st.push(((Widget)st.pop()).sz);
-                } else if(op == 'w') {
-                    synchronized(ui) {
-                        st.push(ui.widgets.get((Integer)st.pop()));
+                } else if (op == 'p') {
+                    st.push(((Widget) st.pop()).c);
+                } else if (op == 'P') {
+                    Widget parent = (Widget) st.pop();
+                    st.push(((Widget) st.pop()).parentpos(parent));
+                } else if (op == 's') {
+                    st.push(((Widget) st.pop()).sz);
+                } else if (op == 'w') {
+                    synchronized (ui) {
+                        st.push(ui.widgets.get((Integer) st.pop()));
                     }
-                } else if(op == 'x') {
-                    st.push(((Coord)st.pop()).x);
-                } else if(op == 'y') {
-                    st.push(((Coord)st.pop()).y);
-                } else if(op == '+') {
+                } else if (op == 'x') {
+                    st.push(((Coord) st.pop()).x);
+                } else if (op == 'y') {
+                    st.push(((Coord) st.pop()).y);
+                } else if (op == '+') {
                     Object b = st.pop();
                     Object a = st.pop();
-                    if((a instanceof Integer) && (b instanceof Integer)) {
-                        st.push((Integer)a + (Integer)b);
-                    } else if((a instanceof Coord) && (b instanceof Coord)) {
-                        st.push(((Coord)a).add((Coord)b));
+                    if ((a instanceof Integer) && (b instanceof Integer)) {
+                        st.push((Integer) a + (Integer) b);
+                    } else if ((a instanceof Coord) && (b instanceof Coord)) {
+                        st.push(((Coord) a).add((Coord) b));
                     } else {
-                        throw(new RuntimeException("Invalid addition operands: " + a + " + " + b));
+                        throw (new RuntimeException("Invalid addition operands: " + a + " + " + b));
                     }
-                } else if(op == '-') {
+                } else if (op == '-') {
                     Object b = st.pop();
                     Object a = st.pop();
-                    if((a instanceof Integer) && (b instanceof Integer)) {
-                        st.push((Integer)a - (Integer)b);
-                    } else if((a instanceof Coord) && (b instanceof Coord)) {
-                        st.push(((Coord)a).sub((Coord)b));
+                    if ((a instanceof Integer) && (b instanceof Integer)) {
+                        st.push((Integer) a - (Integer) b);
+                    } else if ((a instanceof Coord) && (b instanceof Coord)) {
+                        st.push(((Coord) a).sub((Coord) b));
                     } else {
-                        throw(new RuntimeException("Invalid subtraction operands: " + a + " - " + b));
+                        throw (new RuntimeException("Invalid subtraction operands: " + a + " - " + b));
                     }
-                } else if(op == '*') {
+                } else if (op == '*') {
                     Object b = st.pop();
                     Object a = st.pop();
-                    if((a instanceof Integer) && (b instanceof Integer)) {
-                        st.push((Integer)a * (Integer)b);
-                    } else if((a instanceof Coord) && (b instanceof Integer)) {
-                        st.push(((Coord)a).mul((Integer)b));
-                    } else if((a instanceof Coord) && (b instanceof Coord)) {
-                        st.push(((Coord)a).mul((Coord)b));
+                    if ((a instanceof Integer) && (b instanceof Integer)) {
+                        st.push((Integer) a * (Integer) b);
+                    } else if ((a instanceof Coord) && (b instanceof Integer)) {
+                        st.push(((Coord) a).mul((Integer) b));
+                    } else if ((a instanceof Coord) && (b instanceof Coord)) {
+                        st.push(((Coord) a).mul((Coord) b));
                     } else {
-                        throw(new RuntimeException("Invalid multiplication operands: " + a + " - " + b));
+                        throw (new RuntimeException("Invalid multiplication operands: " + a + " - " + b));
                     }
-                } else if(op == '/') {
+                } else if (op == '/') {
                     Object b = st.pop();
                     Object a = st.pop();
-                    if((a instanceof Integer) && (b instanceof Integer)) {
-                        st.push((Integer)a / (Integer)b);
-                    } else if((a instanceof Coord) && (b instanceof Integer)) {
-                        st.push(((Coord)a).div((Integer)b));
-                    } else if((a instanceof Coord) && (b instanceof Coord)) {
-                        st.push(((Coord)a).div((Coord)b));
+                    if ((a instanceof Integer) && (b instanceof Integer)) {
+                        st.push((Integer) a / (Integer) b);
+                    } else if ((a instanceof Coord) && (b instanceof Integer)) {
+                        st.push(((Coord) a).div((Integer) b));
+                    } else if ((a instanceof Coord) && (b instanceof Coord)) {
+                        st.push(((Coord) a).div((Coord) b));
                     } else {
-                        throw(new RuntimeException("Invalid division operands: " + a + " - " + b));
+                        throw (new RuntimeException("Invalid division operands: " + a + " - " + b));
                     }
-                } else if(Character.isWhitespace(op)) {
+                } else if (Character.isWhitespace(op)) {
                 } else {
-                    throw(new RuntimeException("Unknown position operation: " + op));
+                    throw (new RuntimeException("Unknown position operation: " + op));
                 }
             }
-        } catch(RuntimeException e) {
-            throw(new RelposError(e, spec, i, st));
+        } catch (RuntimeException e) {
+            throw (new RelposError(e, spec, i, st));
         }
         return ((Coord) st.pop());
     }
@@ -541,7 +551,7 @@ public class Widget {
                         last.lostfocus();
                     w.gotfocus();
                 } else if ((last != null) && last.hasfocus) {
-            /* Bug, but ah well. */
+                    /* Bug, but ah well. */
                     last.hasfocus = false;
                     last.lostfocus();
                 }
@@ -588,7 +598,7 @@ public class Widget {
     }
 
     private void findfocus() {
-    /* XXX: Might need to check subwidgets recursively */
+        /* XXX: Might need to check subwidgets recursively */
         focused = null;
         for (Widget w = lchild; w != null; w = w.prev) {
             if (w.visible && w.autofocus) {
@@ -624,14 +634,14 @@ public class Widget {
             cancancel = (Integer) args[0] != 0;
         } else if (msg == "autofocus") {
             autofocus = (Integer) args[0] != 0;
-        } else if(msg == "focus") {
-            int tid = (Integer)args[0];
-            if(tid < 0) {
+        } else if (msg == "focus") {
+            int tid = (Integer) args[0];
+            if (tid < 0) {
                 setfocus(null);
             } else {
                 Widget w = ui.widgets.get(tid);
-                if(w != null) {
-                    if(w.canfocus)
+                if (w != null) {
+                    if (w.canfocus)
                         setfocus(w);
                 }
             }
@@ -644,7 +654,7 @@ public class Widget {
             int a = 0;
             Object tt = args[a++];
             if (tt instanceof String) {
-                tooltip = Text.render(Resource.getLocString(Resource.BUNDLE_LABEL, (String)tt));
+                tooltip = Text.render(Resource.getLocString(Resource.BUNDLE_LABEL, (String) tt));
             } else if (tt instanceof Integer) {
                 final Indir<Resource> tres = ui.sess.getres((Integer) tt);
                 tooltip = new Indir<Tex>() {
@@ -664,14 +674,14 @@ public class Widget {
                     }
                 };
             }
-        } else if(msg == "gk") {
-            if(args[0] instanceof Integer) {
-                KeyMatch key = gkeymatch((Integer)args[0]);
-                if(args.length > 1) {
+        } else if (msg == "gk") {
+            if (args[0] instanceof Integer) {
+                KeyMatch key = gkeymatch((Integer) args[0]);
+                if (args.length > 1) {
                     int modign = 0;
-                    if(args.length > 2)
-                        modign = (Integer)args[2];
-                    kb_gkey = KeyBinding.get("wgk/" + (String)args[1], key, modign);
+                    if (args.length > 2)
+                        modign = (Integer) args[2];
+                    kb_gkey = KeyBinding.get("wgk/" + (String) args[1], key, modign);
                 } else {
                     gkey = key;
                 }
@@ -699,11 +709,13 @@ public class Widget {
             next = wdg.next;
             wdg.tick(dt);
         }
-        /* It would be very nice to do these things in harmless mix-in
-         * classes, but alas, this is Java. */
+        /*
+         * It would be very nice to do these things in harmless mix-in classes, but
+         * alas, this is Java.
+         */
         anims.addAll(nanims);
         nanims.clear();
-        for (Iterator<Anim> i = anims.iterator(); i.hasNext(); ) {
+        for (Iterator<Anim> i = anims.iterator(); i.hasNext();) {
             Anim anim = i.next();
             if (anim.tick(dt))
                 i.remove();
@@ -782,34 +794,38 @@ public class Widget {
         }
     }
 
-    private static final Map<Integer, Integer> gkeys = Utils.<Integer, Integer>map().
-            put((int)'0', KeyEvent.VK_0).put((int)'1', KeyEvent.VK_1).put((int)'2', KeyEvent.VK_2).put((int)'3', KeyEvent.VK_3).put((int)'4', KeyEvent.VK_4).
-            put((int)'5', KeyEvent.VK_5).put((int)'6', KeyEvent.VK_6).put((int)'7', KeyEvent.VK_7).put((int)'8', KeyEvent.VK_8).put((int)'9', KeyEvent.VK_9).
-            put((int)'`', KeyEvent.VK_BACK_QUOTE).put((int)'-', KeyEvent.VK_MINUS).put((int)'=', KeyEvent.VK_EQUALS).
-            put(8, KeyEvent.VK_BACK_SPACE).put(9, KeyEvent.VK_TAB).put(13, KeyEvent.VK_ENTER).put(27, KeyEvent.VK_ESCAPE).
-            put(128, KeyEvent.VK_UP).put(129, KeyEvent.VK_RIGHT).put(130, KeyEvent.VK_DOWN).put(131, KeyEvent.VK_LEFT).
-            put(132, KeyEvent.VK_INSERT).put(133, KeyEvent.VK_HOME).put(134, KeyEvent.VK_PAGE_UP).put(135, KeyEvent.VK_DELETE).put(136, KeyEvent.VK_END).put(137, KeyEvent.VK_PAGE_DOWN).map();
+    private static final Map<Integer, Integer> gkeys = Utils.<Integer, Integer>map().put((int) '0', KeyEvent.VK_0)
+            .put((int) '1', KeyEvent.VK_1).put((int) '2', KeyEvent.VK_2).put((int) '3', KeyEvent.VK_3)
+            .put((int) '4', KeyEvent.VK_4).put((int) '5', KeyEvent.VK_5).put((int) '6', KeyEvent.VK_6)
+            .put((int) '7', KeyEvent.VK_7).put((int) '8', KeyEvent.VK_8).put((int) '9', KeyEvent.VK_9)
+            .put((int) '`', KeyEvent.VK_BACK_QUOTE).put((int) '-', KeyEvent.VK_MINUS).put((int) '=', KeyEvent.VK_EQUALS)
+            .put(8, KeyEvent.VK_BACK_SPACE).put(9, KeyEvent.VK_TAB).put(13, KeyEvent.VK_ENTER)
+            .put(27, KeyEvent.VK_ESCAPE).put(128, KeyEvent.VK_UP).put(129, KeyEvent.VK_RIGHT).put(130, KeyEvent.VK_DOWN)
+            .put(131, KeyEvent.VK_LEFT).put(132, KeyEvent.VK_INSERT).put(133, KeyEvent.VK_HOME)
+            .put(134, KeyEvent.VK_PAGE_UP).put(135, KeyEvent.VK_DELETE).put(136, KeyEvent.VK_END)
+            .put(137, KeyEvent.VK_PAGE_DOWN).map();
+
     public static KeyMatch gkeymatch(int gkey) {
-        if(gkey == 0)
-            return(KeyMatch.nil);
+        if (gkey == 0)
+            return (KeyMatch.nil);
         int key = gkey & 0xff, modmask = (gkey & 0xf000) >> 12, modmatch = (gkey & 0x0f00) >> 8;
-        if(modmask == 0)
+        if (modmask == 0)
             modmask = KeyMatch.MODS;
         Integer code = gkeys.get(key);
-        if(code != null)
-            return(KeyMatch.forcode(code, modmask, modmatch));
-        if(gkey < 32)
-            return(KeyMatch.forchar((char)((int)'A' + gkey - 1), KeyMatch.C));
-        return(KeyMatch.forchar((char)key, modmask, modmatch));
+        if (code != null)
+            return (KeyMatch.forcode(code, modmask, modmatch));
+        if (gkey < 32)
+            return (KeyMatch.forchar((char) ((int) 'A' + gkey - 1), KeyMatch.C));
+        return (KeyMatch.forchar((char) key, modmask, modmatch));
     }
 
     public boolean globtype(char key, KeyEvent ev) {
         KeyMatch gkey = this.gkey;
-        if(kb_gkey != null)
+        if (kb_gkey != null)
             gkey = kb_gkey.key();
-        if((gkey != null) && gkey.match(ev)) {
+        if ((gkey != null) && gkey.match(ev)) {
             wdgmsg("activate", UI.modflags(ev));
-            return(true);
+            return (true);
         }
         for (Widget wdg = lchild; wdg != null; wdg = wdg.prev) {
             if (wdg.globtype(key, ev))
@@ -834,7 +850,7 @@ public class Widget {
         }
         if (focusctl) {
             if (focused != null) {
-                if(focused.keydown(ev))
+                if (focused.keydown(ev))
                     return (true);
                 if (focustab) {
                     if (key == '\t' && !ev.isShiftDown()) {
@@ -845,7 +861,7 @@ public class Widget {
                                 f = ((n == null) || !n.hasparent(this)) ? child : n;
                             } else {
                                 Widget p = f.rprev();
-				                f = ((p == null) || (p == this) || !p.hasparent(this))?lchild:p;
+                                f = ((p == null) || (p == this) || !p.hasparent(this)) ? lchild : p;
                             }
                             if (f.canfocus)
                                 break;
@@ -923,7 +939,7 @@ public class Widget {
     }
 
     public void move(Coord c) {
-	this.c = c;
+        this.c = c;
     }
 
     public void resize(Coord sz) {
@@ -935,8 +951,8 @@ public class Widget {
     }
 
     public void move(Area a) {
-	move(a.ul);
-	resize(a.sz());
+        move(a.ul);
+        resize(a.sz());
     }
 
     public void resize(int x, int y) {
@@ -979,12 +995,13 @@ public class Widget {
         if (prev != null) {
             Widget lc = prev.lchild;
             if (lc != null) {
-                for(; lc.lchild != null; lc = lc.lchild);
-                return(lc);
+                for (; lc.lchild != null; lc = lc.lchild)
+                    ;
+                return (lc);
             }
-            return(prev);
+            return (prev);
         }
-        return(parent);
+        return (parent);
     }
 
     public Widget rnext() {
@@ -1141,12 +1158,12 @@ public class Widget {
     public final Collection<Anim> nanims = new LinkedList<Anim>();
 
     public <T extends Anim> void clearanims(Class<T> type) {
-        for (Iterator<Anim> i = nanims.iterator(); i.hasNext(); ) {
+        for (Iterator<Anim> i = nanims.iterator(); i.hasNext();) {
             Anim a = i.next();
             if (type.isInstance(a))
                 i.remove();
         }
-        for (Iterator<Anim> i = anims.iterator(); i.hasNext(); ) {
+        for (Iterator<Anim> i = anims.iterator(); i.hasNext();) {
             Anim a = i.next();
             if (type.isInstance(a))
                 i.remove();

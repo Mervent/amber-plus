@@ -6,7 +6,6 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-
 public class Utils {
 
     public static Coord rotate(int x, int y, float pivotx, float pivoty, double cos, double sin) {
@@ -14,7 +13,8 @@ public class Utils {
         float fy = y;
         fx -= pivotx;
         fy -= pivoty;
-        return new Coord((int) Math.round((fx * cos - fy * sin) + pivotx), (int) Math.round((fx * sin + fy * cos) + pivoty));
+        return new Coord((int) Math.round((fx * cos - fy * sin) + pivotx),
+                (int) Math.round((fx * sin + fy * cos) + pivoty));
     }
 
     public static class MinMax {
@@ -22,12 +22,14 @@ public class Utils {
         int max = Integer.MIN_VALUE;
     }
 
-    public static HashMap<Integer, MinMax> plotRect(byte[][] map, Coord ca, Coord cb, Coord cc, Coord cd, byte celltype) {
+    public static HashMap<Integer, MinMax> plotRect(byte[][] map, Coord ca, Coord cb, Coord cc, Coord cd,
+            byte celltype) {
         HashMap<Integer, MinMax> raster = new HashMap<Integer, MinMax>();
 
         // Very naive implementation for plotting rotated rectangles:
-        //  1. Draw frame using Bresenham's line algorithm. saving min-max X coordinates pairs along the way.
-        //  2. Fill the interior using min-max X coordinate pairs.
+        // 1. Draw frame using Bresenham's line algorithm. saving min-max X coordinates
+        // pairs along the way.
+        // 2. Fill the interior using min-max X coordinate pairs.
         Utils.plotLine(map, raster, ca.x, ca.y, cb.x, cb.y, celltype);
         Utils.plotLine(map, raster, cb.x, cb.y, cc.x, cc.y, celltype);
         Utils.plotLine(map, raster, cd.x, cd.y, cc.x, cc.y, celltype);
@@ -42,7 +44,8 @@ public class Utils {
         return raster;
     }
 
-    public static HashMap<Integer, MinMax> plotRotRect(byte[][] map, Dbg dbg, Coord a, Coord b, int gcx, int gcy, double cos, double sin) {
+    public static HashMap<Integer, MinMax> plotRotRect(byte[][] map, Dbg dbg, Coord a, Coord b, int gcx, int gcy,
+            double cos, double sin) {
         HashMap<Integer, MinMax> raster = new HashMap<Integer, MinMax>();
 
         float pivotx = 0.5f;
@@ -79,7 +82,7 @@ public class Utils {
         int ey = y1 < y2 ? 1 : -1;
 
         if (dy <= dx) {
-            for (; ; ) {
+            for (;;) {
                 map[x1][y1] = val;
 
                 MinMax minmax = vx.get(y1);
@@ -102,7 +105,7 @@ public class Utils {
                 }
             }
         } else {
-            for (; ; ) {
+            for (;;) {
                 map[x1][y1] = val;
 
                 MinMax minmax = vx.get(y1);
@@ -127,14 +130,15 @@ public class Utils {
         }
     }
 
-    // Bresenham's supercover - http://lifc.univ-fcomte.fr/home/~ededu/projects/bresenham/
+    // Bresenham's supercover -
+    // http://lifc.univ-fcomte.fr/home/~ededu/projects/bresenham/
     public static boolean isVisible(byte[][] map, Dbg dbg, int x1, int y1, int x2, int y2, byte block) {
-        int i;               // loop counter
-        int ystep, xstep;    // the step on y and x axis
-        int error;           // the error accumulated during the increment
-        int errorprev;       // *vision the previous value of the error variable
-        int y = y1, x = x1;  // the line points
-        int ddy, ddx;        // compulsory variables: the double values of dy and dx
+        int i; // loop counter
+        int ystep, xstep; // the step on y and x axis
+        int error; // the error accumulated during the increment
+        int errorprev; // *vision the previous value of the error variable
+        int y = y1, x = x1; // the line points
+        int ddy, ddx; // compulsory variables: the double values of dy and dx
         int dx = x2 - x1;
         int dy = y2 - y1;
 
@@ -151,25 +155,25 @@ public class Utils {
         } else {
             xstep = 1;
         }
-        ddy = 2 * dy;  // work with double values for full precision
+        ddy = 2 * dy; // work with double values for full precision
         ddx = 2 * dx;
-        if (ddx >= ddy) {  // first octant (0 <= slope <= 1)
+        if (ddx >= ddy) { // first octant (0 <= slope <= 1)
             // compulsory initialization (even for errorprev, needed when dx==dy)
-            errorprev = error = dx;  // start in the middle of the square
-            for (i = 0; i < dx; i++) {  // do not use the first point (already done)
+            errorprev = error = dx; // start in the middle of the square
+            for (i = 0; i < dx; i++) { // do not use the first point (already done)
                 x += xstep;
                 error += ddy;
-                if (error > ddx) {  // increment y if AFTER the middle ( > )
+                if (error > ddx) { // increment y if AFTER the middle ( > )
                     y += ystep;
                     error -= ddx;
                     // three cases (octant == right->right-top for directions below):
                     if (error + errorprev < ddx) { // bottom square also
                         if ((map[x][y - ystep] & block) != 0)
                             return false;
-                    } else if (error + errorprev > ddx) {  // left square also
+                    } else if (error + errorprev > ddx) { // left square also
                         if ((map[x - xstep][y] & block) != 0)
                             return false;
-                    } else {  // corner: bottom and left squares also
+                    } else { // corner: bottom and left squares also
                         if ((map[x][y - ystep] & block) != 0 || (map[x - xstep][y] & block) != 0)
                             return false;
                     }
@@ -178,7 +182,7 @@ public class Utils {
                     return false;
                 errorprev = error;
             }
-        } else {  // the same as above
+        } else { // the same as above
             errorprev = error = dy;
             for (i = 0; i < dy; i++) {
                 y += ystep;
@@ -207,12 +211,12 @@ public class Utils {
     }
 
     public static boolean trace(byte[][] map, Dbg dbg, int x1, int y1, int x2, int y2, byte block) {
-        int i;               // loop counter
-        int ystep, xstep;    // the step on y and x axis
-        int error;           // the error accumulated during the increment
-        int errorprev;       // *vision the previous value of the error variable
-        int y = y1, x = x1;  // the line points
-        int ddy, ddx;        // compulsory variables: the double values of dy and dx
+        int i; // loop counter
+        int ystep, xstep; // the step on y and x axis
+        int error; // the error accumulated during the increment
+        int errorprev; // *vision the previous value of the error variable
+        int y = y1, x = x1; // the line points
+        int ddy, ddx; // compulsory variables: the double values of dy and dx
         int dx = x2 - x1;
         int dy = y2 - y1;
 
@@ -229,25 +233,25 @@ public class Utils {
         } else {
             xstep = 1;
         }
-        ddy = 2 * dy;  // work with double values for full precision
+        ddy = 2 * dy; // work with double values for full precision
         ddx = 2 * dx;
-        if (ddx >= ddy) {  // first octant (0 <= slope <= 1)
+        if (ddx >= ddy) { // first octant (0 <= slope <= 1)
             // compulsory initialization (even for errorprev, needed when dx==dy)
-            errorprev = error = dx;  // start in the middle of the square
-            for (i = 0; i < dx; i++) {  // do not use the first point (already done)
+            errorprev = error = dx; // start in the middle of the square
+            for (i = 0; i < dx; i++) { // do not use the first point (already done)
                 x += xstep;
                 error += ddy;
-                if (error > ddx) {  // increment y if AFTER the middle ( > )
+                if (error > ddx) { // increment y if AFTER the middle ( > )
                     y += ystep;
                     error -= ddx;
                     // three cases (octant == right->right-top for directions below):
                     if (error + errorprev < ddx) { // bottom square also
                         dbg.dot(x, y - ystep, Color.DARK_GRAY);
 
-                    } else if (error + errorprev > ddx) {  // left square also
+                    } else if (error + errorprev > ddx) { // left square also
                         dbg.dot(x - xstep, y, Color.DARK_GRAY);
 
-                    } else {  // corner: bottom and left squares also
+                    } else { // corner: bottom and left squares also
                         dbg.dot(x, y - ystep, Color.DARK_GRAY);
                         dbg.dot(x - xstep, y, Color.DARK_GRAY);
 
@@ -256,7 +260,7 @@ public class Utils {
                 dbg.dot(x, y, Color.DARK_GRAY);
                 errorprev = error;
             }
-        } else {  // the same as above
+        } else { // the same as above
             errorprev = error = dy;
             for (i = 0; i < dy; i++) {
                 y += ystep;
@@ -285,8 +289,8 @@ public class Utils {
         return true;
     }
 
-
-    public static Set<TraversableObstacle> getObstructions(TraversableObstacle[][] pomap, int x1, int y1, int x2, int y2) {
+    public static Set<TraversableObstacle> getObstructions(TraversableObstacle[][] pomap, int x1, int y1, int x2,
+            int y2) {
         Set<TraversableObstacle> obs = new HashSet<TraversableObstacle>();
         int d = 0;
         int dy = Math.abs(y2 - y1);
@@ -297,7 +301,7 @@ public class Utils {
         int ey = y1 < y2 ? 1 : -1;
 
         if (dy <= dx) {
-            for (; ; ) {
+            for (;;) {
                 for (int x = 1; x < Map.plbbox; x++) {
                     for (int y = 1; y < Map.plbbox; y++) {
                         if (pomap[x1 + x][y1 + y] != null)
@@ -320,7 +324,7 @@ public class Utils {
                 }
             }
         } else {
-            for (; ; ) {
+            for (;;) {
                 for (int x = 1; x < Map.plbbox; x++) {
                     for (int y = 1; y < Map.plbbox; y++) {
                         if (pomap[x1 + x][y1 + y] != null)

@@ -102,9 +102,10 @@ public class SessWidget extends AWidget {
 
     public void destroy() {
         super.destroy();
-    /* XXX: There's a race condition here, but I admit I'm not
-     * sure what can properly be done about it, and it ought at
-	 * least be uncommon. */
+        /*
+         * XXX: There's a race condition here, but I admit I'm not sure what can
+         * properly be done about it, and it ought at least be uncommon.
+         */
         if (conn.done()) {
             Session sess = conn.get().sess;
             if (sess != null)

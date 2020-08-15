@@ -70,7 +70,8 @@ public class Text {
         public int chatName;
         public int richText;
 
-        public FontSettings(int label, int def, int attr, int charWndBox, int tooltipCap, int wndCap, int flowerMenu, int msg, int charName, int btn, int chatName, int richText) {
+        public FontSettings(int label, int def, int attr, int charWndBox, int tooltipCap, int wndCap, int flowerMenu,
+                int msg, int charName, int btn, int chatName, int richText) {
             this.label = scale(label);
             this.def = scale(def);
             this.attr = scale(attr);
@@ -92,21 +93,26 @@ public class Text {
 
     static {
         // here be localization horrors...
-        
+
         switch (Resource.language) {
             default:
             case "en":
-                cfg = new FontSettings(11, 11, 14, 11, 11, 14, 12, 14, 12, 12, 12, 11); break;
+                cfg = new FontSettings(11, 11, 14, 11, 11, 14, 12, 14, 12, 12, 12, 11);
+                break;
             case "ru":
-                cfg = new FontSettings(11, 11, 13, 11, 11, 14, 12, 14, 12, 12, 12, 11); break;
+                cfg = new FontSettings(11, 11, 13, 11, 11, 14, 12, 14, 12, 12, 12, 11);
+                break;
             case "ko":
-                cfg = new FontSettings(14, 14, 16, 14, 14, 14, 14, 14, 12, 12, 12, 14); break;
+                cfg = new FontSettings(14, 14, 16, 14, 14, 14, 14, 14, 12, 12, 12, 14);
+                break;
             case "zh":
-                cfg = new FontSettings(14, 16, 14, 16, 16, 16, 16, 16, 12, 14, 16, 16); break;
+                cfg = new FontSettings(14, 16, 14, 16, 16, 16, 16, 16, 12, 14, 16, 16);
+                break;
         }
 
         // this mapping is not really needed anymore.
-        // however it's still here just in case we would want to use custom fonts in the future.
+        // however it's still here just in case we would want to use custom fonts in the
+        // future.
         if (Config.usefont) {
             cfg.font.put("serif", Config.font);
             cfg.font.put("sans", Config.font);
@@ -245,8 +251,10 @@ public class Text {
         }
 
         public int height() {
-        /* XXX: Should leading go into this, when it's mostly
-         * supposed to be used for one-liners? */
+            /*
+             * XXX: Should leading go into this, when it's mostly supposed to be used for
+             * one-liners?
+             */
             return (m.getAscent() + m.getDescent());
         }
 
@@ -260,7 +268,8 @@ public class Text {
             wfnd.aa = aa;
             text = RichText.Parser.quote(text);
             if (c != null)
-                text = String.format("$col[%d,%d,%d,%d]{%s}", c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), text);
+                text = String.format("$col[%d,%d,%d,%d]{%s}", c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(),
+                        text);
             return (wfnd.render(text, width));
         }
 
@@ -299,7 +308,7 @@ public class Text {
             g.drawString(text, 0, m.getAscent());
             g.drawString(text, 2, m.getAscent());
             g.drawString(text, 1, m.getAscent() - 1);
-            g.drawString(text,1, m.getAscent() + 1);
+            g.drawString(text, 1, m.getAscent() + 1);
             g.setColor(c);
             g.drawString(text, 1, m.getAscent());
             g.dispose();
@@ -335,7 +344,7 @@ public class Text {
         }
 
         protected Text render(String text) {
-            return(fnd.render(text));
+            return (fnd.render(text));
         }
 
         protected String text(T value) {
@@ -465,6 +474,6 @@ public class Text {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-       return font;
+        return font;
     }
 }

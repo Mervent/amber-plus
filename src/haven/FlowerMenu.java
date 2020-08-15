@@ -42,7 +42,7 @@ public class FlowerMenu extends Widget {
     private static long nextAutoSelTimeout;
     public static String lastSel;
     private boolean ignoreAutoSetting;
-    
+
     @RName("sm")
     public static class $_ implements Factory {
         public Widget create(UI ui, Object[] args) {
@@ -73,8 +73,8 @@ public class FlowerMenu extends Widget {
             // adjust horizontal position for potentially parallel petals to avoid overlap
             if (r == rad) {
                 for (Petal p : opts) {
-                    if (this.c.x + sz.x >= p.c.x &&
-                            (num == 7 && p.num == 1 || num == 6 && p.num == 2 || num == 5 && p.num == 3)) {
+                    if (this.c.x + sz.x >= p.c.x
+                            && (num == 7 && p.num == 1 || num == 6 && p.num == 2 || num == 5 && p.num == 3)) {
                         p.c.x = opts[0].c.x + opts[0].sz.x / 2 + 5;
                         this.c.x = p.c.x - sz.x - 5;
                         break;
@@ -110,8 +110,8 @@ public class FlowerMenu extends Widget {
                 p.a = s;
                 if (s == 1.0) {
                     CheckListboxItem itm = Config.flowermenus.get(p.name);
-                    if (itm != null && itm.selected && !ui.modmeta && (!ignoreAutoSetting || p.name.equals("Peer into")) ||
-                            p.name.equals(nextAutoSel) && System.currentTimeMillis() - nextAutoSelTimeout < 2000) {
+                    if (itm != null && itm.selected && !ui.modmeta && (!ignoreAutoSetting || p.name.equals("Peer into"))
+                            || p.name.equals(nextAutoSel) && System.currentTimeMillis() - nextAutoSelTimeout < 2000) {
                         nextAutoSel = null;
                         choose(p);
                         break;
@@ -165,13 +165,13 @@ public class FlowerMenu extends Widget {
     }
 
     private void organize(Petal[] opts) {
-        for (int i = 0 ; i < opts.length; i++) {
-            double ta = PI/2 - i * PI/4;
+        for (int i = 0; i < opts.length; i++) {
+            double ta = PI / 2 - i * PI / 4;
 
             // slightly adjust 45 degrees angles
-            if (ta == PI/4 || ta == -3*PI/4)
+            if (ta == PI / 4 || ta == -3 * PI / 4)
                 ta -= 0.25;
-            if (ta == -PI/4 || ta == -5*PI/4)
+            if (ta == -PI / 4 || ta == -5 * PI / 4)
                 ta += 0.25;
 
             opts[i].ta = ta;
@@ -184,7 +184,7 @@ public class FlowerMenu extends Widget {
         for (int i = 0; i < options.length; i++) {
             add(opts[i] = new Petal(options[i]));
             opts[i].num = i;
-            if (options[i].equals("Study") || options[i].equals("Turn"))    // eatable curios & spitroasting
+            if (options[i].equals("Study") || options[i].equals("Turn")) // eatable curios & spitroasting
                 ignoreAutoSetting = true;
         }
     }

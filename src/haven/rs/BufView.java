@@ -62,7 +62,8 @@ public class BufView {
     public void clear2d(GOut g, java.awt.Color cc) {
         g.state2d();
         g.apply();
-        g.gl.glClearColor((float) cc.getRed() / 255f, (float) cc.getGreen() / 255f, (float) cc.getBlue() / 255f, (float) cc.getAlpha() / 255f);
+        g.gl.glClearColor((float) cc.getRed() / 255f, (float) cc.getGreen() / 255f, (float) cc.getBlue() / 255f,
+                (float) cc.getAlpha() / 255f);
         g.gl.glClear(GL.GL_COLOR_BUFFER_BIT);
     }
 

@@ -53,7 +53,7 @@ public class FoodInfo extends ItemInfo.Tip {
     }
 
     public FoodInfo(Owner owner, double end, double glut, Event[] evs, Effect[] efs, int[] types) {
-	this(owner, end, glut, 0, evs, efs, types);
+        this(owner, end, glut, 0, evs, efs, types);
     }
 
     public static class Event {
@@ -79,12 +79,13 @@ public class FoodInfo extends ItemInfo.Tip {
     }
 
     public BufferedImage tipimg() {
-        String infoStr = Resource.getLocString(Resource.BUNDLE_LABEL, "Energy: $col[128,128,255]{%s%%}, Hunger: $col[255,192,128]{%s%%}");
+        String infoStr = Resource.getLocString(Resource.BUNDLE_LABEL,
+                "Energy: $col[128,128,255]{%s%%}, Hunger: $col[255,192,128]{%s%%}");
         String satiationStr = Resource.getLocString(Resource.BUNDLE_LABEL, ", Satiation: $col[192,192,128]{%s%%}");
         String chanceStr = Resource.getLocString(Resource.BUNDLE_LABEL, "$i{($col[192,192,255]{%d%%} chance)}");
 
         String head = String.format(infoStr, Utils.odformat2(end * 100, 2), Utils.odformat2(glut * 100, 2));
-        if(cons != 0)
+        if (cons != 0)
             head += String.format(satiationStr, Utils.odformat2(cons * 100, 2));
         BufferedImage base = RichText.render(head, 0).img;
 
@@ -95,19 +96,20 @@ public class FoodInfo extends ItemInfo.Tip {
             String str;
             if (showbaseq && owner instanceof GItem) {
                 QBuff q = ((GItem) owner).quality();
-                str = String.format("%s: $col[%d,%d,%d]{%s}  $col[%d,%d,%d]{(%s)}",
-                        evs[i].ev.nm,
-                        col.getRed(), col.getGreen(), col.getBlue(), Utils.odformat2(evs[i].a, 2),
-                        col.getRed(), col.getGreen(), col.getBlue(), q != null ? basefepfmt.format(evs[i].a / Math.sqrt(q.q / 10)) : "???");
+                str = String.format("%s: $col[%d,%d,%d]{%s}  $col[%d,%d,%d]{(%s)}", evs[i].ev.nm, col.getRed(),
+                        col.getGreen(), col.getBlue(), Utils.odformat2(evs[i].a, 2), col.getRed(), col.getGreen(),
+                        col.getBlue(), q != null ? basefepfmt.format(evs[i].a / Math.sqrt(q.q / 10)) : "???");
             } else {
-                str = String.format("%s: $col[%d,%d,%d]{%s}", evs[i].ev.nm, col.getRed(), col.getGreen(), col.getBlue(), Utils.odformat2(evs[i].a, 2));
+                str = String.format("%s: $col[%d,%d,%d]{%s}", evs[i].ev.nm, col.getRed(), col.getGreen(), col.getBlue(),
+                        Utils.odformat2(evs[i].a, 2));
             }
             imgs.add(catimgsh(5, evs[i].img, RichText.render(str, 0).img));
         }
         for (int i = 0; i < efs.length; i++) {
             BufferedImage efi = ItemInfo.longtip(efs[i].info);
             if (efs[i].p != 1)
-                efi = catimgsh(5, efi, RichText.render(String.format(chanceStr, (int) Math.round(efs[i].p * 100)), 0).img);
+                efi = catimgsh(5, efi,
+                        RichText.render(String.format(chanceStr, (int) Math.round(efs[i].p * 100)), 0).img);
             imgs.add(efi);
         }
         return (catimgs(0, imgs.toArray(new BufferedImage[0])));

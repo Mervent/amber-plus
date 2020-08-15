@@ -38,8 +38,7 @@ public class SimpleSprite {
     }
 
     public SimpleSprite(Resource res, int id, Coord cc) {
-        find:
-        {
+        find: {
             for (Resource.Image img : res.layers(Resource.imgc)) {
                 if (img.id == id) {
                     this.img = img;

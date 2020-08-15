@@ -93,7 +93,8 @@ public class ErrorHandler extends ThreadGroup {
             }
             try {
                 r.join();
-            } catch (InterruptedException e) { /* XXX? */ }
+            } catch (InterruptedException e) {
+                /* XXX? */ }
         }
     }
 

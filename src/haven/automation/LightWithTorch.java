@@ -1,6 +1,5 @@
 package haven.automation;
 
-
 import haven.*;
 
 import static haven.OCache.posres;
@@ -19,12 +18,9 @@ public class LightWithTorch implements Runnable {
         synchronized (gui.map.glob.oc) {
             for (Gob gob : gui.map.glob.oc) {
                 Resource res = gob.getres();
-                if (res != null &&
-                        (res.name.equals("gfx/terobjs/oven") ||
-                        res.name.equals("gfx/terobjs/smelter") ||
-                        res.name.equals("gfx/terobjs/steelcrucible") ||
-                        res.name.equals("gfx/terobjs/kiln") ||
-                        res.name.equals("gfx/terobjs/cauldron"))) {
+                if (res != null && (res.name.equals("gfx/terobjs/oven") || res.name.equals("gfx/terobjs/smelter")
+                        || res.name.equals("gfx/terobjs/steelcrucible") || res.name.equals("gfx/terobjs/kiln")
+                        || res.name.equals("gfx/terobjs/cauldron"))) {
                     if (this.gob == null)
                         this.gob = gob;
                     else if (gob.rc.dist(gui.map.player().rc) < this.gob.rc.dist(gui.map.player().rc))
@@ -72,7 +68,8 @@ public class LightWithTorch implements Runnable {
 
             gui.map.wdgmsg("itemact", Coord.z, gob.rc.floor(posres), 0, 0, (int) gob.id, gob.rc.floor(posres), 0, -1);
 
-            if (!Utils.waitForProgressFinish(gui, TIMEOUT_ACT, "Oops something went wrong. Timeout when trying to light with torch.")) {
+            if (!Utils.waitForProgressFinish(gui, TIMEOUT_ACT,
+                    "Oops something went wrong. Timeout when trying to light with torch.")) {
                 e.wdgmsg("drop", noltorch ? 7 : 6);
                 return;
             }

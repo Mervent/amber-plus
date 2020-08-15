@@ -48,7 +48,6 @@ public class DirCam extends Camera {
     public static Matrix4f compute(Coord3f base, Coord3f dir) {
         Coord3f diff = defdir.cmul(dir);
         float a = (float) Math.asin(diff.abs());
-        return (makerot(new Matrix4f(), diff, -a)
-                .mul1(makexlate(new Matrix4f(), base.inv())));
+        return (makerot(new Matrix4f(), diff, -a).mul1(makexlate(new Matrix4f(), base.inv())));
     }
 }

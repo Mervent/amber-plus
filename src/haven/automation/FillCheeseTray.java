@@ -1,6 +1,5 @@
 package haven.automation;
 
-
 import haven.*;
 
 public class FillCheeseTray implements Runnable {

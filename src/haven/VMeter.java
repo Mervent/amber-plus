@@ -35,25 +35,22 @@ public class VMeter extends Widget {
     static Tex fg = Resource.loadtex("gfx/hud/vm-tex");
     Color cl;
     public int amount;
-    private static final Map<String, Integer> levels = new HashMap<String, Integer>(3) {{
-        put("Oven", 3 * 4);   // amount per unit * number of units
-        put("Finery Forge", 6 * 2);
-        put("Ore Smelter", (int) (3.3 * 12));
-    }};
+    private static final Map<String, Integer> levels = new HashMap<String, Integer>(3) {
+        {
+            put("Oven", 3 * 4); // amount per unit * number of units
+            put("Finery Forge", 6 * 2);
+            put("Ore Smelter", (int) (3.3 * 12));
+        }
+    };
 
     @RName("vm")
     public static class $_ implements Factory {
         public Widget create(UI ui, Object[] args) {
             Color cl;
             if (args.length > 4) {
-                cl = new Color((Integer) args[1],
-                        (Integer) args[2],
-                        (Integer) args[3],
-                        (Integer) args[4]);
+                cl = new Color((Integer) args[1], (Integer) args[2], (Integer) args[3], (Integer) args[4]);
             } else if (args.length > 3) {
-                cl = new Color((Integer) args[1],
-                        (Integer) args[2],
-                        (Integer) args[3]);
+                cl = new Color((Integer) args[1], (Integer) args[2], (Integer) args[3]);
             } else {
                 cl = (Color) args[1];
             }

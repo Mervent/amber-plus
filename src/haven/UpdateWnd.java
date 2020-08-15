@@ -10,7 +10,8 @@ public class UpdateWnd extends Window {
     public UpdateWnd(final String version) {
         super(Coord.z, "Update");
 
-        Label lbl = new Label(Resource.getLocString(Resource.BUNDLE_LABEL, "New client version available") + " - v" + version + "    ");
+        Label lbl = new Label(Resource.getLocString(Resource.BUNDLE_LABEL, "New client version available") + " - v"
+                + version + "    ");
         add(lbl, new Coord(20, 40));
 
         Button btn = new Button(200, "Download Update") {

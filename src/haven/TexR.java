@@ -60,24 +60,19 @@ public class TexR extends Resource.Layer implements Resource.IDLayer<Integer> {
                     break;
                 case 1:
                     int ma = buf.uint8();
-                    tex.mipmap(new Mipmapper[]{
-                            Mipmapper.avg, // Default
+                    tex.mipmap(new Mipmapper[] { Mipmapper.avg, // Default
                             Mipmapper.avg, // Specific
-                            Mipmapper.rnd,
-                            Mipmapper.cnt,
-                            Mipmapper.dav,
-                    }[ma]);
+                            Mipmapper.rnd, Mipmapper.cnt, Mipmapper.dav, }[ma]);
                     break;
                 case 2:
                     int magf = buf.uint8();
-                    magfilter = new int[]{GL.GL_NEAREST, GL.GL_LINEAR}[magf];
+                    magfilter = new int[] { GL.GL_NEAREST, GL.GL_LINEAR }[magf];
                     break;
                 case 3:
                     int minf = buf.uint8();
-                    minfilter = new int[]{GL.GL_NEAREST, GL.GL_LINEAR,
-                            GL.GL_NEAREST_MIPMAP_NEAREST, GL.GL_NEAREST_MIPMAP_LINEAR,
-                            GL.GL_LINEAR_MIPMAP_NEAREST, GL.GL_LINEAR_MIPMAP_LINEAR,
-                    }[minf];
+                    minfilter = new int[] { GL.GL_NEAREST, GL.GL_LINEAR, GL.GL_NEAREST_MIPMAP_NEAREST,
+                            GL.GL_NEAREST_MIPMAP_LINEAR, GL.GL_LINEAR_MIPMAP_NEAREST,
+                            GL.GL_LINEAR_MIPMAP_LINEAR, }[minf];
                     break;
                 case 4:
                     this.mask = buf.bytes(buf.int32());
@@ -101,10 +96,11 @@ public class TexR extends Resource.Layer implements Resource.IDLayer<Integer> {
 
         private BufferedImage rd(final byte[] data) {
             return (AccessController.doPrivileged(new PrivilegedAction<BufferedImage>() {
-                /* This can crash if not privileged due to ImageIO
-                 * creating tempfiles without doing that
-                 * privileged itself. It can very much be argued
-                 * that this is a bug in ImageIO. */
+                /*
+                 * This can crash if not privileged due to ImageIO creating tempfiles without
+                 * doing that privileged itself. It can very much be argued that this is a bug
+                 * in ImageIO.
+                 */
                 public BufferedImage run() {
                     try {
                         return (ImageIO.read(new ByteArrayInputStream(data)));
@@ -115,7 +111,7 @@ public class TexR extends Resource.Layer implements Resource.IDLayer<Integer> {
             }));
         }
 
-	public BufferedImage fill() {
+        public BufferedImage fill() {
             if (mask == null) {
                 return (rd(TexR.this.img));
             } else {

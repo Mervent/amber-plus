@@ -22,7 +22,8 @@ public class SeamarriageFactory implements ItemInfo.InfoFactory {
 
         public Tip(Owner var2, double var3, double var5) {
             super(var2);
-            String str = Resource.getLocString(Resource.BUNDLE_LABEL, "Quality of caught fish: +%d%%\nQuality on built knarrs: +%d%%");
+            String str = Resource.getLocString(Resource.BUNDLE_LABEL,
+                    "Quality of caught fish: +%d%%\nQuality on built knarrs: +%d%%");
             this.tip = RichText.render(String.format(str, Math.round(var3 * 100.0D), Math.round(var5 * 100.0D)), 0);
         }
 

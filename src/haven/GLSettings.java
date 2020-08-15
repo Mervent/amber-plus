@@ -101,7 +101,8 @@ public class GLSettings implements java.io.Serializable {
             for (E e : EnumSet.allOf(real)) {
                 if (e.name().toUpperCase().startsWith(val)) {
                     if (f != null)
-                        throw (new SettingException("Multiple settings with this abbreviation: " + f.name() + ", " + e.name()));
+                        throw (new SettingException(
+                                "Multiple settings with this abbreviation: " + f.name() + ", " + e.name()));
                     f = e;
                 }
             }
@@ -153,12 +154,15 @@ public class GLSettings implements java.io.Serializable {
     };
 
     public final BoolSetting instancing = new BoolSetting("instance") {
-	    public Boolean defval() {return(cfg.exts.contains("GL_ARB_instanced_arrays"));}
-	    public void validate(Boolean val) {
-		if(!cfg.exts.contains("GL_ARB_instanced_arrays"))
-		    throw(new SettingException("Video card does not support instancing."));
-	    }
-	};
+        public Boolean defval() {
+            return (cfg.exts.contains("GL_ARB_instanced_arrays"));
+        }
+
+        public void validate(Boolean val) {
+            if (!cfg.exts.contains("GL_ARB_instanced_arrays"))
+                throw (new SettingException("Video card does not support instancing."));
+        }
+    };
 
     public final BoolSetting fsaa = new BoolSetting("fsaa") {
         public Boolean defval() {
@@ -177,7 +181,8 @@ public class GLSettings implements java.io.Serializable {
 
         public void validate(Boolean val) {
             if (val) {
-                if (!fsaa.val) throw (new SettingException("Alpha-to-coverage must be used with multisampling."));
+                if (!fsaa.val)
+                    throw (new SettingException("Alpha-to-coverage must be used with multisampling."));
             }
         }
     };
@@ -198,7 +203,8 @@ public class GLSettings implements java.io.Serializable {
 
         public void validate(Boolean val) {
             if (val) {
-                if (!flight.val) throw (new SettingException("Cel-shading requires per-fragment lighting."));
+                if (!flight.val)
+                    throw (new SettingException("Cel-shading requires per-fragment lighting."));
             }
         }
     };
@@ -210,7 +216,8 @@ public class GLSettings implements java.io.Serializable {
 
         public void validate(Boolean val) {
             if (val) {
-                if (!flight.val) throw (new SettingException("Shadowed lighting requires per-fragment lighting."));
+                if (!flight.val)
+                    throw (new SettingException("Shadowed lighting requires per-fragment lighting."));
                 if (!cfg.havefbo())
                     throw (new SettingException("Shadowed lighting requires a video card supporting framebuffers."));
             }
@@ -256,8 +263,10 @@ public class GLSettings implements java.io.Serializable {
                 if (cfg.anisotropy <= 1)
                     throw (new SettingException("Video card does not support anisotropic filtering."));
                 if (val > cfg.anisotropy)
-                    throw (new SettingException("Video card only supports up to " + cfg.anisotropy + "x anistropic filtering."));
-                if (val < 0) throw (new SettingException("Anisostropy factor cannot be negative."));
+                    throw (new SettingException(
+                            "Video card only supports up to " + cfg.anisotropy + "x anistropic filtering."));
+                if (val < 0)
+                    throw (new SettingException("Anisostropy factor cannot be negative."));
             }
         }
 

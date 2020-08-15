@@ -13,7 +13,6 @@ public class PartyMemberOutline extends Sprite {
     private final ShortBuffer eidx;
     private Coord2d lc;
 
-
     protected PartyMemberOutline(Owner owner, Color color) {
         super(owner, null);
         float rad = 50 / 10.0F;
@@ -71,7 +70,7 @@ public class PartyMemberOutline extends Sprite {
         try {
             double z = glob.map.getcz(c);
             for (int j = 0; j < this.posa.size(); j++) {
-                float tz = (float)(glob.map.getcz(c.x + posa.get(j * 3), c.y - posa.get(j * 3 + 1)) - z);
+                float tz = (float) (glob.map.getcz(c.x + posa.get(j * 3), c.y - posa.get(j * 3 + 1)) - z);
                 posa.put(j * 3 + 2, tz + 0.1f);
             }
         } catch (Loading e) {

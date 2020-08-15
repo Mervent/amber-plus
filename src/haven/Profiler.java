@@ -189,7 +189,8 @@ public class Profiler {
             p.print(nm);
             for (int i = nm.length(); i < 60; i++)
                 p.print(" ");
-            p.printf("%6d (%5.2f%%)", fn.iticks + fn.dticks, 100.0 * (double) (fn.iticks + fn.dticks) / (double) nticks);
+            p.printf("%6d (%5.2f%%)", fn.iticks + fn.dticks,
+                    100.0 * (double) (fn.iticks + fn.dticks) / (double) nticks);
             p.println();
         }
         p.println();
@@ -214,7 +215,8 @@ public class Profiler {
                 p.print(nm);
                 for (int i = nm.length(); i < 60; i++)
                     p.print(" ");
-                p.printf("%6d (%5.2f%%)", cf.getValue(), 100.0 * (double) cf.getValue() / (double) (fn.dticks + fn.iticks));
+                p.printf("%6d (%5.2f%%)", cf.getValue(),
+                        100.0 * (double) cf.getValue() / (double) (fn.dticks + fn.iticks));
                 p.println();
             }
             p.println();
@@ -235,7 +237,8 @@ public class Profiler {
                 p.print(nm);
                 for (int i = nm.length(); i < 60; i++)
                     p.print(" ");
-                p.printf("%6d (%5.2f%%)", cf.getValue(), 100.0 * (double) cf.getValue() / (double) (fn.dticks + fn.iticks));
+                p.printf("%6d (%5.2f%%)", cf.getValue(),
+                        100.0 * (double) cf.getValue() / (double) (fn.dticks + fn.iticks));
                 p.println();
             }
             p.println();
@@ -297,7 +300,8 @@ public class Profiler {
                 while (true) {
                     Thread.sleep(1000 + (int) (Math.random() * 5000));
                     for (StackTraceElement f : th.getStackTrace())
-                        System.err.printf("%s.%s(%s:%d)\n", f.getClassName(), f.getMethodName(), f.getFileName(), f.getLineNumber());
+                        System.err.printf("%s.%s(%s:%d)\n", f.getClassName(), f.getMethodName(), f.getFileName(),
+                                f.getLineNumber());
                     System.err.println();
                 }
             } catch (InterruptedException e) {

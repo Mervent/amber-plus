@@ -200,7 +200,9 @@ public interface ShaderMacro {
             }
         }
 
-        /* XXX: It would be terribly nice to replace these with some faster operation. */
+        /*
+         * XXX: It would be terribly nice to replace these with some faster operation.
+         */
         private final transient Map<Uniform, VarID> umap = new IdentityHashMap<Uniform, VarID>();
 
         public VarID cuniform(Uniform var) {
@@ -210,7 +212,8 @@ public interface ShaderMacro {
         public VarID uniform(Uniform var) {
             VarID r = cuniform(var);
             if (r == null)
-                throw (new UnknownExternException("Uniform not found in symtab: " + var, this, "uniform", var.toString()));
+                throw (new UnknownExternException("Uniform not found in symtab: " + var, this, "uniform",
+                        var.toString()));
             return (r);
         }
 
@@ -223,14 +226,15 @@ public interface ShaderMacro {
         public VarID attrib(Attribute var) {
             VarID r = cattrib(var);
             if (r == null)
-                throw (new UnknownExternException("Attribute not found in symtab: " + var, this, "attrib", var.toString()));
+                throw (new UnknownExternException("Attribute not found in symtab: " + var, this, "attrib",
+                        var.toString()));
             return (r);
         }
     }
 
     public static final ShaderMacro dump = new ShaderMacro() {
-	    public void modify(ProgramContext prog) {
-		prog.dump = true;
-	    }
-	};
+        public void modify(ProgramContext prog) {
+            prog.dump = true;
+        }
+    };
 }

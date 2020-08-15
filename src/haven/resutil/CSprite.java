@@ -61,6 +61,6 @@ public class CSprite extends Sprite {
     }
 
     public Object staticp() {
-	return(CONSTANS);
+        return (CONSTANS);
     }
 }

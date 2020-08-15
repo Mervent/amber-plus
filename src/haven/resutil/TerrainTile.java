@@ -76,7 +76,7 @@ public class TerrainTile extends Tiler implements Tiler.MCons, Tiler.CTrans {
                     }
                 }
             }
-                
+
             setbase(buf1);
             for (int i = 0; i < sr; i++) {
                 float[][] buf2 = new float[var.length + 1][vs.l];
@@ -136,13 +136,13 @@ public class TerrainTile extends Tiler implements Tiler.MCons, Tiler.CTrans {
                     for (int i = var.length; i >= 0; i--) {
                         if (fall) {
                             en[i][es.o(x, y)] = false;
-                        } else if ((bv[i][vs.o(x, y)] < 0.001f) && (bv[i][vs.o(x + 1, y)] < 0.001f) &&
-                                (bv[i][vs.o(x, y + 1)] < 0.001f) && (bv[i][vs.o(x + 1, y + 1)] < 0.001f)) {
+                        } else if ((bv[i][vs.o(x, y)] < 0.001f) && (bv[i][vs.o(x + 1, y)] < 0.001f)
+                                && (bv[i][vs.o(x, y + 1)] < 0.001f) && (bv[i][vs.o(x + 1, y + 1)] < 0.001f)) {
                             en[i][es.o(x, y)] = false;
                         } else {
                             en[i][es.o(x, y)] = true;
-                            if ((bv[i][vs.o(x, y)] > 0.99f) && (bv[i][vs.o(x + 1, y)] > 0.99f) &&
-                                    (bv[i][vs.o(x, y + 1)] > 0.99f) && (bv[i][vs.o(x + 1, y + 1)] > 0.99f)) {
+                            if ((bv[i][vs.o(x, y)] > 0.99f) && (bv[i][vs.o(x + 1, y)] > 0.99f)
+                                    && (bv[i][vs.o(x, y + 1)] > 0.99f) && (bv[i][vs.o(x + 1, y + 1)] > 0.99f)) {
                                 fall = true;
                             }
                         }
@@ -170,8 +170,7 @@ public class TerrainTile extends Tiler implements Tiler.MCons, Tiler.CTrans {
             } else {
                 for (int y = vs.ul.y; y < vs.br.y - 1; y++) {
                     for (int x = vs.ul.x; x < vs.br.x - 1; x++) {
-                        fall:
-                        {
+                        fall: {
                             for (int i = var.length - 1; i >= 0; i--) {
                                 Var v = var[i];
                                 double n = 0;
@@ -205,8 +204,10 @@ public class TerrainTile extends Tiler implements Tiler.MCons, Tiler.CTrans {
 
                     float bv(Coord lc, float tcx, float tcy) {
                         float icx = 1 - tcx, icy = 1 - tcy;
-                        return ((((bv[l][vs.o(lc.x + 0, lc.y + 0)] * icx) + (bv[l][vs.o(lc.x + 1, lc.y + 0)] * tcx)) * icy) +
-                                (((bv[l][vs.o(lc.x + 0, lc.y + 1)] * icx) + (bv[l][vs.o(lc.x + 1, lc.y + 1)] * tcx)) * tcy));
+                        return ((((bv[l][vs.o(lc.x + 0, lc.y + 0)] * icx) + (bv[l][vs.o(lc.x + 1, lc.y + 0)] * tcx))
+                                * icy)
+                                + (((bv[l][vs.o(lc.x + 0, lc.y + 1)] * icx) + (bv[l][vs.o(lc.x + 1, lc.y + 1)] * tcx))
+                                        * tcy));
                     }
 
                     public Surface.MeshVertex make(MeshBuf buf, MPart d, int i) {
@@ -240,20 +241,21 @@ public class TerrainTile extends Tiler implements Tiler.MCons, Tiler.CTrans {
             GLState base = null;
             Collection<Var> var = new LinkedList<Var>();
             GLState commat = null;
-            for(Object rdesc : set.ta) {
-                Object[] desc = (Object[])rdesc;
-                String p = (String)desc[0];
-                if(p.equals("common-mat")) {
-                    if(desc[1] instanceof Integer) {
-                        int mid = (Integer)desc[1];
+            for (Object rdesc : set.ta) {
+                Object[] desc = (Object[]) rdesc;
+                String p = (String) desc[0];
+                if (p.equals("common-mat")) {
+                    if (desc[1] instanceof Integer) {
+                        int mid = (Integer) desc[1];
                         commat = res.layer(Material.Res.class, mid).get();
-                    } else if(desc[1] instanceof String) {
-                        String mnm = (String)desc[1];
-                        int mver = (Integer)desc[2];
-                        if(desc.length > 3) {
-                            commat = res.pool.load(mnm, mver).get().layer(Material.Res.class, (Integer)desc[3]).get();
+                    } else if (desc[1] instanceof String) {
+                        String mnm = (String) desc[1];
+                        int mver = (Integer) desc[2];
+                        if (desc.length > 3) {
+                            commat = res.pool.load(mnm, mver).get().layer(Material.Res.class, (Integer) desc[3]).get();
                         } else {
-                            commat = Material.fromres((Material.Owner)null, res.pool.load(mnm, mver).get(), Message.nil);
+                            commat = Material.fromres((Material.Owner) null, res.pool.load(mnm, mver).get(),
+                                    Message.nil);
                         }
                     }
                 }
@@ -282,9 +284,10 @@ public class TerrainTile extends Tiler implements Tiler.MCons, Tiler.CTrans {
                     trans = tres.layer(Tileset.class);
                 }
             }
-            /* XXX? Arguably ugly, but tell the base tileset format
-             * that. Also arguably nice to be able to set terrain and
-             * flavobj materials in one go. */
+            /*
+             * XXX? Arguably ugly, but tell the base tileset format that. Also arguably nice
+             * to be able to set terrain and flavobj materials in one go.
+             */
             set.flavobjmat = commat;
             return (new TerrainTile(id, new SNoise3(res.name.hashCode()), base, var.toArray(new Var[0]), trans));
         }
@@ -321,9 +324,10 @@ public class TerrainTile extends Tiler implements Tiler.MCons, Tiler.CTrans {
 
     private final static Map<TexGL, AlphaTex> transtex = new WeakHashMap<TexGL, AlphaTex>();
 
-    /* XXX: Some strange javac bug seems to make it resolve the
-     * trans() references to the wrong signature, thus the name
-     * distinction. */
+    /*
+     * XXX: Some strange javac bug seems to make it resolve the trans() references
+     * to the wrong signature, thus the name distinction.
+     */
     public void _faces(MapMesh m, int z, Tile trans, MPart d) {
         Tex ttex = trans.tex();
         float tl = ttex.tcx(0), tt = ttex.tcy(0), tw = ttex.tcx(ttex.sz().x) - tl, th = ttex.tcy(ttex.sz().y) - tt;
@@ -419,7 +423,8 @@ public class TerrainTile extends Tiler implements Tiler.MCons, Tiler.CTrans {
             }
         }
 
-        public RidgeTile(int id, SNoise3 noise, GLState base, Var[] var, Tileset transset, int rth, GLState rmat, float texh) {
+        public RidgeTile(int id, SNoise3 noise, GLState base, Var[] var, Tileset transset, int rth, GLState rmat,
+                float texh) {
             super(id, noise, base, var, transset);
             this.rth = rth;
             this.rcons = new Ridges.TexCons(rmat, texh);

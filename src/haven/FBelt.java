@@ -6,9 +6,9 @@ import java.awt.event.KeyEvent;
 import static haven.Inventory.invsq;
 
 public class FBelt extends Widget implements DTarget, DropTarget {
-    private final int beltkeys[] = {KeyEvent.VK_F1, KeyEvent.VK_F2, KeyEvent.VK_F3, KeyEvent.VK_F4,
-            KeyEvent.VK_F5, KeyEvent.VK_F6, KeyEvent.VK_F7, KeyEvent.VK_F8,
-            KeyEvent.VK_F9, KeyEvent.VK_F10, KeyEvent.VK_F11, KeyEvent.VK_F12};
+    private final int beltkeys[] = { KeyEvent.VK_F1, KeyEvent.VK_F2, KeyEvent.VK_F3, KeyEvent.VK_F4, KeyEvent.VK_F5,
+            KeyEvent.VK_F6, KeyEvent.VK_F7, KeyEvent.VK_F8, KeyEvent.VK_F9, KeyEvent.VK_F10, KeyEvent.VK_F11,
+            KeyEvent.VK_F12 };
     @SuppressWarnings("unchecked")
     private GameUI.BeltSlot[] belt = new GameUI.BeltSlot[12];
     private UI.Grab dragging;
@@ -34,8 +34,8 @@ public class FBelt extends Widget implements DTarget, DropTarget {
                     String resname = resnames[i];
                     if (!resname.equals("null")) {
                         try {
-                            belt[i] = ((GameUI)parent).new BeltSlot(i, Resource.local().load(resname), Message.nil);
-                        } catch (Exception e) {   // possibly a resource from another client
+                            belt[i] = ((GameUI) parent).new BeltSlot(i, Resource.local().load(resname), Message.nil);
+                        } catch (Exception e) { // possibly a resource from another client
                         }
                     }
                 }

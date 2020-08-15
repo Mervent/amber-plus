@@ -74,7 +74,7 @@ public class Avaview extends PView {
             this.avadesc = null;
         } else if (msg == "col") {
             this.color = (Color) args[0];
-        } else if(msg == "pop") {
+        } else if (msg == "pop") {
             pop(Desc.decode(ui.sess, args));
         } else {
             super.uimsg(msg, args);
@@ -92,8 +92,7 @@ public class Avaview extends PView {
     }
 
     private static final OwnerContext.ClassResolver<Avaview> ctxr = new OwnerContext.ClassResolver<Avaview>()
-            .add(Glob.class, v -> v.ui.sess.glob)
-            .add(Session.class, v -> v.ui.sess)
+            .add(Glob.class, v -> v.ui.sess.glob).add(Session.class, v -> v.ui.sess)
             .add(Resource.Resolver.class, v -> (v.resmap == null ? v.ui.sess : v.resmap));
 
     private class AvaOwner implements Sprite.Owner {
@@ -191,14 +190,14 @@ public class Avaview extends PView {
     public void draw(GOut g) {
         boolean drawn = false;
         try {
-            if(avagob != -1) {
+            if (avagob != -1) {
                 Gob gob = ui.sess.glob.oc.getgob(avagob);
-                if(gob != null) {
+                if (gob != null) {
                     Avatar ava = gob.getattr(Avatar.class);
-                    if(ava != null) {
+                    if (ava != null) {
                         List<Resource.Image> imgs = ava.images();
-                        if(imgs != null) {
-                            for(Resource.Image img : imgs) {
+                        if (imgs != null) {
+                            for (Resource.Image img : imgs) {
                                 g.image(img.tex(), Coord.z, this.sz);
                             }
                             drawn = true;
@@ -206,17 +205,17 @@ public class Avaview extends PView {
                     }
                 }
             }
-        } catch(Loading e) {
+        } catch (Loading e) {
         }
-        if(!drawn) {
+        if (!drawn) {
             try {
                 updcomp();
                 super.draw(g);
-            } catch(Loading e) {
+            } catch (Loading e) {
                 g.image(missing, Coord.z, sz);
             }
         }
-        if(color != null) {
+        if (color != null) {
             g.chcolor(color);
             Window.wbox.draw(g, Coord.z, sz);
         }

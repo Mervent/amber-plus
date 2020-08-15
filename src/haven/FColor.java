@@ -29,14 +29,14 @@ package haven;
 import java.awt.Color;
 
 public class FColor {
-    public static final FColor BLACK   = new FColor(0, 0, 0);
-    public static final FColor WHITE   = new FColor(1, 1, 1);
-    public static final FColor RED     = new FColor(1, 0, 0);
-    public static final FColor GREEN   = new FColor(0, 1, 0);
-    public static final FColor BLUE    = new FColor(0, 0, 1);
-    public static final FColor YELLOW  = new FColor(1, 1, 0);
+    public static final FColor BLACK = new FColor(0, 0, 0);
+    public static final FColor WHITE = new FColor(1, 1, 1);
+    public static final FColor RED = new FColor(1, 0, 0);
+    public static final FColor GREEN = new FColor(0, 1, 0);
+    public static final FColor BLUE = new FColor(0, 0, 1);
+    public static final FColor YELLOW = new FColor(1, 1, 0);
     public static final FColor MAGENTA = new FColor(1, 0, 1);
-    public static final FColor CYAN    = new FColor(0, 1, 1);
+    public static final FColor CYAN = new FColor(0, 1, 1);
     public final float r, g, b, a;
 
     public FColor(float r, float g, float b, float a) {
@@ -51,10 +51,7 @@ public class FColor {
     }
 
     public FColor(Color c, float f) {
-        this(f * c.getRed() / 255.0f,
-                f * c.getGreen() / 255.0f,
-                f * c.getBlue() / 255.0f,
-                c.getAlpha() / 255.0f);
+        this(f * c.getRed() / 255.0f, f * c.getGreen() / 255.0f, f * c.getBlue() / 255.0f, c.getAlpha() / 255.0f);
     }
 
     public FColor(Color c) {
@@ -62,11 +59,11 @@ public class FColor {
     }
 
     public float[] to3a() {
-        return (new float[]{r, g, b});
+        return (new float[] { r, g, b });
     }
 
     public float[] to4a() {
-        return (new float[]{r, g, b, a});
+        return (new float[] { r, g, b, a });
     }
 
     public FColor mul(FColor that) {
@@ -75,25 +72,19 @@ public class FColor {
 
     public FColor blend(FColor that) {
         float B = that.a, A = 1.0f - B;
-        return (new FColor((this.r * A) + (that.r * B),
-                (this.g * A) + (that.g * B),
-                (this.b * A) + (that.b * B),
+        return (new FColor((this.r * A) + (that.r * B), (this.g * A) + (that.g * B), (this.b * A) + (that.b * B),
                 this.a));
     }
 
     public FColor blend(FColor that, float B) {
         float A = 1.0f - B;
-        return (new FColor((this.r * A) + (that.r * B),
-                (this.g * A) + (that.g * B),
-                (this.b * A) + (that.b * B),
+        return (new FColor((this.r * A) + (that.r * B), (this.g * A) + (that.g * B), (this.b * A) + (that.b * B),
                 (this.a * A) + (that.a * B)));
     }
 
     public int hashCode() {
-        return (((((((Float.floatToIntBits(r)) * 31) +
-                Float.floatToIntBits(g)) * 31) +
-                Float.floatToIntBits(b)) * 31) +
-                Float.floatToIntBits(a));
+        return (((((((Float.floatToIntBits(r)) * 31) + Float.floatToIntBits(g)) * 31) + Float.floatToIntBits(b)) * 31)
+                + Float.floatToIntBits(a));
     }
 
     public boolean equals(Object o) {

@@ -58,7 +58,8 @@ public abstract class TexL extends TexGL {
         private Prepared() {
             img = fill();
             if (!Utils.imgsz(img).equals(dim))
-                throw (new RuntimeException("Generated TexL image from " + TexL.this + " does not match declared size"));
+                throw (new RuntimeException(
+                        "Generated TexL image from " + TexL.this + " does not match declared size"));
             ifmt = TexI.detectfmt(img);
             LinkedList<byte[]> data = new LinkedList<byte[]>();
             if ((ifmt == GL.GL_RGB) || (ifmt == GL2.GL_BGR)) {
@@ -129,7 +130,8 @@ public abstract class TexL extends TexGL {
         gl.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1);
         Coord cdim = tdim;
         for (int i = 0; i < prep.data.length; i++) {
-            gl.glTexImage2D(GL.GL_TEXTURE_2D, i, GL.GL_RGBA, cdim.x, cdim.y, 0, prep.ifmt, GL.GL_UNSIGNED_BYTE, ByteBuffer.wrap(prep.data[i]));
+            gl.glTexImage2D(GL.GL_TEXTURE_2D, i, GL.GL_RGBA, cdim.x, cdim.y, 0, prep.ifmt, GL.GL_UNSIGNED_BYTE,
+                    ByteBuffer.wrap(prep.data[i]));
             cdim = Mipmapper.nextsz(cdim);
         }
     }

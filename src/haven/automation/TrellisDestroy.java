@@ -1,6 +1,5 @@
 package haven.automation;
 
-
 import haven.*;
 
 import java.util.HashSet;
@@ -42,7 +41,8 @@ public class TrellisDestroy implements Runnable {
             return;
 
         gui.act("destroy");
-        gui.map.wdgmsg("click", plant.sc, plant.rc.floor(posres), 1, 0, 0, (int) plant.id, plant.rc.floor(posres), 0, -1);
+        gui.map.wdgmsg("click", plant.sc, plant.rc.floor(posres), 1, 0, 0, (int) plant.id, plant.rc.floor(posres), 0,
+                -1);
         gui.map.wdgmsg("click", Coord.z, Coord.z, 3, 0);
     }
 }

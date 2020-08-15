@@ -76,18 +76,17 @@ public class Location extends Transform {
 
         public int hashCode() {
             int h = System.identityHashCode(loc);
-            if(p != null)
+            if (p != null)
                 h = (h * 31) + p.hashCode();
-            return(h);
+            return (h);
         }
 
         public boolean equals(Object o) {
-            if(!(o instanceof Chain))
-                return(false);
-            Chain c = (Chain)o;
-            return((c.loc == loc) && Utils.eq(c.p, p));
+            if (!(o instanceof Chain))
+                return (false);
+            Chain c = (Chain) o;
+            return ((c.loc == loc) && Utils.eq(c.p, p));
         }
-
 
         public String toString() {
             String ret = loc.toString();

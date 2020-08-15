@@ -1,6 +1,5 @@
 package haven.livestock;
 
-
 import haven.*;
 
 import java.util.HashMap;
@@ -25,7 +24,7 @@ public class Horses extends Animal {
         x = addColumn(columns, "Endurance:", "Endurance", 7, x);
         x = addColumn(columns, "Stamina:", "Stamina", 8, x);
         x = addColumn(columns, "Metabolism:", "Metabolism", 9, x);
-            addColumn(columns, "X", "", 10, x);
+        addColumn(columns, "X", "", 10, x);
     }
 
     public Horses(long wndid, String type) {

@@ -1,6 +1,5 @@
 package haven.livestock;
 
-
 import haven.Resource;
 import haven.Tex;
 
@@ -23,7 +22,7 @@ public class Cattle extends Animal {
         x = addColumn(columns, "Hide quality:", "Hide", 4, x);
         x = addColumn(columns, "Meat quantity:", "Meat #", 5, x);
         x = addColumn(columns, "Milk quantity:", "Milk #", 6, x);
-            addColumn(columns, "X", "", 7, x);
+        addColumn(columns, "X", "", 7, x);
     }
 
     public Cattle(long wndid, String type) {

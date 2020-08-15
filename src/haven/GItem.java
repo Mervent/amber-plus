@@ -63,6 +63,7 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
 
     public interface OverlayInfo<T> {
         public T overlay();
+
         public void drawoverlay(GOut g, T data);
     }
 
@@ -80,18 +81,19 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
         }
 
         public static <S> InfoOverlay<S> create(OverlayInfo<S> inf) {
-            return(new InfoOverlay<S>(inf));
+            return (new InfoOverlay<S>(inf));
         }
     }
 
     public interface NumberInfo extends OverlayInfo<Tex> {
         public int itemnum();
+
         public default Color numcolor() {
-            return(Color.WHITE);
+            return (Color.WHITE);
         }
 
         public default Tex overlay() {
-            return(new TexI(GItem.NumberInfo.numrender(itemnum(), numcolor())));
+            return (new TexI(GItem.NumberInfo.numrender(itemnum(), numcolor())));
         }
 
         public default void drawoverlay(GOut g, Tex tex) {
@@ -106,7 +108,6 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
     public interface MeterInfo {
         public double meter();
     }
-
 
     public static class Amount extends ItemInfo implements NumberInfo {
         private final int num;
@@ -155,8 +156,7 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
     }
 
     private static final OwnerContext.ClassResolver<GItem> ctxr = new OwnerContext.ClassResolver<GItem>()
-            .add(Glob.class, wdg -> wdg.ui.sess.glob)
-            .add(Session.class, wdg -> wdg.ui.sess);
+            .add(Glob.class, wdg -> wdg.ui.sess.glob).add(Session.class, wdg -> wdg.ui.sess);
 
     public <T> T context(Class<T> cl) {
         return (ctxr.context(cl, this));
@@ -227,7 +227,7 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
                 quality = null;
             rawinfo = new ItemInfo.Raw(args);
         } else if (name == "meter") {
-            meter = (int)((Number)args[0]).doubleValue();
+            meter = (int) ((Number) args[0]).doubleValue();
             metertex = Text.renderstroked(String.format("%d%%", meter), Color.WHITE, Color.BLACK, num10Fnd).tex();
         }
     }
@@ -276,11 +276,11 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
             String name = this.resource().basename();
             if ((Config.dropSoil && name.equals("soil")))
                 this.wdgmsg("drop", Coord.z);
-            if (curs != null && curs.name.equals("gfx/hud/curs/mine") &&
-                    (Config.dropMinedStones && Config.mineablesStone.contains(name) ||
-                    Config.dropMinedOre && Config.mineablesOre.contains(name) ||
-                    Config.dropMinedOrePrecious && Config.mineablesOrePrecious.contains(name) ||
-                    Config.dropMinedCurios && Config.mineablesCurios.contains(name)))
+            if (curs != null && curs.name.equals("gfx/hud/curs/mine")
+                    && (Config.dropMinedStones && Config.mineablesStone.contains(name)
+                            || Config.dropMinedOre && Config.mineablesOre.contains(name)
+                            || Config.dropMinedOrePrecious && Config.mineablesOrePrecious.contains(name)
+                            || Config.dropMinedCurios && Config.mineablesCurios.contains(name)))
                 this.wdgmsg("drop", Coord.z);
         }
     }

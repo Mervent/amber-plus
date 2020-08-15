@@ -117,8 +117,8 @@ public class Composite extends Drawable {
                 updequ();
                 for (ResData resdata : nposes) {
                     Resource posres = resdata.res.get();
-                    // livestock:       */knock-*
-                    // other animals:   */knock
+                    // livestock: */knock-*
+                    // other animals: */knock
                     if (posres != null && posres.name.contains("/knock")) {
                         gob.knocked = Boolean.TRUE;
                         break;
@@ -191,6 +191,6 @@ public class Composite extends Drawable {
     }
 
     public Object staticp() {
-	return(null);
+        return (null);
     }
 }

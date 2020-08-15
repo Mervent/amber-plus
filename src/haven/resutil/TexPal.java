@@ -93,7 +93,8 @@ public class TexPal extends GLState {
                 public void resolve(Collection<GLState> buf) {
                     TexR rt = tres.get().layer(TexR.class, tid);
                     if (rt == null)
-                        throw (new RuntimeException(String.format("Specified texture %d for %s not found in %s", tid, res, tres)));
+                        throw (new RuntimeException(
+                                String.format("Specified texture %d for %s not found in %s", tid, res, tres)));
                     buf.add(new TexPal((TexGL) rt.tex()));
                 }
             });

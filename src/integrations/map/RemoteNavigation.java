@@ -62,8 +62,8 @@ public class RemoteNavigation {
             scheduler.execute(new LoadIndexFileTask(localMapdataIndexFile, localMapdataIndex));
         }
         // Request new mapdata cache and schedule update every 30 minutes
-        scheduler.scheduleAtFixedRate(new LoadRemoteIndexTask(globalMapdataIndexFile, globalMapdataIndex),
-                0L, 30, TimeUnit.MINUTES);
+        scheduler.scheduleAtFixedRate(new LoadRemoteIndexTask(globalMapdataIndexFile, globalMapdataIndex), 0L, 30,
+                TimeUnit.MINUTES);
         // Update character's position on the map
         scheduler.scheduleAtFixedRate(new UpdateCharacterPosition(), 2L, 2L, TimeUnit.SECONDS);
     }
@@ -79,17 +79,18 @@ public class RemoteNavigation {
 
     /**
      * Find absolute coordinates for the specific gridId
+     *
      * @return null is there is no such data
      */
     public CompletableFuture<Coord> locateGridCoordinates(long gridId, boolean includeRemote) {
         Coord coordinates = globalMapdataIndex.get(gridId);
         if (coordinates != null) {
-            //System.out.println(gridId + " found in global cache: " + coordinates);
+            // System.out.println(gridId + " found in global cache: " + coordinates);
             return CompletableFuture.completedFuture(coordinates);
         }
         coordinates = localMapdataIndex.get(gridId);
         if (coordinates != null) {
-            //System.out.println(gridId + " found in local cache: " + coordinates);
+            // System.out.println(gridId + " found in local cache: " + coordinates);
             return CompletableFuture.completedFuture(coordinates);
         }
         if (includeRemote) {
@@ -118,7 +119,8 @@ public class RemoteNavigation {
 
     void setCharacterGrid(long gridId, Coord virtualCoordinates, Coord detectedAbsoluteCoordinates) {
         final int sessionId = sessionCounter.get();
-        System.out.println("Setting character grid " + gridId + " " + virtualCoordinates + " " + detectedAbsoluteCoordinates);
+        System.out.println(
+                "Setting character grid " + gridId + " " + virtualCoordinates + " " + detectedAbsoluteCoordinates);
         if (sessionAbsoluteRealPair.containsKey(sessionId)) {
             // Do nothing, we already have this session processed
             System.out.println("This session is already present");
@@ -129,10 +131,12 @@ public class RemoteNavigation {
             }
         }
         locateGridCoordinates(gridId, true).thenApply(cachedCoordinates -> {
-            if (cachedCoordinates != null) return cachedCoordinates;
+            if (cachedCoordinates != null)
+                return cachedCoordinates;
             else {
                 if (detectedAbsoluteCoordinates != null) {
-                    System.out.println("Using detected absolute coordinates for grid " + gridId + ": " + detectedAbsoluteCoordinates);
+                    System.out.println("Using detected absolute coordinates for grid " + gridId + ": "
+                            + detectedAbsoluteCoordinates);
                 }
                 return detectedAbsoluteCoordinates;
             }
@@ -167,9 +171,10 @@ public class RemoteNavigation {
 
     public void openBrowserMap(Coord gridCoord) {
         try {
-            WebBrowser.self.show(new URL(
-                    String.format(Config.mapperUrl + "/#/grid/%d/%d/6", gridCoord.x, gridCoord.y)));
-        } catch (Exception ex) {}
+            WebBrowser.self
+                    .show(new URL(String.format(Config.mapperUrl + "/#/grid/%d/%d/6", gridCoord.x, gridCoord.y)));
+        } catch (Exception ex) {
+        }
     }
 
     /**
@@ -221,8 +226,8 @@ public class RemoteNavigation {
 
         @Override
         public String toString() {
-            return String.format("Grid (%d) V:%s, A:%s", gridId,
-                    String.valueOf(virtualGridCoordinates), String.valueOf(absoluteGridCoordinates));
+            return String.format("Grid (%d) V:%s, A:%s", gridId, String.valueOf(virtualGridCoordinates),
+                    String.valueOf(absoluteGridCoordinates));
         }
     }
 
@@ -279,9 +284,11 @@ public class RemoteNavigation {
             }
             try {
                 // Update cache
-                List<String> gridDataList = target.entrySet().stream().map(entry -> String.format("%d,%d,%d",
-                        entry.getKey(), entry.getValue().x, entry.getValue().y)).collect(Collectors.toList());
-                Files.write(cacheFile.toPath(), gridDataList, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                List<String> gridDataList = target.entrySet().stream()
+                        .map(entry -> String.format("%d,%d,%d", entry.getKey(), entry.getValue().x, entry.getValue().y))
+                        .collect(Collectors.toList());
+                Files.write(cacheFile.toPath(), gridDataList, StandardOpenOption.CREATE,
+                        StandardOpenOption.TRUNCATE_EXISTING);
             } catch (Exception ex) {
                 System.err.println("Cannot save remote index file: " + ex.getMessage());
             }
@@ -301,9 +308,11 @@ public class RemoteNavigation {
         public void run() {
             try {
                 // Update cache
-                List<String> gridDataList = source.entrySet().stream().map(entry -> String.format("%d,%d,%d",
-                        entry.getKey(), entry.getValue().x, entry.getValue().y)).collect(Collectors.toList());
-                Files.write(cacheFile.toPath(), gridDataList, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                List<String> gridDataList = source.entrySet().stream()
+                        .map(entry -> String.format("%d,%d,%d", entry.getKey(), entry.getValue().x, entry.getValue().y))
+                        .collect(Collectors.toList());
+                Files.write(cacheFile.toPath(), gridDataList, StandardOpenOption.CREATE,
+                        StandardOpenOption.TRUNCATE_EXISTING);
             } catch (Exception ex) {
                 System.err.println("Cannot save index file: " + ex.getMessage());
             }
@@ -373,8 +382,8 @@ public class RemoteNavigation {
                     dataToSend.put("name", Navigation.getCharacterName());
                     dataToSend.put("id", Navigation.getCharacterId());
                     try {
-                        HttpURLConnection connection =
-                                (HttpURLConnection) new URL(API_ENDPOINT + "/v2/updateCharacter").openConnection();
+                        HttpURLConnection connection = (HttpURLConnection) new URL(API_ENDPOINT + "/v2/updateCharacter")
+                                .openConnection();
                         connection.setRequestMethod("POST");
                         connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
                         connection.setDoOutput(true);
@@ -383,7 +392,8 @@ public class RemoteNavigation {
                             out.write(json.getBytes(StandardCharsets.UTF_8));
                         }
                         connection.getResponseCode();
-                    } catch (Exception ex) { }
+                    } catch (Exception ex) {
+                    }
                 }
             }
         }
@@ -426,23 +436,22 @@ public class RemoteNavigation {
             if (mapFile.lock.readLock().tryLock()) {
                 List<MarkerData> markers;
                 try {
-                    markers= mapFile.markers.stream()
-                        .map(marker -> {
-                            Coord markerGridOffset = new Coord((int) Math.floor(marker.tc.x / 100.0),
-                                    (int) Math.floor(marker.tc.y / 100.0));
-                            MapFile.Segment segment = mapFile.segments.get(marker.seg);
-                            MarkerData markerData = new MarkerData();
-                            markerData.name = marker.nm;
-                            markerData.gridOffset = marker.tc.sub(markerGridOffset.mul(100));
-                            markerData.gridId = segment.map.get(markerGridOffset);
-                            if (marker instanceof MapFile.SMarker) {
-                                markerData.image = ((MapFile.SMarker) marker).res.name;
-                                markerData.objectId = ((MapFile.SMarker) marker).oid;
-                            } else if (marker instanceof MapFile.PMarker) {
-                                markerData.color = ((MapFile.PMarker) marker).color;
-                            }
-                            return markerData;
-                        }).collect(Collectors.toList());
+                    markers = mapFile.markers.stream().map(marker -> {
+                        Coord markerGridOffset = new Coord((int) Math.floor(marker.tc.x / 100.0),
+                                (int) Math.floor(marker.tc.y / 100.0));
+                        MapFile.Segment segment = mapFile.segments.get(marker.seg);
+                        MarkerData markerData = new MarkerData();
+                        markerData.name = marker.nm;
+                        markerData.gridOffset = marker.tc.sub(markerGridOffset.mul(100));
+                        markerData.gridId = segment.map.get(markerGridOffset);
+                        if (marker instanceof MapFile.SMarker) {
+                            markerData.image = ((MapFile.SMarker) marker).res.name;
+                            markerData.objectId = ((MapFile.SMarker) marker).oid;
+                        } else if (marker instanceof MapFile.PMarker) {
+                            markerData.color = ((MapFile.PMarker) marker).color;
+                        }
+                        return markerData;
+                    }).collect(Collectors.toList());
                 } finally {
                     mapFile.lock.readLock().unlock();
                 }
@@ -460,23 +469,25 @@ public class RemoteNavigation {
                                 loadedMarkers.add(markerData);
                             }
                             iterator.remove();
-                        } catch (Loading ex) { }
+                        } catch (Loading ex) {
+                        }
                     }
                     try {
                         Thread.sleep(50);
-                    } catch (InterruptedException ex) { }
+                    } catch (InterruptedException ex) {
+                    }
                 }
                 System.out.println("Loaded " + loadedMarkers.size() + " markers");
                 if (!loadedMarkers.isEmpty()) {
                     try {
-                        HttpURLConnection connection = (HttpURLConnection)
-                                new URL(API_ENDPOINT + "/v1/uploadMarkers").openConnection();
+                        HttpURLConnection connection = (HttpURLConnection) new URL(API_ENDPOINT + "/v1/uploadMarkers")
+                                .openConnection();
                         connection.setRequestMethod("POST");
                         connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
                         connection.setDoOutput(true);
                         try (OutputStream outputStream = connection.getOutputStream()) {
-                            Collection collection = loadedMarkers.stream()
-                                    .map(MarkerData::dataToSend).collect(Collectors.toCollection(ArrayList::new));
+                            Collection collection = loadedMarkers.stream().map(MarkerData::dataToSend)
+                                    .collect(Collectors.toCollection(ArrayList::new));
                             String json = new JSONArray(collection).toString();
                             outputStream.write(json.getBytes(StandardCharsets.UTF_8));
                         }

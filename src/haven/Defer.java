@@ -162,12 +162,12 @@ public class Defer extends ThreadGroup {
                 if (state != "done")
                     chstate("resched");
                 running = null;
-                /* XXX: This is a race; a cancelling thread could have
-                 * gotten the thread reference via running and then
-                 * interrupt this thread after interrupted()
-                 * returns. There is no obvious elegant solution,
-                 * though, and the risk should be quite low. Fix if
-                 * possible. */
+                /*
+                 * XXX: This is a race; a cancelling thread could have gotten the thread
+                 * reference via running and then interrupt this thread after interrupted()
+                 * returns. There is no obvious elegant solution, though, and the risk should be
+                 * quite low. Fix if possible.
+                 */
                 Thread.interrupted();
             }
         }

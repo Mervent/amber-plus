@@ -54,7 +54,7 @@ public class Coord3f {
     }
 
     public boolean equals(Object o) {
-	return((o instanceof Coord3f) && equals((Coord3f)o));
+        return ((o instanceof Coord3f) && equals((Coord3f) o));
     }
 
     public Coord3f add(float ax, float ay, float az) {
@@ -66,7 +66,8 @@ public class Coord3f {
     }
 
     public Coord3f sadd(float e, float a, float r) {
-        return (add((float) Math.cos(a) * (float) Math.cos(e) * r, (float) Math.sin(a) * (float) Math.cos(e) * r, (float) Math.sin(e) * r));
+        return (add((float) Math.cos(a) * (float) Math.cos(e) * r, (float) Math.sin(a) * (float) Math.cos(e) * r,
+                (float) Math.sin(e) * r));
     }
 
     public Coord3f neg() {
@@ -120,15 +121,10 @@ public class Coord3f {
     public Coord3f rot(Coord3f p, float a) {
         float c = (float) Math.cos(a), s = (float) Math.sin(a), C = 1.0f - c;
         float ax = p.x, ay = p.y, az = p.z;
-        return (new Coord3f((x * ((ax * ax * C) + c)) +
-                (y * ((ay * ax * C) - (az * s))) +
-                (z * ((az * ax * C) + (ay * s))),
-                (x * ((ax * ay * C) + (az * s))) +
-                        (y * ((ay * ay * C) + c)) +
-                        (z * ((az * ay * C) - (ax * s))),
-                (x * ((ax * az * C) - (ay * s))) +
-                        (y * ((ay * az * C) + (ax * s))) +
-                        (z * ((az * az * C) + c))));
+        return (new Coord3f(
+                (x * ((ax * ax * C) + c)) + (y * ((ay * ax * C) - (az * s))) + (z * ((az * ax * C) + (ay * s))),
+                (x * ((ax * ay * C) + (az * s))) + (y * ((ay * ay * C) + c)) + (z * ((az * ay * C) - (ax * s))),
+                (x * ((ax * az * C) - (ay * s))) + (y * ((ay * az * C) + (ax * s))) + (z * ((az * az * C) + c))));
     }
 
     public float abs() {
@@ -169,11 +165,11 @@ public class Coord3f {
     }
 
     public float[] to3a() {
-        return (new float[]{x, y, z});
+        return (new float[] { x, y, z });
     }
 
     public float[] to4a(float w) {
-        return (new float[]{x, y, z, w});
+        return (new float[] { x, y, z, w });
     }
 
     public String toString() {

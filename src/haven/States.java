@@ -145,13 +145,15 @@ public abstract class States extends GLState {
                 if (in[0] == vertexcolor) {
                     for (int i = 1; i < in.length; i++) {
                         if (in[i] != vertexcolor)
-                            throw (new RuntimeException("cannot mix uniform and per-vertex coloring in instanced rendering"));
+                            throw (new RuntimeException(
+                                    "cannot mix uniform and per-vertex coloring in instanced rendering"));
                     }
                     return (vertexcolor);
                 } else {
                     for (int i = 1; i < in.length; i++) {
                         if (in[i] == vertexcolor)
-                            throw (new RuntimeException("cannot mix uniform and per-vertex coloring in instanced rendering"));
+                            throw (new RuntimeException(
+                                    "cannot mix uniform and per-vertex coloring in instanced rendering"));
                     }
                     return (new InstColor(in));
                 }
@@ -253,6 +255,7 @@ public abstract class States extends GLState {
     }
 
     public static final Slot<Blending> blend = new Slot<Blending>(Slot.Type.DRAW, Blending.class, HavenPanel.global);
+
     public static class Blending extends GLState {
         public final int csrc, cdst, asrc, adst;
         public final int cfn, afn;
@@ -324,7 +327,8 @@ public abstract class States extends GLState {
         }
     }
 
-    public static final Slot<DepthOffset> depthoffset = new Slot<DepthOffset>(Slot.Type.GEOM, DepthOffset.class, PView.proj);
+    public static final Slot<DepthOffset> depthoffset = new Slot<DepthOffset>(Slot.Type.GEOM, DepthOffset.class,
+            PView.proj);
 
     public static class DepthOffset extends GLState {
         public final int mode;
@@ -357,7 +361,8 @@ public abstract class States extends GLState {
     }
 
     public static class PolygonMode extends GLState {
-        public static final Slot<PolygonMode> slot = new Slot<PolygonMode>(Slot.Type.GEOM, PolygonMode.class, PView.proj);
+        public static final Slot<PolygonMode> slot = new Slot<PolygonMode>(Slot.Type.GEOM, PolygonMode.class,
+                PView.proj);
         public final int mode;
 
         public PolygonMode(int mode) {

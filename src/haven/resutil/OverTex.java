@@ -141,7 +141,8 @@ public class OverTex extends GLState {
                 public void resolve(Collection<GLState> buf) {
                     TexR rt = tres.get().layer(TexR.class, tid);
                     if (rt == null)
-                        throw (new RuntimeException(String.format("Specified texture %d for %s not found in %s", tid, res, tres)));
+                        throw (new RuntimeException(
+                                String.format("Specified texture %d for %s not found in %s", tid, res, tres)));
                     buf.add(new OverTex(rt.tex(), blend));
                 }
             });
@@ -150,9 +151,15 @@ public class OverTex extends GLState {
 
     @VertexBuf.ResName("otex2")
     public static class OTexC extends VertexBuf.Vec2Array {
-        public OTexC(FloatBuffer data) {super(data, otexc);}
-        public OTexC(Resource res, Message buf, int nv) {this(VertexBuf.loadbuf2(Utils.wfbuf(nv * 2), buf));}
+        public OTexC(FloatBuffer data) {
+            super(data, otexc);
+        }
+
+        public OTexC(Resource res, Message buf, int nv) {
+            this(VertexBuf.loadbuf2(Utils.wfbuf(nv * 2), buf));
+        }
     }
+
     @VertexBuf.ResName("otex")
     public static class CDecode implements VertexBuf.ArrayCons {
         public void cons(Collection<VertexBuf.AttribArray> dst, Resource res, Message buf, int nv) {

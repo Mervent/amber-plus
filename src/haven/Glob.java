@@ -108,9 +108,7 @@ public class Glob {
     private static Color colstep(Color o, Color t, double a) {
         int or = o.getRed(), og = o.getGreen(), ob = o.getBlue(), oa = o.getAlpha();
         int tr = t.getRed(), tg = t.getGreen(), tb = t.getBlue(), ta = t.getAlpha();
-        return (new Color(or + (int) ((tr - or) * a),
-                og + (int) ((tg - og) * a),
-                ob + (int) ((tb - ob) * a),
+        return (new Color(or + (int) ((tr - or) * a), og + (int) ((tg - og) * a), ob + (int) ((tb - ob) * a),
                 oa + (int) ((ta - oa) * a)));
     }
 
@@ -185,26 +183,30 @@ public class Glob {
         if (ast == null)
             return;
 
-        long secs = (long)globtime();
+        long secs = (long) globtime();
         long day = secs / secinday;
         long secintoday = secs % secinday;
         long hours = secintoday / 3600;
         long mins = (secintoday % 3600) / 60;
-        int nextseason = (int)Math.ceil((1 - ast.sp) * (ast.is == 1 ? 30 : 10));
+        int nextseason = (int) Math.ceil((1 - ast.sp) * (ast.is == 1 ? 30 : 10));
 
         String fmt;
         switch (ast.is) {
             case 0:
-                fmt = nextseason == 1 ? "Day %d, %02d:%02d. Spring (%d RL day left)." : "Day %d, %02d:%02d. Spring (%d RL days left).";
+                fmt = nextseason == 1 ? "Day %d, %02d:%02d. Spring (%d RL day left)."
+                        : "Day %d, %02d:%02d. Spring (%d RL days left).";
                 break;
             case 1:
-                fmt = nextseason == 1 ? "Day %d, %02d:%02d. Summer (%d RL day left)." : "Day %d, %02d:%02d. Summer (%d RL days left).";
+                fmt = nextseason == 1 ? "Day %d, %02d:%02d. Summer (%d RL day left)."
+                        : "Day %d, %02d:%02d. Summer (%d RL days left).";
                 break;
             case 2:
-                fmt = nextseason == 1 ? "Day %d, %02d:%02d. Autumn (%d RL day left)." : "Day %d, %02d:%02d. Autumn (%d RL days left).";
+                fmt = nextseason == 1 ? "Day %d, %02d:%02d. Autumn (%d RL day left)."
+                        : "Day %d, %02d:%02d. Autumn (%d RL days left).";
                 break;
             case 3:
-                fmt = nextseason == 1 ? "Day %d, %02d:%02d. Winter (%d RL day left)." : "Day %d, %02d:%02d. Winter (%d RL days left).";
+                fmt = nextseason == 1 ? "Day %d, %02d:%02d. Winter (%d RL day left)."
+                        : "Day %d, %02d:%02d. Winter (%d RL days left).";
                 break;
             default:
                 fmt = "Unknown Season";
@@ -236,9 +238,9 @@ public class Glob {
                 double yt = ((Number) a[n++]).doubleValue();
                 boolean night = (Integer) a[n++] != 0;
                 Color mc = (Color) a[n++];
-                int is = (n < a.length) ? ((Number)a[n++]).intValue() : 1;
-                double sp = (n < a.length) ? ((Number)a[n++]).doubleValue() : 0.5;
-                double sd = (n < a.length) ? ((Number)a[n++]).doubleValue() : 0.5;
+                int is = (n < a.length) ? ((Number) a[n++]).intValue() : 1;
+                double sp = (n < a.length) ? ((Number) a[n++]).doubleValue() : 0.5;
+                double sd = (n < a.length) ? ((Number) a[n++]).doubleValue() : 0.5;
                 ast = new Astronomy(dt, mp, yt, night, mc, is, sp, sd);
             } else if (t == "light") {
                 synchronized (this) {
@@ -322,10 +324,11 @@ public class Glob {
                                 n = (Weather) v;
                                 break;
                             }
-                            Class<? extends Weather> cl = cur.getKey().get().layer(Resource.CodeEntry.class).getcl(Weather.class);
+                            Class<? extends Weather> cl = cur.getKey().get().layer(Resource.CodeEntry.class)
+                                    .getcl(Weather.class);
                             Weather w;
                             try {
-                                w = Utils.construct(cl.getConstructor(Object[].class), new Object[]{v});
+                                w = Utils.construct(cl.getConstructor(Object[].class), new Object[] { v });
                             } catch (NoSuchMethodException e) {
                                 throw (new RuntimeException(e));
                             }
@@ -350,10 +353,11 @@ public class Glob {
         }
     };
 
-    /* XXX: This is actually quite ugly and there should be a better
-     * way, but until I can think of such a way, have this as a known
-     * entry-point to be forwards-compatible with compiled
-     * resources. */
+    /*
+     * XXX: This is actually quite ugly and there should be a better way, but until
+     * I can think of such a way, have this as a known entry-point to be
+     * forwards-compatible with compiled resources.
+     */
     public static DirLight amblight(RenderList rl) {
         return (((MapView) ((PView.WidgetContext) rl.state().get(PView.ctx)).widget()).amb);
     }

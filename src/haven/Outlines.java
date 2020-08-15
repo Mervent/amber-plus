@@ -51,12 +51,7 @@ public class Outlines implements Rendered {
     private static ShaderMacro shader(final boolean symmetric, final boolean ms) {
         return (new ShaderMacro() {
             Color color = Color.BLACK;
-            Coord[] points = {
-                    new Coord(-1, 0),
-                    new Coord(1, 0),
-                    new Coord(0, -1),
-                    new Coord(0, 1),
-            };
+            Coord[] points = { new Coord(-1, 0), new Coord(1, 0), new Coord(0, -1), new Coord(0, 1), };
 
             Expression sample(boolean nrm, Expression c, Expression s, Coord o) {
                 if (ms) {
@@ -72,49 +67,55 @@ public class Outlines implements Rendered {
                 }
             }
 
-            Function ofac = new Function.Def(FLOAT) {{
-                Expression sample = param(PDir.IN, INT).ref();
-                Expression tc = Tex2D.rtexcoord.ref();
-                LValue ret = code.local(FLOAT, l(0.0)).ref();
-                Expression lnrm = code.local(VEC3, mul(sub(pick(sample(true, tc, sample, Coord.z), "rgb"), l(0.5)), l(2.0))).ref();
-                Expression ldep = code.local(FLOAT, pick(sample(false, tc, sample, Coord.z), "z")).ref();
-            /* XXX: Current depth detection doesn't work well
-		     * with frustum projections, perhaps because of
-		     * the lack of precision in the depth buffer
-		     * (though I'm not sure I buy that explanation
-		     * yet). */
-                LValue dh = code.local(FLOAT, l(0.0002)).ref(), dl = code.local(FLOAT, l(-0.0002)).ref();
-                for (int i = 0; i < points.length; i++) {
-                    Expression cdep = pick(sample(false, tc, sample, points[i]), "z");
-                    cdep = sub(ldep, cdep);
-                    cdep = code.local(FLOAT, cdep).ref();
-                    code.add(stmt(ass(dh, max(dh, cdep))));
-                    code.add(stmt(ass(dl, min(dl, cdep))));
-                }
-                if (symmetric)
-                    code.add(aadd(ret, smoothstep(l(5.0), l(6.0), max(div(dh, neg(dl)), div(dl, neg(dh))))));
-                else
-                    code.add(aadd(ret, smoothstep(l(5.0), l(6.0), div(dh, neg(dl)))));
-                for (int i = 0; i < points.length; i++) {
-                    Expression cnrm = mul(sub(pick(sample(true, tc, sample, points[i]), "rgb"), l(0.5)), l(2.0));
-                    if (symmetric) {
-                        code.add(aadd(ret, sub(l(1.0), abs(dot(lnrm, cnrm)))));
-                    } else {
-                        cnrm = code.local(VEC3, cnrm).ref();
-                        code.add(new If(gt(pick(cross(lnrm, cnrm), "z"), l(0.0)),
-                                stmt(aadd(ret, sub(l(1.0), abs(dot(lnrm, cnrm)))))));
+            Function ofac = new Function.Def(FLOAT) {
+                {
+                    Expression sample = param(PDir.IN, INT).ref();
+                    Expression tc = Tex2D.rtexcoord.ref();
+                    LValue ret = code.local(FLOAT, l(0.0)).ref();
+                    Expression lnrm = code
+                            .local(VEC3, mul(sub(pick(sample(true, tc, sample, Coord.z), "rgb"), l(0.5)), l(2.0)))
+                            .ref();
+                    Expression ldep = code.local(FLOAT, pick(sample(false, tc, sample, Coord.z), "z")).ref();
+                    /*
+                     * XXX: Current depth detection doesn't work well with frustum projections,
+                     * perhaps because of the lack of precision in the depth buffer (though I'm not
+                     * sure I buy that explanation yet).
+                     */
+                    LValue dh = code.local(FLOAT, l(0.0002)).ref(), dl = code.local(FLOAT, l(-0.0002)).ref();
+                    for (int i = 0; i < points.length; i++) {
+                        Expression cdep = pick(sample(false, tc, sample, points[i]), "z");
+                        cdep = sub(ldep, cdep);
+                        cdep = code.local(FLOAT, cdep).ref();
+                        code.add(stmt(ass(dh, max(dh, cdep))));
+                        code.add(stmt(ass(dl, min(dl, cdep))));
                     }
+                    if (symmetric)
+                        code.add(aadd(ret, smoothstep(l(5.0), l(6.0), max(div(dh, neg(dl)), div(dl, neg(dh))))));
+                    else
+                        code.add(aadd(ret, smoothstep(l(5.0), l(6.0), div(dh, neg(dl)))));
+                    for (int i = 0; i < points.length; i++) {
+                        Expression cnrm = mul(sub(pick(sample(true, tc, sample, points[i]), "rgb"), l(0.5)), l(2.0));
+                        if (symmetric) {
+                            code.add(aadd(ret, sub(l(1.0), abs(dot(lnrm, cnrm)))));
+                        } else {
+                            cnrm = code.local(VEC3, cnrm).ref();
+                            code.add(new If(gt(pick(cross(lnrm, cnrm), "z"), l(0.0)),
+                                    stmt(aadd(ret, sub(l(1.0), abs(dot(lnrm, cnrm)))))));
+                        }
+                    }
+                    code.add(new Return(smoothstep(l(0.4), l(0.6), min(ret, l(1.0)))));
                 }
-                code.add(new Return(smoothstep(l(0.4), l(0.6), min(ret, l(1.0)))));
-            }};
+            };
 
-            Function msfac = new Function.Def(FLOAT) {{
-                LValue ret = code.local(FLOAT, l(0.0)).ref();
-                LValue i = code.local(INT, null).ref();
-                code.add(new For(ass(i, l(0)), lt(i, FBConfig.numsamples.ref()), linc(i),
-                        stmt(aadd(ret, ofac.call(i)))));
-                code.add(new Return(div(ret, FBConfig.numsamples.ref())));
-            }};
+            Function msfac = new Function.Def(FLOAT) {
+                {
+                    LValue ret = code.local(FLOAT, l(0.0)).ref();
+                    LValue i = code.local(INT, null).ref();
+                    code.add(new For(ass(i, l(0)), lt(i, FBConfig.numsamples.ref()), linc(i),
+                            stmt(aadd(ret, ofac.call(i)))));
+                    code.add(new Return(div(ret, FBConfig.numsamples.ref())));
+                }
+            };
 
             public void modify(ProgramContext prog) {
                 prog.fctx.fragcol.mod(in -> {
@@ -126,8 +127,10 @@ public class Outlines implements Rendered {
     }
 
     static {
-	/* XXX: It would be good to have some kind of more convenient
-	 * shader internation. */
+        /*
+         * XXX: It would be good to have some kind of more convenient shader
+         * internation.
+         */
         shaders[0] = shader(false, false);
         shaders[1] = shader(false, true);
         shaders[2] = shader(true, false);

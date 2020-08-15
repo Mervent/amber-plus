@@ -71,8 +71,7 @@ public class Buff extends Widget implements ItemInfo.ResOwner, Bufflist.Managed 
     }
 
     private static final OwnerContext.ClassResolver<Buff> ctxr = new OwnerContext.ClassResolver<Buff>()
-            .add(Glob.class, wdg -> wdg.ui.sess.glob)
-            .add(Session.class, wdg -> wdg.ui.sess);
+            .add(Glob.class, wdg -> wdg.ui.sess.glob).add(Session.class, wdg -> wdg.ui.sess);
 
     public <T> T context(Class<T> cl) {
         return (ctxr.context(cl, this));
@@ -113,9 +112,12 @@ public class Buff extends Widget implements ItemInfo.ResOwner, Bufflist.Managed 
         }
     }
 
-    private final AttrCache<Double> ameteri = new AttrCache<>(this::info, AttrCache.map1(AMeterInfo.class, minf -> minf::ameter));
-    private final AttrCache<Tex> nmeteri = new AttrCache<>(this::info, AttrCache.map1s(GItem.NumberInfo.class, ninf -> new TexI(GItem.NumberInfo.numrender(ninf.itemnum(), ninf.numcolor()))));
-    private final AttrCache<Double> cmeteri = new AttrCache<>(this::info, AttrCache.map1(GItem.MeterInfo.class, minf -> minf::meter));
+    private final AttrCache<Double> ameteri = new AttrCache<>(this::info,
+            AttrCache.map1(AMeterInfo.class, minf -> minf::ameter));
+    private final AttrCache<Tex> nmeteri = new AttrCache<>(this::info, AttrCache.map1s(GItem.NumberInfo.class,
+            ninf -> new TexI(GItem.NumberInfo.numrender(ninf.itemnum(), ninf.numcolor()))));
+    private final AttrCache<Double> cmeteri = new AttrCache<>(this::info,
+            AttrCache.map1(GItem.MeterInfo.class, minf -> minf::meter));
 
     public void draw(GOut g) {
         g.chcolor(255, 255, 255, a);
@@ -138,7 +140,7 @@ public class Buff extends Widget implements ItemInfo.ResOwner, Bufflist.Managed 
             Double cmeter;
             if (this.cmeter >= 0) {
                 double m = this.cmeter;
-                if(cmrem >= 0) {
+                if (cmrem >= 0) {
                     double ot = cmrem;
                     double pt = Utils.rtime() - gettime;
                     m *= (ot - pt) / ot;
@@ -206,17 +208,17 @@ public class Buff extends Widget implements ItemInfo.ResOwner, Bufflist.Managed 
     }
 
     public void reqdestroy() {
-	anims.clear();
-	final Coord o = this.c;
-	dest = true;
-	new NormAnim(0.35) {
-	    public void ntick(double a) {
-		Buff.this.a = 255 - (int)(255 * a);
-		Buff.this.c = o.add(0, (int)(a * a * cframe.sz().y));
-		if(a == 1.0)
-		    destroy();
-	    }
-	};
+        anims.clear();
+        final Coord o = this.c;
+        dest = true;
+        new NormAnim(0.35) {
+            public void ntick(double a) {
+                Buff.this.a = 255 - (int) (255 * a);
+                Buff.this.c = o.add(0, (int) (a * a * cframe.sz().y));
+                if (a == 1.0)
+                    destroy();
+            }
+        };
     }
 
     public void move(Coord c, double off) {
@@ -259,8 +261,8 @@ public class Buff extends Widget implements ItemInfo.ResOwner, Bufflist.Managed 
             this.nmeter = (Integer) args[0];
             ntext = null;
         } else if (msg == "cm") {
-            this.cmeter = ((Number)args[0]).doubleValue() / 100.0;
-            this.cmrem = (args.length > 1) ? (((Number)args[1]).doubleValue() * 0.06) : -1;
+            this.cmeter = ((Number) args[0]).doubleValue() / 100.0;
+            this.cmrem = (args.length > 1) ? (((Number) args[1]).doubleValue() * 0.06) : -1;
             gettime = Utils.rtime();
         } else {
             super.uimsg(msg, args);

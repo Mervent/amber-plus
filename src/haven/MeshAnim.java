@@ -233,7 +233,8 @@ public class MeshAnim {
         private void setfr(int fi) {
             cf = frames[fi];
             nfi = rnd.nextInt(frames.length - 1);
-            if (nfi >= fi) nfi++;
+            if (nfi >= fi)
+                nfi++;
             nf = frames[nfi];
             fl = ((fi < frames.length - 1) ? (frames[fi + 1].time) : len) - frames[fi].time;
         }

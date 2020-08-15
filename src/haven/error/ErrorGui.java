@@ -46,47 +46,61 @@ public abstract class ErrorGui extends JDialog implements ErrorStatus {
         super(parent, "Haven error!", true);
         setMinimumSize(new Dimension(300, 100));
         setResizable(false);
-        add(new JPanel() {{
-            setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-            add(new JLabel(" An error has occurred! Please notify the client developer."));
+        add(new JPanel() {
+            {
+                setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+                add(new JLabel(" An error has occurred! Please notify the client developer."));
 
-            add(new JPanel() {{
-                setLayout(new FlowLayout());
-                setAlignmentX(0);
-                add(cbbtn = new JButton("Copy to Clipboard") {{
-                    addActionListener(new ActionListener() {
-                        public void actionPerformed(ActionEvent ev) {
-                            StringSelection exc = new StringSelection(exbox.getText());
-                            Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
-                            cb.setContents(exc, null);
-                            ErrorGui.this.pack();
-                        }
-                    });
-                }});
-                add(closebtn = new JButton("Close") {{
-                    addActionListener(new ActionListener() {
-                        public void actionPerformed(ActionEvent ev) {
-                            ErrorGui.this.dispose();
-                            synchronized (ErrorGui.this) {
-                                done = true;
-                                ErrorGui.this.notifyAll();
+                add(new JPanel() {
+                    {
+                        setLayout(new FlowLayout());
+                        setAlignmentX(0);
+                        add(cbbtn = new JButton("Copy to Clipboard") {
+                            {
+                                addActionListener(new ActionListener() {
+                                    public void actionPerformed(ActionEvent ev) {
+                                        StringSelection exc = new StringSelection(exbox.getText());
+                                        Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
+                                        cb.setContents(exc, null);
+                                        ErrorGui.this.pack();
+                                    }
+                                });
                             }
-                            System.exit(1);
-                        }
-                    });
-                }});
-            }});
-            add(details = new JPanel() {{
-                setLayout(new BorderLayout());
-                setAlignmentX(0);
-                setVisible(true);
-                add(exboxc = new JScrollPane(exbox = new JTextArea(15, 80) {{
-                    setEditable(false);
-                }}) {{
-                    setVisible(true);
-                }});
-            }});
-        }});
+                        });
+                        add(closebtn = new JButton("Close") {
+                            {
+                                addActionListener(new ActionListener() {
+                                    public void actionPerformed(ActionEvent ev) {
+                                        ErrorGui.this.dispose();
+                                        synchronized (ErrorGui.this) {
+                                            done = true;
+                                            ErrorGui.this.notifyAll();
+                                        }
+                                        System.exit(1);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+                add(details = new JPanel() {
+                    {
+                        setLayout(new BorderLayout());
+                        setAlignmentX(0);
+                        setVisible(true);
+                        add(exboxc = new JScrollPane(exbox = new JTextArea(15, 80) {
+                            {
+                                setEditable(false);
+                            }
+                        }) {
+                            {
+                                setVisible(true);
+                            }
+                        });
+                    }
+                });
+            }
+        });
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent ev) {
                 ErrorGui.this.dispose();
@@ -108,11 +122,8 @@ public abstract class ErrorGui extends JDialog implements ErrorStatus {
         r.t.printStackTrace(new java.io.PrintWriter(w));
         final String tr = w.toString();
         SwingUtilities.invokeLater(() -> {
-            String details = String.format("%s.%s\n%s, %s\n%s\n\n%s",
-                    Config.version, Config.gitrev.substring(0, 8),
-                    r.props.get("os"), r.props.get("java"),
-                    r.props.get("gpu"),
-                    tr);
+            String details = String.format("%s.%s\n%s, %s\n%s\n\n%s", Config.version, Config.gitrev.substring(0, 8),
+                    r.props.get("os"), r.props.get("java"), r.props.get("gpu"), tr);
             exbox.setText(details);
             pack();
             exbox.setCaretPosition(0);

@@ -17,7 +17,7 @@ public class BeltWnd extends Widget implements DTarget {
 
     public BeltWnd(Coord sz, String cap) {
         origcap = cap;
-	    resize(sz);
+        resize(sz);
     }
 
     @Override

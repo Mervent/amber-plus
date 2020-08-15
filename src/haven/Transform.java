@@ -49,9 +49,7 @@ public abstract class Transform extends GLState {
 
     public static Matrix4f makexlate(Matrix4f d, Coord3f c) {
         d.m[0] = d.m[5] = d.m[10] = d.m[15] = 1.0f;
-        d.m[1] = d.m[2] = d.m[3] =
-                d.m[4] = d.m[6] = d.m[7] =
-                        d.m[8] = d.m[9] = d.m[11] = 0.0f;
+        d.m[1] = d.m[2] = d.m[3] = d.m[4] = d.m[6] = d.m[7] = d.m[8] = d.m[9] = d.m[11] = 0.0f;
         d.m[12] = c.x;
         d.m[13] = c.y;
         d.m[14] = c.z;
@@ -76,8 +74,9 @@ public abstract class Transform extends GLState {
     }
 
     public static Matrix4f rxinvert(Matrix4f m) {
-    /* This assumes that m is merely a composition of rotations
-     * and translations. */
+        /*
+         * This assumes that m is merely a composition of rotations and translations.
+         */
         return (m.trim3(1).transpose().mul1(makexlate(new Matrix4f(), new Coord3f(-m.m[12], -m.m[13], -m.m[14]))));
     }
 

@@ -58,7 +58,7 @@ public class ResDrawable extends Drawable {
         MessageBuf stdCopy = sdt.clone();
         if (Config.bonsai && (gob.type == Gob.Type.TREE || gob.type == Gob.Type.BUSH) && !stdCopy.eom()) {
             byte[] args = new byte[2];
-            args[0] = (byte)stdCopy.uint8();
+            args[0] = (byte) stdCopy.uint8();
             int fscale = 25;
             if (!stdCopy.eom()) {
                 fscale = stdCopy.uint8();
@@ -66,7 +66,7 @@ public class ResDrawable extends Drawable {
                     fscale = 25;
 
             }
-            args[1] = (byte)fscale;
+            args[1] = (byte) fscale;
             stdCopy = new MessageBuf(args);
         }
 
@@ -106,6 +106,6 @@ public class ResDrawable extends Drawable {
     }
 
     public Object staticp() {
-        return((spr != null)?spr.staticp():null);
+        return ((spr != null) ? spr.staticp() : null);
     }
 }

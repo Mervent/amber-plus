@@ -28,7 +28,8 @@ public class GaussianPlant implements Factory {
         int scount = rnd.nextInt(this.numh - this.numl + 1) + this.numl;
         for (int i = 0; i < scount; ++i) {
             MeshRes var9 = (MeshRes) allmeshes.get(rnd.nextInt(allmeshes.size()));
-            cs.addpart((float) rnd.nextGaussian() * this.r, (float) rnd.nextGaussian() * this.r, var9.mat.get(), var9.m);
+            cs.addpart((float) rnd.nextGaussian() * this.r, (float) rnd.nextGaussian() * this.r, var9.mat.get(),
+                    var9.m);
         }
         return cs;
     }

@@ -41,8 +41,10 @@ public class Button extends SIWidget {
     public static final BufferedImage bm = Resource.loadimg("gfx/hud/buttons/tbtn/mid");
     public static final int hs = bl.getHeight(), hl = bm.getHeight();
     public static final Resource click = Loading.waitfor(Resource.local().load("sfx/hud/btn"));
-    public static final Resource.Audio lbtdown = Loading.waitfor(Resource.local().load("sfx/hud/lbtn")).layer(Resource.audio, "down");
-    public static final Resource.Audio lbtup = Loading.waitfor(Resource.local().load("sfx/hud/lbtn")).layer(Resource.audio, "up");
+    public static final Resource.Audio lbtdown = Loading.waitfor(Resource.local().load("sfx/hud/lbtn"))
+            .layer(Resource.audio, "down");
+    public static final Resource.Audio lbtup = Loading.waitfor(Resource.local().load("sfx/hud/lbtn"))
+            .layer(Resource.audio, "up");
     public boolean lg;
     public Text text;
     public BufferedImage cont;
@@ -75,7 +77,7 @@ public class Button extends SIWidget {
     }
 
     private static boolean largep(int w) {
-        return(w >= (bl.getWidth() + bm.getWidth() + br.getWidth()));
+        return (w >= (bl.getWidth() + bm.getWidth() + br.getWidth()));
     }
 
     private Button(int w, boolean lg) {
@@ -130,7 +132,8 @@ public class Button extends SIWidget {
         g.drawImage(bl, 0, yo, null);
         g.drawImage(br, sz.x - br.getWidth(), yo, null);
         g.drawImage(bt, bl.getWidth(), yo, sz.x - bl.getWidth() - br.getWidth(), bt.getHeight(), null);
-        g.drawImage(bb, bl.getWidth(), yo + hs - bb.getHeight(), sz.x - bl.getWidth() - br.getWidth(), bb.getHeight(), null);
+        g.drawImage(bb, bl.getWidth(), yo + hs - bb.getHeight(), sz.x - bl.getWidth() - br.getWidth(), bb.getHeight(),
+                null);
         if (lg)
             g.drawImage(bm, (sz.x - bm.getWidth()) / 2, 0, null);
 

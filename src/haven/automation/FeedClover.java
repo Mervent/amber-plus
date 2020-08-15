@@ -1,6 +1,5 @@
 package haven.automation;
 
-
 import haven.*;
 
 import static haven.OCache.posres;
@@ -24,11 +23,9 @@ public class FeedClover implements Runnable {
                     res = gob.getres();
                 } catch (Loading l) {
                 }
-                if (res != null && (res.name.equals("gfx/kritter/horse/horse") ||
-                        res.name.equals("gfx/kritter/sheep/sheep") ||
-                        res.name.equals("gfx/kritter/cattle/cattle") ||
-                        res.name.equals("gfx/kritter/boar/boar") ||
-                        res.name.equals("gfx/kritter/goat/wildgoat"))) {
+                if (res != null && (res.name.equals("gfx/kritter/horse/horse")
+                        || res.name.equals("gfx/kritter/sheep/sheep") || res.name.equals("gfx/kritter/cattle/cattle")
+                        || res.name.equals("gfx/kritter/boar/boar") || res.name.equals("gfx/kritter/goat/wildgoat"))) {
                     if (animal == null)
                         animal = gob;
                     else if (gob.rc.dist(gui.map.player().rc) < animal.rc.dist(gui.map.player().rc))
@@ -64,6 +61,7 @@ public class FeedClover implements Runnable {
             }
         }
 
-        gui.map.wdgmsg("itemact", Coord.z, animal.rc.floor(posres), 0, 0, (int) animal.id, animal.rc.floor(posres), 0, -1);
+        gui.map.wdgmsg("itemact", Coord.z, animal.rc.floor(posres), 0, 0, (int) animal.id, animal.rc.floor(posres), 0,
+                -1);
     }
 }

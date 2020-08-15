@@ -73,18 +73,18 @@ public class CaveTile extends Tiler {
         public Tiler create(int id, Tileset set) {
             Material wtex = null;
             Tiler ground = null;
-            for(Object rdesc : set.ta) {
-                Object[] desc = (Object[])rdesc;
-                String p = (String)desc[0];
-                if(p.equals("wmat")) {
-                    wtex = set.getres().layer(Material.Res.class, (Integer)desc[1]).get();
-                } else if(p.equals("gnd")) {
-                    Resource gres = set.getres().pool.load((String)desc[1], (Integer)desc[2]).get();
+            for (Object rdesc : set.ta) {
+                Object[] desc = (Object[]) rdesc;
+                String p = (String) desc[0];
+                if (p.equals("wmat")) {
+                    wtex = set.getres().layer(Material.Res.class, (Integer) desc[1]).get();
+                } else if (p.equals("gnd")) {
+                    Resource gres = set.getres().pool.load((String) desc[1], (Integer) desc[2]).get();
                     Tileset ts = gres.layer(Tileset.class);
                     ground = ts.tfac().create(id, ts);
                 }
             }
-            return(new CaveTile(id, set, wtex, ground));
+            return (new CaveTile(id, set, wtex, ground));
         }
     }
 
@@ -94,8 +94,8 @@ public class CaveTile extends Tiler {
         this.ground = ground;
     }
 
-    private static final Coord[] tces = {new Coord(0, -1), new Coord(1, 0), new Coord(0, 1), new Coord(-1, 0)};
-    private static final Coord[] tccs = {new Coord(0, 0), new Coord(1, 0), new Coord(1, 1), new Coord(0, 1)};
+    private static final Coord[] tces = { new Coord(0, -1), new Coord(1, 0), new Coord(0, 1), new Coord(-1, 0) };
+    private static final Coord[] tccs = { new Coord(0, 0), new Coord(1, 0), new Coord(1, 1), new Coord(0, 1) };
 
     private void modelwall(Walls w, Coord ltc, Coord rtc) {
         Vertex[] lw = w.fortile(ltc), rw = w.fortile(rtc);
@@ -112,7 +112,8 @@ public class CaveTile extends Tiler {
             int cid = m.map.gettile(gc.add(tces[i]));
             if (cid <= id || (m.map.tiler(cid) instanceof CaveTile))
                 continue;
-            if (w == null) w = m.data(walls);
+            if (w == null)
+                w = m.data(walls);
             modelwall(w, lc.add(tccs[(i + 1) % 4]), lc.add(tccs[i]));
         }
     }
@@ -141,10 +142,11 @@ public class CaveTile extends Tiler {
             int cid = m.map.gettile(gc.add(tces[i]));
             if (cid <= id || (m.map.tiler(cid) instanceof CaveTile))
                 continue;
-            if (w == null) w = m.data(walls);
+            if (w == null)
+                w = m.data(walls);
             mkwall(m, w, lc.add(tccs[(i + 1) % 4]), lc.add(tccs[i]));
         }
-        if(ground != null)
+        if (ground != null)
             ground.lay(m, rnd, lc, gc);
     }
 

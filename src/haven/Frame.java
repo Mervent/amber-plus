@@ -30,7 +30,7 @@ public class Frame extends Widget {
     private final IBox box;
 
     public Frame(Coord sz, boolean inner, IBox box) {
-	super(inner?sz.add(box.bisz()):sz);
+        super(inner ? sz.add(box.bisz()) : sz);
         this.box = box;
     }
 
@@ -39,8 +39,7 @@ public class Frame extends Widget {
     }
 
     public static Frame around(Widget parent, Area area, IBox box) {
-        return (parent.add(new Frame(area.sz(), true, box),
-                area.ul.sub(box.btloff())));
+        return (parent.add(new Frame(area.sz(), true, box), area.ul.sub(box.btloff())));
     }
 
     public static Frame around(Widget parent, Area area) {
@@ -52,16 +51,20 @@ public class Frame extends Widget {
         Coord tl = new Coord(f.c), br = new Coord(f.c);
         for (Widget wdg : wl) {
             Coord wbr = wdg.c.add(wdg.sz);
-            if (wdg.c.x < tl.x) tl.x = wdg.c.x;
-            if (wdg.c.y < tl.y) tl.y = wdg.c.y;
-            if (wbr.x > br.x) br.x = wbr.x;
-            if (wbr.y > br.y) br.y = wbr.y;
+            if (wdg.c.x < tl.x)
+                tl.x = wdg.c.x;
+            if (wdg.c.y < tl.y)
+                tl.y = wdg.c.y;
+            if (wbr.x > br.x)
+                br.x = wbr.x;
+            if (wbr.y > br.y)
+                br.y = wbr.y;
         }
         return (around(parent, new Area(tl, br)));
     }
 
     public Coord inner() {
-	return(sz.sub(box.bisz()));
+        return (sz.sub(box.bisz()));
     }
 
     public Coord xlate(Coord c, boolean in) {
@@ -77,8 +80,8 @@ public class Frame extends Widget {
     }
 
     public <T extends Widget> T addin(T child) {
-	child.resize(inner());
-	parent.add(child, this.c.add(box.btloff()));
-	return(child);
+        child.resize(inner());
+        parent.add(child, this.c.add(box.btloff()));
+        return (child);
     }
 }

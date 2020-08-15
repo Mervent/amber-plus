@@ -26,10 +26,12 @@ public class Table extends QList {
             QBuff qb = (QBuff) it.next();
             icon[i] = CompImage.mk(qb.icon);
             text[i] = CompImage.mk(Text.render(qb.name + ":").img);
-            val[i] = CompImage.mk(Text.render((double) ((int) qb.q) == qb.q ? String.format("%d", new Object[]{Integer.valueOf((int) qb.q)}) : String.format("%.1f", new Object[]{Double.valueOf(qb.q)})).img);
+            val[i] = CompImage.mk(Text.render(
+                    (double) ((int) qb.q) == qb.q ? String.format("%d", new Object[] { Integer.valueOf((int) qb.q) })
+                            : String.format("%.1f", new Object[] { Double.valueOf(qb.q) })).img);
         }
 
-        ci.table(Coord.z, new CompImage.Image[][]{icon, text, val}, new int[]{5, 15}, 0, new int[]{0, 0, 1});
+        ci.table(Coord.z, new CompImage.Image[][] { icon, text, val }, new int[] { 5, 15 }, 0, new int[] { 0, 0, 1 });
         layout.cmp.add(ci, new Coord(0, layout.cmp.sz.y));
     }
 }

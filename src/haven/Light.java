@@ -37,9 +37,9 @@ import static haven.Utils.c2fa;
 public class Light implements Rendered {
     public float[] amb, dif, spc;
 
-    private static final float[] defamb = {0.0f, 0.0f, 0.0f, 1.0f};
-    private static final float[] defdif = {1.0f, 1.0f, 1.0f, 1.0f};
-    private static final float[] defspc = {1.0f, 1.0f, 1.0f, 1.0f};
+    private static final float[] defamb = { 0.0f, 0.0f, 0.0f, 1.0f };
+    private static final float[] defdif = { 1.0f, 1.0f, 1.0f, 1.0f };
+    private static final float[] defspc = { 1.0f, 1.0f, 1.0f, 1.0f };
 
     public Light() {
         this.amb = defamb;
@@ -85,9 +85,12 @@ public class Light implements Rendered {
         gl.glDisable(GL2.GL_LIGHT0 + idx);
     }
 
-    public static final GLState.Slot<LightList> lights = new GLState.Slot<LightList>(GLState.Slot.Type.SYS, LightList.class, PView.cam);
-    public static final GLState.Slot<Model> model = new GLState.Slot<Model>(GLState.Slot.Type.DRAW, Model.class, PView.proj);
-    public static final GLState.Slot<GLState> lighting = new GLState.Slot<GLState>(GLState.Slot.Type.DRAW, GLState.class, model, lights);
+    public static final GLState.Slot<LightList> lights = new GLState.Slot<LightList>(GLState.Slot.Type.SYS,
+            LightList.class, PView.cam);
+    public static final GLState.Slot<Model> model = new GLState.Slot<Model>(GLState.Slot.Type.DRAW, Model.class,
+            PView.proj);
+    public static final GLState.Slot<GLState> lighting = new GLState.Slot<GLState>(GLState.Slot.Type.DRAW,
+            GLState.class, model, lights);
 
     public static class BaseLights extends GLState {
         private final ShaderMacro shader;
@@ -259,7 +262,7 @@ public class Light implements Rendered {
     public static class Model extends GLState {
         public float[] amb;
         public int cc = GL2.GL_SINGLE_COLOR;
-        private static final float[] defamb = {0.2f, 0.2f, 0.2f, 1.0f};
+        private static final float[] defamb = { 0.2f, 0.2f, 0.2f, 1.0f };
 
         public Model(Color amb) {
             this.amb = c2fa(amb);
@@ -311,10 +314,8 @@ public class Light implements Rendered {
         public Coord3f dir;
 
         private static Color cold(Message buf) {
-            return (new Color((int) (buf.cpfloat() * 255.0),
-                    (int) (buf.cpfloat() * 255.0),
-                    (int) (buf.cpfloat() * 255.0),
-                    (int) (buf.cpfloat() * 255.0)));
+            return (new Color((int) (buf.cpfloat() * 255.0), (int) (buf.cpfloat() * 255.0),
+                    (int) (buf.cpfloat() * 255.0), (int) (buf.cpfloat() * 255.0)));
         }
 
         public Res(Resource res, Message buf) {

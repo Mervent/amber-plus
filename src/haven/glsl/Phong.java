@@ -47,19 +47,17 @@ public class Phong extends ValBlock.Group {
             this.spc = spc;
         }
 
-        public static final Function celramp = new Function.Def(VEC3) {{
-            Expression c = param(IN, VEC3).ref();
-            Block.Local m = code.local(FLOAT, max(pick(c, "r"), pick(c, "g"), pick(c, "b")));
-            code.add(new If(lt(m.ref(), l(0.01)),
-                    new Return(Vec3Cons.z)));
-            Block.Local v = code.local(FLOAT, null);
-            code.add(new If(gt(m.ref(), l(0.5)),
-                    stmt(ass(v, l(1.0))),
-                    new If(gt(m.ref(), l(0.1)),
-                            stmt(ass(v, l(0.5))),
-                            stmt(ass(v, l(0.0))))));
-            code.add(new Return(mul(c, div(v.ref(), m.ref()))));
-        }};
+        public static final Function celramp = new Function.Def(VEC3) {
+            {
+                Expression c = param(IN, VEC3).ref();
+                Block.Local m = code.local(FLOAT, max(pick(c, "r"), pick(c, "g"), pick(c, "b")));
+                code.add(new If(lt(m.ref(), l(0.01)), new Return(Vec3Cons.z)));
+                Block.Local v = code.local(FLOAT, null);
+                code.add(new If(gt(m.ref(), l(0.5)), stmt(ass(v, l(1.0))),
+                        new If(gt(m.ref(), l(0.1)), stmt(ass(v, l(0.5))), stmt(ass(v, l(0.0))))));
+                code.add(new Return(mul(c, div(v.ref(), m.ref()))));
+            }
+        };
 
         public void modify(ProgramContext prog) {
             Phong ph = prog.getmod(Phong.class);
@@ -99,15 +97,15 @@ public class Phong extends ValBlock.Group {
                     dir.tgt = blk.local(VEC3, null).ref();
                     Block.Local rel = new Block.Local(VEC3);
                     Block.Local dst = new Block.Local(FLOAT);
-                    code.add(new If(eq(pick(fref(ls, "position"), "w"), l(0.0)),
-                            new Block(stmt(ass(lvl.tgt, l(1.0))),
-                                    stmt(ass(dir.tgt, pick(fref(ls, "position"), "xyz")))),
-                            new Block(rel.new Def(sub(pick(fref(ls, "position"), "xyz"), vert)),
-                                    stmt(ass(dir.tgt, normalize(rel.ref()))),
-                                    dst.new Def(length(rel.ref())),
-                                    stmt(ass(lvl.tgt, inv(add(fref(ls, "constantAttenuation"),
-                                            mul(fref(ls, "linearAttenuation"), dst.ref()),
-                                            mul(fref(ls, "quadraticAttenuation"), dst.ref(), dst.ref()))))))));
+                    code.add(
+                            new If(eq(pick(fref(ls, "position"), "w"), l(0.0)),
+                                    new Block(stmt(ass(lvl.tgt, l(1.0))),
+                                            stmt(ass(dir.tgt, pick(fref(ls, "position"), "xyz")))),
+                                    new Block(rel.new Def(sub(pick(fref(ls, "position"), "xyz"), vert)),
+                                            stmt(ass(dir.tgt, normalize(rel.ref()))), dst.new Def(length(rel.ref())),
+                                            stmt(ass(lvl.tgt, inv(add(fref(ls, "constantAttenuation"),
+                                                    mul(fref(ls, "linearAttenuation"), dst.ref()),
+                                                    mul(fref(ls, "quadraticAttenuation"), dst.ref(), dst.ref()))))))));
                 }
             };
             lvl = tdep.new GValue(FLOAT);
@@ -131,22 +129,18 @@ public class Phong extends ValBlock.Group {
 
         protected void cons() {
             dvals.cons(code);
-            code.add(stmt(aadd(diff, mul(pick(fref(mat, "ambient"), "rgb"),
-                    pick(fref(ls, "ambient"), "rgb"),
-                    lvl.ref()))));
+            code.add(stmt(
+                    aadd(diff, mul(pick(fref(mat, "ambient"), "rgb"), pick(fref(ls, "ambient"), "rgb"), lvl.ref()))));
 
             code.add(new If(gt(dl.ref(), l(0.0)), dcalc = new Block()));
             dcalc.add(dcurs = new Placeholder());
-            dcalc.add(aadd(diff, mul(pick(fref(mat, "diffuse"), "rgb"),
-                    pick(fref(ls, "diffuse"), "rgb"),
-                    dl.ref(), lvl.ref())));
+            dcalc.add(aadd(diff,
+                    mul(pick(fref(mat, "diffuse"), "rgb"), pick(fref(ls, "diffuse"), "rgb"), dl.ref(), lvl.ref())));
 
             dcalc.add(new If(gt(shine, l(0.5)), scalc = new Block()));
             svals.cons(scalc);
             scalc.add(scurs = new Placeholder());
-            scalc.add(aadd(spec, mul(pick(fref(mat, "specular"), "rgb"),
-                    pick(fref(ls, "specular"), "rgb"),
-                    sl.ref())));
+            scalc.add(aadd(spec, mul(pick(fref(mat, "specular"), "rgb"), pick(fref(ls, "specular"), "rgb"), sl.ref())));
 
             for (Runnable mod : mods)
                 mod.run();
@@ -172,9 +166,10 @@ public class Phong extends ValBlock.Group {
                     stmt(dolight.call(i.ref(), vert, edir, norm, bcol.tgt, scol.tgt))));
         } else {
             for (int i = 0; i < 4; i++) {
-        /* No few drivers seem to be having trouble with the for
-		 * loop. It would be nice to be able to select this code
-		 * path only on those drivers. */
+                /*
+                 * No few drivers seem to be having trouble with the for loop. It would be nice
+                 * to be able to select this code path only on those drivers.
+                 */
                 blk.add(new If(gt(nlights.ref(), l(i)),
                         stmt(dolight.call(l(i), vert, edir, norm, bcol.tgt, scol.tgt))));
             }
@@ -184,7 +179,8 @@ public class Phong extends ValBlock.Group {
     }
 
     private static void fmod(final FragmentContext fctx, final Expression bcol, final Expression scol) {
-        fctx.fragcol.mod(in -> add(mul(in, vec4(bcol, pick(fref(fctx.prog.gl_FrontMaterial.ref(), "diffuse"), "a"))), vec4(scol, l(0.0))), 500);
+        fctx.fragcol.mod(in -> add(mul(in, vec4(bcol, pick(fref(fctx.prog.gl_FrontMaterial.ref(), "diffuse"), "a"))),
+                vec4(scol, l(0.0))), 500);
     }
 
     public Phong(VertexContext vctx) {

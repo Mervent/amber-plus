@@ -149,7 +149,8 @@ public class UI {
         }
     }
 
-    public void newwidget(int id, String type, int parent, Object[] pargs, Object... cargs) throws InterruptedException {
+    public void newwidget(int id, String type, int parent, Object[] pargs, Object... cargs)
+            throws InterruptedException {
         if (Config.quickbelt && type.equals("wnd") && cargs[1].equals("Belt")) {
             // use custom belt window
             type = "wnd-belt";
@@ -160,7 +161,7 @@ public class UI {
         }
 
         Widget.Factory f = Widget.gettype2(type);
-        synchronized(this) {
+        synchronized (this) {
             if (parent == beltWndId)
                 f = Widget.gettype2("inv-belt");
 
@@ -168,8 +169,8 @@ public class UI {
             wdg.attach(this);
             if (parent != 65535) {
                 Widget pwdg = widgets.get(parent);
-                if(pwdg == null)
-                    throw(new UIException("Null parent widget " + parent + " for " + id, type, cargs));
+                if (pwdg == null)
+                    throw (new UIException("Null parent widget " + parent + " for " + id, type, cargs));
                 pwdg.addchild(wdg, pargs);
 
                 if (pwdg instanceof Window) {
@@ -201,13 +202,13 @@ public class UI {
     }
 
     public void addwidget(int id, int parent, Object[] pargs) {
-        synchronized(this) {
+        synchronized (this) {
             Widget wdg = widgets.get(id);
-            if(wdg == null)
-                throw(new UIException("Null child widget " + id + " added to " + parent, null, pargs));
+            if (wdg == null)
+                throw (new UIException("Null child widget " + id + " added to " + parent, null, pargs));
             Widget pwdg = widgets.get(parent);
-            if(pwdg == null)
-                throw(new UIException("Null parent widget " + parent + " for " + id, null, pargs));
+            if (pwdg == null)
+                throw (new UIException("Null parent widget " + parent + " for " + id, null, pargs));
             pwdg.addchild(wdg, pargs);
         }
     }
@@ -281,7 +282,8 @@ public class UI {
     }
 
     public Grab grabmouse(Widget wdg) {
-        if (wdg == null) throw (new NullPointerException());
+        if (wdg == null)
+            throw (new NullPointerException());
         Grab g = new Grab(wdg) {
             public void remove() {
                 mousegrab.remove(this);
@@ -292,7 +294,8 @@ public class UI {
     }
 
     public Grab grabkeys(Widget wdg) {
-        if (wdg == null) throw (new NullPointerException());
+        if (wdg == null)
+            throw (new NullPointerException());
         Grab g = new Grab(wdg) {
             public void remove() {
                 keygrab.remove(this);
@@ -313,12 +316,12 @@ public class UI {
     }
 
     public void destroy(Widget wdg) {
-        for (Iterator<Grab> i = mousegrab.iterator(); i.hasNext(); ) {
+        for (Iterator<Grab> i = mousegrab.iterator(); i.hasNext();) {
             Grab g = i.next();
             if (g.wdg.hasparent(wdg))
                 i.remove();
         }
-        for (Iterator<Grab> i = keygrab.iterator(); i.hasNext(); ) {
+        for (Iterator<Grab> i = keygrab.iterator(); i.hasNext();) {
             Grab g = i.next();
             if (g.wdg.hasparent(wdg))
                 i.remove();
@@ -338,17 +341,18 @@ public class UI {
 
     public void wdgmsg(Widget sender, String msg, Object... args) {
         int id;
-        synchronized(this) {
+        synchronized (this) {
             if (msg.endsWith("-identical"))
                 return;
 
-            if(!rwidgets.containsKey(sender)) {
-                System.err.printf("Wdgmsg sender (%s) is not in rwidgets, message is %s\n", sender.getClass().getName(), msg);
+            if (!rwidgets.containsKey(sender)) {
+                System.err.printf("Wdgmsg sender (%s) is not in rwidgets, message is %s\n", sender.getClass().getName(),
+                        msg);
                 return;
             }
             id = rwidgets.get(sender);
         }
-        if(rcvr != null)
+        if (rcvr != null)
             rcvr.rcvmsg(id, msg, args);
     }
 
@@ -367,9 +371,9 @@ public class UI {
         Debug.kf1 = modshift = (mod & InputEvent.SHIFT_DOWN_MASK) != 0;
         Debug.kf2 = modctrl = (mod & InputEvent.CTRL_DOWN_MASK) != 0;
         Debug.kf3 = modmeta = (mod & (InputEvent.META_DOWN_MASK | InputEvent.ALT_DOWN_MASK)) != 0;
-    /*
-    Debug.kf4 = modsuper = (mod & InputEvent.SUPER_DOWN_MASK) != 0;
-	*/
+        /*
+         * Debug.kf4 = modsuper = (mod & InputEvent.SUPER_DOWN_MASK) != 0;
+         */
     }
 
     private Grab[] c(Collection<Grab> g) {
@@ -383,9 +387,9 @@ public class UI {
             if (g.wdg.keydown(ev))
                 return;
         }
-        if(!root.keydown(ev)) {
+        if (!root.keydown(ev)) {
             char key = ev.getKeyChar();
-            if(key == ev.CHAR_UNDEFINED)
+            if (key == ev.CHAR_UNDEFINED)
                 key = 0;
             root.globtype(key, ev);
         }
@@ -461,27 +465,25 @@ public class UI {
     }
 
     public Resource getcurs(Coord c) {
-        for(Grab g : mousegrab) {
+        for (Grab g : mousegrab) {
             Resource ret = g.wdg.getcurs(wdgxlate(c, g.wdg));
-            if(ret != null)
-                return(ret);
+            if (ret != null)
+                return (ret);
         }
-        return(root.getcurs(c));
+        return (root.getcurs(c));
     }
 
     public static int modflags(InputEvent ev) {
         int mod = ev.getModifiersEx();
-        return((((mod & InputEvent.SHIFT_DOWN_MASK) != 0) ? MOD_SHIFT : 0) |
-                (((mod & InputEvent.CTRL_DOWN_MASK) != 0)  ? MOD_CTRL : 0) |
-                (((mod & (InputEvent.META_DOWN_MASK | InputEvent.ALT_DOWN_MASK)) != 0) ? MOD_META : 0)
-                /* (((mod & InputEvent.SUPER_DOWN_MASK) != 0) ? MOD_SUPER : 0) */);
+        return ((((mod & InputEvent.SHIFT_DOWN_MASK) != 0) ? MOD_SHIFT : 0)
+                | (((mod & InputEvent.CTRL_DOWN_MASK) != 0) ? MOD_CTRL : 0)
+                | (((mod & (InputEvent.META_DOWN_MASK | InputEvent.ALT_DOWN_MASK)) != 0) ? MOD_META : 0)
+        /* (((mod & InputEvent.SUPER_DOWN_MASK) != 0) ? MOD_SUPER : 0) */);
     }
 
     public int modflags() {
-        return((modshift ? MOD_SHIFT : 0) |
-                (modctrl  ? MOD_CTRL  : 0) |
-                (modmeta  ? MOD_META  : 0) |
-                (modsuper ? MOD_SUPER : 0));
+        return ((modshift ? MOD_SHIFT : 0) | (modctrl ? MOD_CTRL : 0) | (modmeta ? MOD_META : 0)
+                | (modsuper ? MOD_SUPER : 0));
     }
 
     public void destroy() {

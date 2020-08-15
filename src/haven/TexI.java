@@ -33,7 +33,8 @@ import java.nio.ByteBuffer;
 import javax.media.opengl.*;
 
 public class TexI extends TexGL {
-    public static ComponentColorModel glcm = new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB), new int[]{8, 8, 8, 8}, true, false, ComponentColorModel.TRANSLUCENT, DataBuffer.TYPE_BYTE);
+    public static ComponentColorModel glcm = new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB),
+            new int[] { 8, 8, 8, 8 }, true, false, ComponentColorModel.TRANSLUCENT, DataBuffer.TYPE_BYTE);
     public BufferedImage back;
     public boolean mutable;
     private int fmt = GL.GL_RGBA;
@@ -50,9 +51,10 @@ public class TexI extends TexGL {
         mutable = true;
     }
 
-    /* Java's image model is a little bit complex, so these may not be
-     * entirely correct. They should be corrected if oddities are
-     * detected. */
+    /*
+     * Java's image model is a little bit complex, so these may not be entirely
+     * correct. They should be corrected if oddities are detected.
+     */
     public static int detectfmt(BufferedImage img) {
         ColorModel cm = img.getColorModel();
         if (!(img.getSampleModel() instanceof PixelInterleavedSampleModel))
@@ -60,29 +62,25 @@ public class TexI extends TexGL {
         PixelInterleavedSampleModel sm = (PixelInterleavedSampleModel) img.getSampleModel();
         int[] cs = cm.getComponentSize();
         int[] off = sm.getBandOffsets();
-    /*
-    System.err.print(this + ": " + cm.getNumComponents() + ", (");
-	for(int i = 0; i < off.length; i++)
-	    System.err.print(((i > 0)?" ":"") + off[i]);
-	System.err.print("), (");
-	for(int i = 0; i < off.length; i++)
-	    System.err.print(((i > 0)?" ":"") + cs[i]);
-	System.err.print(")");
-	System.err.println();
-	*/
+        /*
+         * System.err.print(this + ": " + cm.getNumComponents() + ", ("); for(int i = 0;
+         * i < off.length; i++) System.err.print(((i > 0)?" ":"") + off[i]);
+         * System.err.print("), ("); for(int i = 0; i < off.length; i++)
+         * System.err.print(((i > 0)?" ":"") + cs[i]); System.err.print(")");
+         * System.err.println();
+         */
         if ((cm.getNumComponents() == 4) && (off.length == 4)) {
-            if (((cs[0] == 8) && (cs[1] == 8) && (cs[2] == 8) && (cs[3] == 8)) &&
-                    (cm.getTransferType() == DataBuffer.TYPE_BYTE) &&
-                    (cm.getTransparency() == java.awt.Transparency.TRANSLUCENT)) {
+            if (((cs[0] == 8) && (cs[1] == 8) && (cs[2] == 8) && (cs[3] == 8))
+                    && (cm.getTransferType() == DataBuffer.TYPE_BYTE)
+                    && (cm.getTransparency() == java.awt.Transparency.TRANSLUCENT)) {
                 if ((off[0] == 0) && (off[1] == 1) && (off[2] == 2) && (off[3] == 3))
                     return (GL.GL_RGBA);
                 if ((off[0] == 2) && (off[1] == 1) && (off[2] == 0) && (off[3] == 3))
                     return (GL.GL_BGRA);
             }
         } else if ((cm.getNumComponents() == 3) && (off.length == 3)) {
-            if (((cs[0] == 8) && (cs[1] == 8) && (cs[2] == 8)) &&
-                    (cm.getTransferType() == DataBuffer.TYPE_BYTE) &&
-                    (cm.getTransparency() == java.awt.Transparency.OPAQUE)) {
+            if (((cs[0] == 8) && (cs[1] == 8) && (cs[2] == 8)) && (cm.getTransferType() == DataBuffer.TYPE_BYTE)
+                    && (cm.getTransparency() == java.awt.Transparency.OPAQUE)) {
                 if ((off[0] == 0) && (off[1] == 1) && (off[2] == 2))
                     return (GL.GL_RGB);
                 if ((off[0] == 2) && (off[1] == 1) && (off[2] == 0))
@@ -101,12 +99,14 @@ public class TexI extends TexGL {
             if (mutable)
                 pixels = Utils.splice(pixels, 0);
             if (sz.equals(tdim)) {
-                gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, fmt, tdim.x, tdim.y, 0, ifmt, GL.GL_UNSIGNED_BYTE, ByteBuffer.wrap(pixels));
+                gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, fmt, tdim.x, tdim.y, 0, ifmt, GL.GL_UNSIGNED_BYTE,
+                        ByteBuffer.wrap(pixels));
                 if (mipmap)
                     genmipmap(gl, 1, tdim, pixels, ifmt);
             } else {
                 gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, fmt, tdim.x, tdim.y, 0, ifmt, GL.GL_UNSIGNED_BYTE, null);
-                gl.glTexSubImage2D(GL.GL_TEXTURE_2D, 0, 0, 0, sz.x, sz.y, ifmt, GL.GL_UNSIGNED_BYTE, ByteBuffer.wrap(pixels));
+                gl.glTexSubImage2D(GL.GL_TEXTURE_2D, 0, 0, 0, sz.x, sz.y, ifmt, GL.GL_UNSIGNED_BYTE,
+                        ByteBuffer.wrap(pixels));
             }
         } else if ((ifmt == GL.GL_RGB) || (ifmt == GL2.GL_BGR)) {
             gl.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1);
@@ -114,17 +114,20 @@ public class TexI extends TexGL {
             if (mutable)
                 pixels = Utils.splice(pixels, 0);
             if (sz.equals(tdim)) {
-                gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, fmt, tdim.x, tdim.y, 0, ifmt, GL.GL_UNSIGNED_BYTE, ByteBuffer.wrap(pixels));
+                gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, fmt, tdim.x, tdim.y, 0, ifmt, GL.GL_UNSIGNED_BYTE,
+                        ByteBuffer.wrap(pixels));
                 if (mipmap)
                     genmipmap3(gl, 1, tdim, pixels, ifmt);
             } else {
                 gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, fmt, tdim.x, tdim.y, 0, ifmt, GL.GL_UNSIGNED_BYTE, null);
-                gl.glTexSubImage2D(GL.GL_TEXTURE_2D, 0, 0, 0, sz.x, sz.y, ifmt, GL.GL_UNSIGNED_BYTE, ByteBuffer.wrap(pixels));
+                gl.glTexSubImage2D(GL.GL_TEXTURE_2D, 0, 0, 0, sz.x, sz.y, ifmt, GL.GL_UNSIGNED_BYTE,
+                        ByteBuffer.wrap(pixels));
             }
         } else {
-	    /* System.err.println("Weird: " + this); */
+            /* System.err.println("Weird: " + this); */
             byte[] pixels = convert(back, tdim);
-            gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, fmt, tdim.x, tdim.y, 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, ByteBuffer.wrap(pixels));
+            gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, fmt, tdim.x, tdim.y, 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE,
+                    ByteBuffer.wrap(pixels));
             if (mipmap)
                 genmipmap(gl, 1, tdim, pixels, GL.GL_RGBA);
         }
@@ -133,7 +136,8 @@ public class TexI extends TexGL {
     private void genmipmap(BGL gl, int lev, Coord dim, byte[] data, int ifmt) {
         Coord ndim = Mipmapper.nextsz(dim);
         byte[] ndata = mmalg.gen4(dim, data, ifmt);
-        gl.glTexImage2D(GL.GL_TEXTURE_2D, lev, fmt, ndim.x, ndim.y, 0, ifmt, GL.GL_UNSIGNED_BYTE, ByteBuffer.wrap(ndata));
+        gl.glTexImage2D(GL.GL_TEXTURE_2D, lev, fmt, ndim.x, ndim.y, 0, ifmt, GL.GL_UNSIGNED_BYTE,
+                ByteBuffer.wrap(ndata));
         if ((ndim.x > 1) || (ndim.y > 1))
             genmipmap(gl, lev + 1, ndim, ndata, ifmt);
     }
@@ -142,7 +146,8 @@ public class TexI extends TexGL {
         if (mmalg instanceof Mipmapper.Mipmapper3) {
             Coord ndim = Mipmapper.nextsz(dim);
             byte[] ndata = ((Mipmapper.Mipmapper3) mmalg).gen3(dim, data, ifmt);
-            gl.glTexImage2D(GL.GL_TEXTURE_2D, lev, fmt, ndim.x, ndim.y, 0, ifmt, GL.GL_UNSIGNED_BYTE, ByteBuffer.wrap(ndata));
+            gl.glTexImage2D(GL.GL_TEXTURE_2D, lev, fmt, ndim.x, ndim.y, 0, ifmt, GL.GL_UNSIGNED_BYTE,
+                    ByteBuffer.wrap(ndata));
             if ((ndim.x > 1) || (ndim.y > 1))
                 genmipmap3(gl, lev + 1, ndim, ndata, ifmt);
         } else {

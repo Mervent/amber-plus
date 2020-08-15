@@ -85,15 +85,14 @@ public interface OwnerContext {
         }
 
         public OwnerContext curry(T on) {
-            return(new OwnerContext() {
+            return (new OwnerContext() {
                 public <C> C context(Class<C> cl) {
-                    return(ClassResolver.this.context(cl, on));
+                    return (ClassResolver.this.context(cl, on));
                 }
             });
         }
     }
 
-    public static final ClassResolver<UI> uictx = new ClassResolver<UI>()
-	.add(Glob.class, ui -> ui.sess.glob)
-	.add(Session.class, ui -> ui.sess);
+    public static final ClassResolver<UI> uictx = new ClassResolver<UI>().add(Glob.class, ui -> ui.sess.glob)
+            .add(Session.class, ui -> ui.sess);
 }

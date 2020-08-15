@@ -437,7 +437,7 @@ public abstract class Mipmapper {
 
         public byte[] gen4(Coord dim, byte[] data, int fmt) {
             BufferedImage img = PUtils.rasterimg(Raster.createInterleavedRaster(new DataBufferByte(data, data.length),
-                    dim.x, dim.y, dim.x * 4, 4, new int[]{0, 1, 2, 3}, null));
+                    dim.x, dim.y, dim.x * 4, 4, new int[] { 0, 1, 2, 3 }, null));
             dim = nextsz(dim);
             BufferedImage sm = PUtils.convolvedown(img, dim, filter);
             return (((DataBufferByte) sm.getRaster().getDataBuffer()).getData());

@@ -76,7 +76,7 @@ public class Block extends Statement {
         if (before == null) {
             stmts.add(stmt);
         } else {
-            for (ListIterator<Statement> i = stmts.listIterator(); i.hasNext(); ) {
+            for (ListIterator<Statement> i = stmts.listIterator(); i.hasNext();) {
                 Statement cur = i.next();
                 if (cur == before) {
                     i.previous();

@@ -42,19 +42,19 @@ public class LinMove extends Moving {
     }
 
     public Coord3f getc() {
-        return(gob.glob.map.getzp(s.add(v.mul(t))));
+        return (gob.glob.map.getzp(s.add(v.mul(t))));
     }
 
     public double getv() {
-        return(v.abs());
+        return (v.abs());
     }
 
     public void ctick(int dt) {
-        if(!ts) {
+        if (!ts) {
             t += (dt / 1000.0) * 0.9;
-            if(!Double.isNaN(e) && (t > e)) {
+            if (!Double.isNaN(e) && (t > e)) {
                 t = e;
-            } else if(t > lt + MAXOVER) {
+            } else if (t > lt + MAXOVER) {
                 t = lt + MAXOVER;
                 ts = true;
             }
@@ -64,7 +64,7 @@ public class LinMove extends Moving {
     public void sett(double t) {
         lastupd = System.currentTimeMillis();
         lt = t;
-        if(t > this.t) {
+        if (t > this.t) {
             this.t = t;
             ts = false;
         }

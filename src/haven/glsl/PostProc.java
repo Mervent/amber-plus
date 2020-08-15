@@ -84,10 +84,10 @@ public class PostProc implements Walker {
 
     public static void autoproc(Context ctx) {
         final Collection<AutoID> closed = new ArrayList<AutoID>();
-        final int[] curo = {Integer.MIN_VALUE};
+        final int[] curo = { Integer.MIN_VALUE };
         while (true) {
-            final int[] mino = {0};
-            final AutoID[] min = {null};
+            final int[] mino = { 0 };
+            final AutoID[] min = { null };
             ctx.walk(new Walker() {
                 public void el(Element el) {
                     if (el instanceof Processed) {
@@ -96,7 +96,8 @@ public class PostProc implements Walker {
                             AutoID id = (AutoID) key;
                             if (!closed.contains(id) && ((min[0] == null) || (id.order < mino[0]))) {
                                 if (id.order < curo[0])
-                                    throw (new RuntimeException("New postprocessor " + id.name + " with order " + id.order + " added when at order " + curo[0]));
+                                    throw (new RuntimeException("New postprocessor " + id.name + " with order "
+                                            + id.order + " added when at order " + curo[0]));
                                 min[0] = id;
                                 mino[0] = id.order;
                             }

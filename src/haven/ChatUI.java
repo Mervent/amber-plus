@@ -43,17 +43,14 @@ import java.awt.datatransfer.*;
 
 public class ChatUI extends Widget {
     private static final Resource alarmsfx = Resource.local().loadwait("sfx/chatalarm");
-    public static final RichText.Foundry fnd = new RichText.Foundry(new ChatParser(TextAttribute.FONT, Text.dfont.deriveFont((float)Config.fontsizechat)));
+    public static final RichText.Foundry fnd = new RichText.Foundry(
+            new ChatParser(TextAttribute.FONT, Text.dfont.deriveFont((float) Config.fontsizechat)));
     public static final Text.Foundry qfnd = new Text.Foundry(Text.dfont, 12, new java.awt.Color(192, 255, 192));
     public static final int selw = 130;
     private static final int brpw = 142, beltw = 410;
     public static final Coord marg = new Coord(9, 9);
-    public static final Color[] urgcols = new Color[]{
-            null,
-            new Color(0, 128, 255),
-            new Color(255, 128, 0),
-            new Color(255, 0, 0),
-    };
+    public static final Color[] urgcols = new Color[] { null, new Color(0, 128, 255), new Color(255, 128, 0),
+            new Color(255, 0, 0), };
     public Channel sel = null;
     public int urgency = 0;
     private final Selector chansel;
@@ -86,11 +83,12 @@ public class ChatUI extends Widget {
     }
 
     public static class FuckMeGentlyWithAChainsaw {
-        /* This wrapper class exists to work around the possibly most
-         * stupid Java bug ever (and that's saying a lot): That
-         * URL.equals and URL.hashCode do DNS lookups and
-         * block. Which, of course, not only sucks performance-wise
-         * but also breaks actual correct URL equality. */
+        /*
+         * This wrapper class exists to work around the possibly most stupid Java bug
+         * ever (and that's saying a lot): That URL.equals and URL.hashCode do DNS
+         * lookups and block. Which, of course, not only sucks performance-wise but also
+         * breaks actual correct URL equality.
+         */
         public final URL url;
 
         public FuckMeGentlyWithAChainsaw(URL url) {
@@ -99,9 +97,10 @@ public class ChatUI extends Widget {
     }
 
     public static class ChatParser extends RichText.Parser {
-        public static final Pattern urlpat = Pattern.compile("\\b((https?://)|(www\\.[a-z0-9_.-]+\\.[a-z0-9_.-]+))[a-z0-9/_.~#%+?&:*=-]*", Pattern.CASE_INSENSITIVE);
-        public static final Map<? extends Attribute, ?> urlstyle = RichText.fillattrs(TextAttribute.FOREGROUND, new Color(64, 64, 255),
-                TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+        public static final Pattern urlpat = Pattern.compile(
+                "\\b((https?://)|(www\\.[a-z0-9_.-]+\\.[a-z0-9_.-]+))[a-z0-9/_.~#%+?&:*=-]*", Pattern.CASE_INSENSITIVE);
+        public static final Map<? extends Attribute, ?> urlstyle = RichText.fillattrs(TextAttribute.FOREGROUND,
+                new Color(64, 64, 255), TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
 
         public ChatParser(Object... args) {
             super(args);
@@ -125,8 +124,10 @@ public class ChatUI extends Widget {
                     continue;
                 }
                 RichText.Part lead = new RichText.TextPart(text.substring(0, m.start()), attrs);
-                if (ret == null) ret = lead;
-                else ret.append(lead);
+                if (ret == null)
+                    ret = lead;
+                else
+                    ret.append(lead);
                 Map<Attribute, Object> na = new HashMap<Attribute, Object>(attrs);
                 na.putAll(urlstyle);
                 na.put(ChatAttribute.HYPERLINK, new FuckMeGentlyWithAChainsaw(url));
@@ -292,7 +293,8 @@ public class ChatUI extends Widget {
             }
 
             public boolean equals(Object oo) {
-                if (!(oo instanceof CharPos)) return (false);
+                if (!(oo instanceof CharPos))
+                    return (false);
                 CharPos o = (CharPos) oo;
                 return ((o.msg == this.msg) && (o.part == this.part) && o.ch.equals(this.ch));
             }
@@ -373,7 +375,8 @@ public class ChatUI extends Widget {
                     if (part instanceof RichText.TextPart)
                         lp = (RichText.TextPart) part;
                 }
-                if (lp == null) return (null);
+                if (lp == null)
+                    return (null);
                 return (new CharPos(msg, lp, TextHitInfo.trailing(lp.end - lp.start - 1)));
             }
             if (!(p instanceof RichText.TextPart))
@@ -479,13 +482,12 @@ public class ChatUI extends Widget {
                 cl = java.awt.Toolkit.getDefaultToolkit().getSystemClipboard();
             try {
                 final CharPos ownsel = selstart;
-                cl.setContents(new StringSelection(buf.toString()),
-                        new ClipboardOwner() {
-                            public void lostOwnership(Clipboard cl, Transferable tr) {
-                                if (selstart == ownsel)
-                                    selstart = selend = null;
-                            }
-                        });
+                cl.setContents(new StringSelection(buf.toString()), new ClipboardOwner() {
+                    public void lostOwnership(Clipboard cl, Transferable tr) {
+                        if (selstart == ownsel)
+                            selstart = selend = null;
+                    }
+                });
             } catch (IllegalStateException e) {
             }
         }
@@ -668,8 +670,10 @@ public class ChatUI extends Widget {
             if ((msg == "msg") || (msg == "log")) {
                 String line = (String) args[0];
                 Color col = null;
-                if (args.length > 1) col = (Color) args[1];
-                if (col == null) col = Color.WHITE;
+                if (args.length > 1)
+                    col = (Color) args[1];
+                if (col == null)
+                    col = Color.WHITE;
                 int urgency = (args.length > 2) ? (Integer) args[2] : 0;
                 Message cmsg = new SimpleMessage(line, col, iw());
                 append(cmsg);
@@ -761,7 +765,8 @@ public class ChatUI extends Widget {
                 Integer from = (Integer) args[0];
                 String line = (String) args[1];
 
-                if (name.equals(Resource.getLocString(Resource.BUNDLE_LABEL, "Area Chat")) && line.startsWith(CMD_PREFIX_HLIGHT)) {
+                if (name.equals(Resource.getLocString(Resource.BUNDLE_LABEL, "Area Chat"))
+                        && line.startsWith(CMD_PREFIX_HLIGHT)) {
                     try {
                         long gobid = Long.parseLong(line.substring(1));
                         OCache oc = gameui().map.glob.oc;
@@ -868,7 +873,7 @@ public class ChatUI extends Widget {
                     Message cmsg = new InMessage(line, iw());
                     append(cmsg);
                     notify(cmsg, 3);
-                    
+
                     BuddyWnd.Buddy buddy = getparent(GameUI.class).buddies.find(other);
                     save("Private Chat", cmsg.text().text, buddy != null ? buddy.name : "???");
 
@@ -970,8 +975,7 @@ public class ChatUI extends Widget {
                 new PUtils.BlurFurn(new PUtils.TexFurn(tf, ctex), 1, 1, new Color(80, 40, 0)),
                 new PUtils.BlurFurn(new PUtils.TexFurn(tf, ctex), 1, 1, new Color(0, 128, 255)),
                 new PUtils.BlurFurn(new PUtils.TexFurn(tf, ctex), 1, 1, new Color(255, 128, 0)),
-                new PUtils.BlurFurn(new PUtils.TexFurn(tf, ctex), 1, 1, new Color(255, 0, 0)),
-        };
+                new PUtils.BlurFurn(new PUtils.TexFurn(tf, ctex), 1, 1, new Color(255, 0, 0)), };
         private final List<DarkChannel> chls = new ArrayList<DarkChannel>();
         private int s = 0;
 
@@ -997,7 +1001,7 @@ public class ChatUI extends Widget {
 
         private void rm(Channel chan) {
             synchronized (chls) {
-                for (Iterator<DarkChannel> i = chls.iterator(); i.hasNext(); ) {
+                for (Iterator<DarkChannel> i = chls.iterator(); i.hasNext();) {
                     DarkChannel c = i.next();
                     if (c.chan == chan)
                         i.remove();
@@ -1044,7 +1048,7 @@ public class ChatUI extends Widget {
         }
 
         public boolean down() {
-            for (Iterator<DarkChannel> i = chls.iterator(); i.hasNext(); ) {
+            for (Iterator<DarkChannel> i = chls.iterator(); i.hasNext();) {
                 DarkChannel ch = i.next();
                 if (ch.chan == sel) {
                     if (i.hasNext()) {
@@ -1139,7 +1143,7 @@ public class ChatUI extends Widget {
         }
         double now = Utils.ntime();
         synchronized (notifs) {
-            for (Iterator<Notification> i = notifs.iterator(); i.hasNext(); ) {
+            for (Iterator<Notification> i = notifs.iterator(); i.hasNext();) {
                 Notification n = i.next();
                 if (now - n.time > 5.0) {
                     i.remove();
@@ -1287,7 +1291,8 @@ public class ChatUI extends Widget {
                 resize(sz.x, savedh = Math.max(111, sz.y + doff.y - c.y));
                 GameUI gui = gameui();
                 if (gui.questpanel != null)
-                    gui.questpanel.c = new Coord(10, gui.sz.y - gui.chat.sz.y - gui.beltwdg.sz.y - gui.questpanel.sz.y - 10);
+                    gui.questpanel.c = new Coord(10,
+                            gui.sz.y - gui.chat.sz.y - gui.beltwdg.sz.y - gui.questpanel.sz.y - 10);
             }
         } else {
             super.mousemove(c);
@@ -1349,8 +1354,9 @@ public class ChatUI extends Widget {
     }
 
     public static final KeyBinding kb_quick = KeyBinding.get("chat-quick", KeyMatch.forcode(KeyEvent.VK_ENTER, 0));
+
     public boolean globtype(char key, KeyEvent ev) {
-        if(kb_quick.key().match(ev)) {
+        if (kb_quick.key().match(ev)) {
             if (!visible && (sel instanceof EntryChannel)) {
                 qgrab = ui.grabkeys(this);
                 qline = new QuickLine((EntryChannel) sel);

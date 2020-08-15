@@ -135,12 +135,14 @@ public class MapMesh implements Rendered, Disposable {
         public MapSurface() {
             for (int y = vs.ul.y; y < vs.br.y; y++) {
                 for (int x = vs.ul.x; x < vs.br.x; x++) {
-                    surf[vs.o(x, y)] = new Vertex(x * (float)tilesz.x, y * -(float)tilesz.y, Config.disableelev ? 0 : map.getz(ul.add(x, y)));
+                    surf[vs.o(x, y)] = new Vertex(x * (float) tilesz.x, y * -(float) tilesz.y,
+                            Config.disableelev ? 0 : map.getz(ul.add(x, y)));
                 }
             }
             for (int y = ts.ul.y; y < ts.br.y; y++) {
                 for (int x = ts.ul.x; x < ts.br.x; x++) {
-                    split[ts.o(x, y)] = Math.abs(surf[vs.o(x, y)].z - surf[vs.o(x + 1, y + 1)].z) > Math.abs(surf[vs.o(x + 1, y)].z - surf[vs.o(x, y + 1)].z);
+                    split[ts.o(x, y)] = Math.abs(surf[vs.o(x, y)].z - surf[vs.o(x + 1, y + 1)].z) > Math
+                            .abs(surf[vs.o(x + 1, y)].z - surf[vs.o(x, y + 1)].z);
                 }
             }
         }
@@ -150,12 +152,8 @@ public class MapMesh implements Rendered, Disposable {
         }
 
         public Vertex[] fortilea(Coord c) {
-            return (new Vertex[]{
-                    surf[vs.o(c.x, c.y)],
-                    surf[vs.o(c.x, c.y + 1)],
-                    surf[vs.o(c.x + 1, c.y + 1)],
-                    surf[vs.o(c.x + 1, c.y)],
-            });
+            return (new Vertex[] { surf[vs.o(c.x, c.y)], surf[vs.o(c.x, c.y + 1)], surf[vs.o(c.x + 1, c.y + 1)],
+                    surf[vs.o(c.x + 1, c.y)], });
         }
 
         public void sfin() {
@@ -251,10 +249,10 @@ public class MapMesh implements Rendered, Disposable {
                     max = tn;
             }
         }
-        int bx[] = {0, 1, 2, 1};
-        int by[] = {1, 0, 1, 2};
-        int cx[] = {0, 2, 2, 0};
-        int cy[] = {0, 0, 2, 2};
+        int bx[] = { 0, 1, 2, 1 };
+        int by[] = { 1, 0, 1, 2 };
+        int cx[] = { 0, 2, 2, 0 };
+        int cy[] = { 0, 0, 2, 2 };
         for (int i = max; i >= 0; i--) {
             int bm = 0, cm = 0;
             for (int o = 0; o < 4; o++) {
@@ -381,13 +379,13 @@ public class MapMesh implements Rendered, Disposable {
             final float si = (float) Math.sin(a), co = (float) Math.cos(a);
             this.cc = cc;
             final MeshBuf buf = new MeshBuf();
-            final float cz = Config.disableelev ? 0 : (float)map.getcz(cc);
+            final float cz = Config.disableelev ? 0 : (float) map.getcz(cc);
             final Coord ult, brt;
             {
                 Coord tult = null, tbrt = null;
-                for (Coord3f corn : new Coord3f[]{ul, new Coord3f(ul.x, br.y, 0), br, new Coord3f(br.x, ul.y, 0)}) {
-                    float cx = (float)((cc.x + co * corn.x - si * corn.y) / tilesz.x);
-                    float cy = (float)((cc.y + co * corn.y + si * corn.x) / tilesz.y);
+                for (Coord3f corn : new Coord3f[] { ul, new Coord3f(ul.x, br.y, 0), br, new Coord3f(br.x, ul.y, 0) }) {
+                    float cx = (float) ((cc.x + co * corn.x - si * corn.y) / tilesz.x);
+                    float cy = (float) ((cc.y + co * corn.y + si * corn.x) / tilesz.y);
                     if (tult == null) {
                         tult = new Coord((int) Math.floor(cx), (int) Math.floor(cy));
                         tbrt = new Coord((int) Math.ceil(cx), (int) Math.ceil(cy));
@@ -409,12 +407,9 @@ public class MapMesh implements Rendered, Disposable {
                 public void faces(MapMesh m, Tiler.MPart d) {
                     Coord3f[] texc = new Coord3f[d.v.length];
                     for (int i = 0; i < d.v.length; i++) {
-                        texc[i] = new Coord3f((float)(((m.ul.x + d.lc.x + d.tcx[i]) * tilesz.x) - cc.x),
-                                (float)(((m.ul.y + d.lc.y + d.tcy[i]) * tilesz.y) - cc.y),
-                                0);
-                        texc[i] = new Coord3f(co * texc[i].x + si * texc[i].y,
-                                co * texc[i].y - si * texc[i].x,
-                                0);
+                        texc[i] = new Coord3f((float) (((m.ul.x + d.lc.x + d.tcx[i]) * tilesz.x) - cc.x),
+                                (float) (((m.ul.y + d.lc.y + d.tcy[i]) * tilesz.y) - cc.y), 0);
+                        texc[i] = new Coord3f(co * texc[i].x + si * texc[i].y, co * texc[i].y - si * texc[i].x, 0);
                         texc[i].x = (texc[i].x - ul.x) / (br.x - ul.x);
                         texc[i].y = (texc[i].y - ul.y) / (br.y - ul.y);
                     }
@@ -451,7 +446,8 @@ public class MapMesh implements Rendered, Disposable {
                             continue;
                         if ((mv[i] = cv.get(d.v[i])) == null) {
                             cv.put(d.v[i], mv[i] = new MeshVertex(buf, d.v[i]));
-                            mv[i].pos = mv[i].pos.add((float)((m.ul.x * tilesz.x) - cc.x), (float)(cc.y - (m.ul.y * tilesz.y)), -cz);
+                            mv[i].pos = mv[i].pos.add((float) ((m.ul.x * tilesz.x) - cc.x),
+                                    (float) (cc.y - (m.ul.y * tilesz.y)), -cz);
                             ta.set(mv[i], texc[i]);
                         }
                     }
@@ -572,7 +568,7 @@ public class MapMesh implements Rendered, Disposable {
     private void clean() {
         texmap = null;
         int on = data.size();
-        for (Iterator<Map.Entry<DataID, Object>> i = data.entrySet().iterator(); i.hasNext(); ) {
+        for (Iterator<Map.Entry<DataID, Object>> i = data.entrySet().iterator(); i.hasNext();) {
             Object d = i.next().getValue();
             if (!(d instanceof ConsHooks) || !((ConsHooks) d).clean())
                 i.remove();
@@ -623,16 +619,17 @@ public class MapMesh implements Rendered, Disposable {
         }
         float[] pos = buf.pos, col = buf.col;
         short[] ind = buf.ind;
-        if (pos.length != buf.vn * 3) pos = Utils.extend(pos, buf.vn * 3);
-        if (col.length != buf.vn * 4) col = Utils.extend(col, buf.vn * 4);
-        if (ind.length != buf.in) ind = Utils.extend(ind, buf.in);
+        if (pos.length != buf.vn * 3)
+            pos = Utils.extend(pos, buf.vn * 3);
+        if (col.length != buf.vn * 4)
+            col = Utils.extend(col, buf.vn * 4);
+        if (ind.length != buf.in)
+            ind = Utils.extend(ind, buf.in);
         VertexBuf.VertexArray posa = new VertexBuf.VertexArray(FloatBuffer.wrap(pos));
         VertexBuf.ColorArray cola = new VertexBuf.ColorArray(FloatBuffer.wrap(col));
         ShortBuffer indb = ShortBuffer.wrap(ind);
-        flats = new FastMesh[]{
-                new FastMesh(new VertexBuf(posa), indb),
-                new FastMesh(new VertexBuf(posa, cola), indb),
-        };
+        flats = new FastMesh[] { new FastMesh(new VertexBuf(posa), indb),
+                new FastMesh(new VertexBuf(posa, cola), indb), };
     }
 
     public void drawflat(GOut g, int mode) {

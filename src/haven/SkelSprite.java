@@ -33,10 +33,8 @@ import haven.Skeleton.PoseMod;
 import haven.MorphedMesh.Morpher;
 
 public class SkelSprite extends Sprite implements Gob.Overlay.CUpd, Skeleton.HasPose {
-    public static final GLState
-            rigid = new Material.Colors(java.awt.Color.GREEN),
-            morphed = new Material.Colors(java.awt.Color.RED),
-            unboned = new Material.Colors(java.awt.Color.YELLOW);
+    public static final GLState rigid = new Material.Colors(java.awt.Color.GREEN),
+            morphed = new Material.Colors(java.awt.Color.RED), unboned = new Material.Colors(java.awt.Color.YELLOW);
     public static boolean bonedb = false;
     public static final float ipollen = 0.3f;
     public final Skeleton skel;
@@ -68,8 +66,10 @@ public class SkelSprite extends Sprite implements Gob.Overlay.CUpd, Skeleton.Has
         chparts(fl);
     }
 
-    /* XXX: It's ugly to snoop inside a wrapping, but I can't think of
-     * a better way to apply morphing to renderlinks right now. */
+    /*
+     * XXX: It's ugly to snoop inside a wrapping, but I can't think of a better way
+     * to apply morphing to renderlinks right now.
+     */
     private Rendered animwrap(GLState.Wrapping wrap) {
         if (!(wrap.r instanceof FastMesh))
             return (wrap);
@@ -181,22 +181,22 @@ public class SkelSprite extends Sprite implements Gob.Overlay.CUpd, Skeleton.Has
     public boolean setup(RenderList rl) {
         for (Rendered p : parts)
             rl.add(p, null);
-    /* rl.add(pose.debug, null); */
+        /* rl.add(pose.debug, null); */
         return (false);
     }
 
     public boolean tick(int idt) {
         float dt = idt / 1000.0f;
-        if(!stat || (ipold > 0)) {
+        if (!stat || (ipold > 0)) {
             boolean done = true;
-            for(PoseMod m : mods) {
+            for (PoseMod m : mods) {
                 m.tick(dt);
                 done = done && m.done();
             }
-            if(done)
+            if (done)
                 stat = true;
-            if(ipold > 0) {
-                if((ipold -= (dt / ipollen)) < 0) {
+            if (ipold > 0) {
+                if ((ipold -= (dt / ipollen)) < 0) {
                     ipold = 0;
                     oldpose = null;
                 }
@@ -209,13 +209,13 @@ public class SkelSprite extends Sprite implements Gob.Overlay.CUpd, Skeleton.Has
     }
 
     public Object staticp() {
-        if(!stat || (manims.length > 0) || (ipold > 0))
-            return(null);
-        return(Gob.SemiStatic.class);
+        if (!stat || (manims.length > 0) || (ipold > 0))
+            return (null);
+        return (Gob.SemiStatic.class);
     }
 
     public Pose getpose() {
-	    return(pose);
+        return (pose);
     }
 
     static {

@@ -3,7 +3,6 @@ package haven;
 import java.awt.*;
 import java.util.Arrays;
 
-
 public class CharterList extends Listbox<String> {
     private String[] charters;
     private static final String prefname = "charters";
@@ -53,8 +52,7 @@ public class CharterList extends Listbox<String> {
     public boolean mousedown(Coord c, int button) {
         if (button == 1) {
             int idx = (c.y / itemh);
-            if (idx < charters.length && idx >= 0 &&
-                    c.x > sz.x - 21 && c.x < sz.x - (sb.vis() ? 12 : 0)) {
+            if (idx < charters.length && idx >= 0 && c.x > sz.x - 21 && c.x < sz.x - (sb.vis() ? 12 : 0)) {
                 String[] charters = Utils.getprefsa(prefname, new String[0]);
                 String[] cleaned = new String[charters.length - 1];
                 System.arraycopy(charters, 0, cleaned, 0, idx);

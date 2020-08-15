@@ -76,7 +76,7 @@ public abstract class BGL {
 
     protected abstract Iterable<Command> dump();
 
-    //throw (new BGLException(this, list[i], exc));
+    // throw (new BGLException(this, list[i], exc));
     public static class BGLException extends RuntimeException {
         public final Dump dump;
 
@@ -110,7 +110,8 @@ public abstract class BGL {
         });
     }
 
-    public void bglCopyBufferf(final FloatBuffer dst, final int doff, final FloatBuffer src, final int soff, final int len) {
+    public void bglCopyBufferf(final FloatBuffer dst, final int doff, final FloatBuffer src, final int soff,
+            final int len) {
         add(new Command() {
             public void run(GL2 gl) {
                 dst.position(doff);
@@ -122,7 +123,8 @@ public abstract class BGL {
         });
     }
 
-    public void bglCopyBufferf(final FloatBuffer dst, final int doff, final float[] src, final int soff, final int len) {
+    public void bglCopyBufferf(final FloatBuffer dst, final int doff, final float[] src, final int soff,
+            final int len) {
         add(new Command() {
             public void run(GL2 gl) {
                 dst.position(doff);
@@ -221,9 +223,11 @@ public abstract class BGL {
     }
 
     public void glBlendFuncSeparate(final int csfac, final int cdfac, final int asfac, final int adfac) {
-	add(new Command() {
-		public void run(GL2 gl) {gl.glBlendFuncSeparate(csfac, cdfac, asfac, adfac);}
-	    });
+        add(new Command() {
+            public void run(GL2 gl) {
+                gl.glBlendFuncSeparate(csfac, cdfac, asfac, adfac);
+            }
+        });
     }
 
     public void glBufferData(final int target, final long size, Buffer data, final int usage) {
@@ -487,7 +491,8 @@ public abstract class BGL {
         });
     }
 
-    public void glDrawElementsInstanced(final int mode, final int count, final int type, final long indices, final int primcount) {
+    public void glDrawElementsInstanced(final int mode, final int count, final int type, final long indices,
+            final int primcount) {
         add(new Command() {
             public void run(GL2 gl) {
                 gl.glDrawElementsInstanced(mode, count, type, indices, primcount);
@@ -505,7 +510,8 @@ public abstract class BGL {
         });
     }
 
-    public void glDrawRangeElements(final int mode, final int start, final int end, final int count, final int type, Buffer indices) {
+    public void glDrawRangeElements(final int mode, final int start, final int end, final int count, final int type,
+            Buffer indices) {
         final BufState is = new BufState(indices);
         add(new Command() {
             public void run(GL2 gl) {
@@ -515,7 +521,8 @@ public abstract class BGL {
         });
     }
 
-    public void glDrawRangeElements(final int mode, final int start, final int end, final int count, final int type, final long indices) {
+    public void glDrawRangeElements(final int mode, final int start, final int end, final int count, final int type,
+            final long indices) {
         add(new Command() {
             public void run(GL2 gl) {
                 gl.glDrawRangeElements(mode, start, end, count, type, indices);
@@ -603,7 +610,8 @@ public abstract class BGL {
         });
     }
 
-    public void glFramebufferTexture2D(final int target, final int attachment, final int textarget, final ID texture, final int level) {
+    public void glFramebufferTexture2D(final int target, final int attachment, final int textarget, final ID texture,
+            final int level) {
         add(new Command() {
             public void run(GL2 gl) {
                 gl.glFramebufferTexture2D(target, attachment, textarget, texture.glid(), level);
@@ -611,7 +619,8 @@ public abstract class BGL {
         });
     }
 
-    public void glFramebufferRenderbuffer(final int target, final int attachment, final int rbtarget, final ID renderbuffer) {
+    public void glFramebufferRenderbuffer(final int target, final int attachment, final int rbtarget,
+            final ID renderbuffer) {
         add(new Command() {
             public void run(GL2 gl) {
                 gl.glFramebufferRenderbuffer(target, attachment, rbtarget, renderbuffer.glid());
@@ -815,7 +824,8 @@ public abstract class BGL {
         });
     }
 
-    public void glRenderbufferStorageMultisample(final int target, final int samples, final int format, final int width, final int height) {
+    public void glRenderbufferStorageMultisample(final int target, final int samples, final int format, final int width,
+            final int height) {
         add(new Command() {
             public void run(GL2 gl) {
                 gl.glRenderbufferStorageMultisample(target, samples, format, width, height);
@@ -839,7 +849,8 @@ public abstract class BGL {
         });
     }
 
-    public void glShaderSourceARB(final ID shader, final int count, final String[] string, final int[] length, final int n) {
+    public void glShaderSourceARB(final ID shader, final int count, final String[] string, final int[] length,
+            final int n) {
         add(new Command() {
             public void run(GL2 gl) {
                 gl.glShaderSourceARB(shader.glid(), count, string, length, n);
@@ -883,7 +894,8 @@ public abstract class BGL {
         });
     }
 
-    public void glTexImage2D(final int target, final int level, final int internalformat, final int width, final int height, final int border, final int format, final int type, Buffer data) {
+    public void glTexImage2D(final int target, final int level, final int internalformat, final int width,
+            final int height, final int border, final int format, final int type, Buffer data) {
         final BufState ds = new BufState(data);
         add(new Command() {
             public void run(GL2 gl) {
@@ -893,7 +905,8 @@ public abstract class BGL {
         });
     }
 
-    public void glTexSubImage2D(final int target, final int level, final int xoff, final int yoff, final int width, final int height, final int format, final int type, Buffer data) {
+    public void glTexSubImage2D(final int target, final int level, final int xoff, final int yoff, final int width,
+            final int height, final int format, final int type, Buffer data) {
         final BufState ds = new BufState(data);
         add(new Command() {
             public void run(GL2 gl) {
@@ -903,10 +916,12 @@ public abstract class BGL {
         });
     }
 
-    public void glTexImage2DMultisample(final int target, final int samples, final int internalformat, final int width, final int height, final boolean fixedsamplelocations) {
+    public void glTexImage2DMultisample(final int target, final int samples, final int internalformat, final int width,
+            final int height, final boolean fixedsamplelocations) {
         add(new Command() {
             public void run(GL2 gl) {
-                gl.getGL3bc().glTexImage2DMultisample(target, samples, internalformat, width, height, fixedsamplelocations);
+                gl.getGL3bc().glTexImage2DMultisample(target, samples, internalformat, width, height,
+                        fixedsamplelocations);
             }
         });
     }
@@ -952,9 +967,11 @@ public abstract class BGL {
     }
 
     public void glUniform3fv(final ID location, final int count, final float[] val, final int n) {
-	add(new Command() {
-		public void run(GL2 gl) {gl.glUniform3fv(location.glid(), count, val, n);}
-	    });
+        add(new Command() {
+            public void run(GL2 gl) {
+                gl.glUniform3fv(location.glid(), count, val, n);
+            }
+        });
     }
 
     public void glUniform4f(final ID location, final float v0, final float v1, final float v2, final float v3) {
@@ -982,12 +999,15 @@ public abstract class BGL {
     }
 
     public void glUniform1iv(final ID location, final int count, final int[] val, final int n) {
-	add(new Command() {
-		public void run(GL2 gl) {gl.glUniform1iv(location.glid(), count, val, n);}
-	    });
+        add(new Command() {
+            public void run(GL2 gl) {
+                gl.glUniform1iv(location.glid(), count, val, n);
+            }
+        });
     }
 
-    public void glUniformMatrix3fv(final ID location, final int count, final boolean transpose, final float[] value, final int n) {
+    public void glUniformMatrix3fv(final ID location, final int count, final boolean transpose, final float[] value,
+            final int n) {
         add(new Command() {
             public void run(GL2 gl) {
                 gl.glUniformMatrix3fv(location.glid(), count, transpose, value, n);
@@ -995,7 +1015,8 @@ public abstract class BGL {
         });
     }
 
-    public void glUniformMatrix4fv(final ID location, final int count, final boolean transpose, final float[] value, final int n) {
+    public void glUniformMatrix4fv(final ID location, final int count, final boolean transpose, final float[] value,
+            final int n) {
         add(new Command() {
             public void run(GL2 gl) {
                 gl.glUniformMatrix4fv(location.glid(), count, transpose, value, n);
@@ -1059,7 +1080,8 @@ public abstract class BGL {
         });
     }
 
-    public void glVertexAttribPointer(final ID location, final int size, final int type, final boolean normalized, final int stride, Buffer pointer) {
+    public void glVertexAttribPointer(final ID location, final int size, final int type, final boolean normalized,
+            final int stride, Buffer pointer) {
         final BufState ps = new BufState(pointer);
         add(new Command() {
             public void run(GL2 gl) {
@@ -1069,7 +1091,8 @@ public abstract class BGL {
         });
     }
 
-    public void glVertexAttribPointer(final ID location, final int size, final int type, final boolean normalized, final int stride, Buffer pointer, int position) {
+    public void glVertexAttribPointer(final ID location, final int size, final int type, final boolean normalized,
+            final int stride, Buffer pointer, int position) {
         final BufState ps = new BufState(pointer, position);
         add(new Command() {
             public void run(GL2 gl) {
@@ -1079,7 +1102,8 @@ public abstract class BGL {
         });
     }
 
-    public void glVertexAttribPointer(final ID location, final int size, final int type, final boolean normalized, final int stride, final long pointer) {
+    public void glVertexAttribPointer(final ID location, final int size, final int type, final boolean normalized,
+            final int stride, final long pointer) {
         add(new Command() {
             public void run(GL2 gl) {
                 gl.glVertexAttribPointer(location.glid(), size, type, normalized, stride, pointer);
@@ -1087,7 +1111,8 @@ public abstract class BGL {
         });
     }
 
-    public void glVertexAttribPointer(final ID location, final int offset, final int size, final int type, final boolean normalized, final int stride, final long pointer) {
+    public void glVertexAttribPointer(final ID location, final int offset, final int size, final int type,
+            final boolean normalized, final int stride, final long pointer) {
         add(new Command() {
             public void run(GL2 gl) {
                 gl.glVertexAttribPointer(location.glid() + offset, size, type, normalized, stride, pointer);
@@ -1140,45 +1165,53 @@ public abstract class BGL {
     }
 
     public static class DebugMessage {
-	public final int source, type, severity, id;
-	public final String text;
+        public final int source, type, severity, id;
+        public final String text;
 
-	public DebugMessage(int source, int type, int severity, int id, String text) {
-	    this.source = source; this.type = type; this.severity = severity; this.id = id;
-	    this.text = text;
-	}
+        public DebugMessage(int source, int type, int severity, int id, String text) {
+            this.source = source;
+            this.type = type;
+            this.severity = severity;
+            this.id = id;
+            this.text = text;
+        }
 
-	public String toString() {
-	    return(String.format("[@d %d:%d:%d] %s", severity, source, type, id, text));
-	}
+        public String toString() {
+            return (String.format("[@d %d:%d:%d] %s", severity, source, type, id, text));
+        }
     }
 
-    public void glDebugMessageControl(final int source, final int type, final int severity, final int[] ids, final boolean enabled) {
-	add(new Command() {
-		public void run(GL2 gl) {gl.glDebugMessageControl(source, type, severity, (ids == null) ? 0 : ids.length, ids, 0, enabled);}
-	    });
+    public void glDebugMessageControl(final int source, final int type, final int severity, final int[] ids,
+            final boolean enabled) {
+        add(new Command() {
+            public void run(GL2 gl) {
+                gl.glDebugMessageControl(source, type, severity, (ids == null) ? 0 : ids.length, ids, 0, enabled);
+            }
+        });
     }
 
     public void bglGetDebugMessageLog(final Consumer<DebugMessage> cb) {
-	add(new Command() {
-		public void run(GL2 gl) {
-		    while(true) {
-			int n = 64;
-			int[] sources = new int[n], types = new int[n], severities = new int[n], ids = new int[n], lengths = new int[n];
-			byte[] textbuf = new byte[65536];
-			int ret = gl.glGetDebugMessageLog(n, textbuf.length, sources, 0, types, 0, ids, 0, severities, 0, lengths, 0, textbuf, 0);
-			for(int i = 0, off = 0; i < ret; i++) {
-			    if(textbuf[off + lengths[i] - 1] != 0)
-				throw(new AssertionError("Debug message not NUL-terminated"));
-			    String text = new String(textbuf, off, lengths[i] - 1);
-			    off += lengths[i];
-			    cb.accept(new DebugMessage(sources[i], types[i], severities[i], ids[i], text));
-			}
-			if(ret < n)
-			    break;
-		    }
-		}
-	    });
+        add(new Command() {
+            public void run(GL2 gl) {
+                while (true) {
+                    int n = 64;
+                    int[] sources = new int[n], types = new int[n], severities = new int[n], ids = new int[n],
+                            lengths = new int[n];
+                    byte[] textbuf = new byte[65536];
+                    int ret = gl.glGetDebugMessageLog(n, textbuf.length, sources, 0, types, 0, ids, 0, severities, 0,
+                            lengths, 0, textbuf, 0);
+                    for (int i = 0, off = 0; i < ret; i++) {
+                        if (textbuf[off + lengths[i] - 1] != 0)
+                            throw (new AssertionError("Debug message not NUL-terminated"));
+                        String text = new String(textbuf, off, lengths[i] - 1);
+                        off += lengths[i];
+                        cb.accept(new DebugMessage(sources[i], types[i], severities[i], ids[i], text));
+                    }
+                    if (ret < n)
+                        break;
+                }
+            }
+        });
     }
 
     public static class Dump implements Serializable {
@@ -1254,7 +1287,8 @@ public abstract class BGL {
                     ret = new PopDummy(id, o, this);
                 } else if (o instanceof Buffer) {
                     Buffer bo = (Buffer) o;
-                    ret = new InfoDummy(id, bo, String.format("p=%d, l=%d, c=%d", bo.position(), bo.limit(), bo.capacity()));
+                    ret = new InfoDummy(id, bo,
+                            String.format("p=%d, l=%d, c=%d", bo.position(), bo.limit(), bo.capacity()));
                 } else {
                     ret = new Dummy(id, o);
                 }

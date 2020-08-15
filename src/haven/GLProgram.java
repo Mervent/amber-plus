@@ -114,7 +114,7 @@ public class GLProgram implements java.io.Serializable {
             gl.glLinkProgram(this);
             gl.bglSubmit(new BGL.Request() {
                 public void run(GL2 rgl) {
-                    int[] buf = {0};
+                    int[] buf = { 0 };
                     rgl.glGetObjectParameterivARB(id, GL2.GL_OBJECT_LINK_STATUS_ARB, buf, 0);
                     if (buf[0] != 1) {
                         String info = null;
@@ -122,7 +122,7 @@ public class GLProgram implements java.io.Serializable {
                         if (buf[0] > 0) {
                             byte[] logbuf = new byte[buf[0]];
                             rgl.glGetInfoLogARB(id, logbuf.length, buf, 0, logbuf, 0);
-                /* The "platform's default charset" is probably a reasonable choice. */
+                            /* The "platform's default charset" is probably a reasonable choice. */
                             info = new String(logbuf, 0, buf[0]);
                         }
                         throw (new LinkException("Failed to link GL program", prog, info));
@@ -132,11 +132,11 @@ public class GLProgram implements java.io.Serializable {
         }
 
         public int uniform(GL2 gl, String name) {
-            return(gl.glGetUniformLocationARB(id, name));
+            return (gl.glGetUniformLocationARB(id, name));
         }
 
         public int attrib(GL2 gl, String name) {
-            return(gl.glGetAttribLocation(id, name));
+            return (gl.glGetAttribLocation(id, name));
         }
     }
 

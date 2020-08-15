@@ -43,7 +43,8 @@ public class If extends Statement {
     public void walk(Walker w) {
         w.el(cond);
         w.el(t);
-        if (f != null) w.el(f);
+        if (f != null)
+            w.el(f);
     }
 
     public void output(Output out) {

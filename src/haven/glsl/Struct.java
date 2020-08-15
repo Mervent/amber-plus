@@ -57,7 +57,7 @@ public class Struct extends Type {
 
     public static Struct make(Symbol name, Object... args) {
         Field[] fs = new Field[args.length / 2];
-        for (int f = 0, a = 0; a < args.length; ) {
+        for (int f = 0, a = 0; a < args.length;) {
             Type ft = (Type) args[a++];
             String fn = (String) args[a++];
             fs[f++] = new Field(ft, fn);
@@ -69,23 +69,11 @@ public class Struct extends Type {
         return ("struct " + name.name(ctx));
     }
 
-    public static final Struct gl_LightSourceParameters = make(new Symbol.Fix("gl_LightSourceParameters"),
-            Type.VEC4, "ambient",
-            Type.VEC4, "diffuse",
-            Type.VEC4, "specular",
-            Type.VEC4, "position",
-            Type.VEC4, "halfVector",
-            Type.VEC3, "spotDirection",
-            Type.FLOAT, "spotExponent",
-            Type.FLOAT, "spotCutoff",
-            Type.FLOAT, "spotCosCutoff",
-            Type.FLOAT, "constantAttenuation",
-            Type.FLOAT, "linearAttenuation",
-            Type.FLOAT, "quadraticAttenuation");
-    public static final Struct gl_MaterialParameters = make(new Symbol.Fix("gl_MaterialParameters"),
-            Type.VEC4, "emission",
-            Type.VEC4, "ambient",
-            Type.VEC4, "diffuse",
-            Type.VEC4, "specular",
-            Type.FLOAT, "shininess");
+    public static final Struct gl_LightSourceParameters = make(new Symbol.Fix("gl_LightSourceParameters"), Type.VEC4,
+            "ambient", Type.VEC4, "diffuse", Type.VEC4, "specular", Type.VEC4, "position", Type.VEC4, "halfVector",
+            Type.VEC3, "spotDirection", Type.FLOAT, "spotExponent", Type.FLOAT, "spotCutoff", Type.FLOAT,
+            "spotCosCutoff", Type.FLOAT, "constantAttenuation", Type.FLOAT, "linearAttenuation", Type.FLOAT,
+            "quadraticAttenuation");
+    public static final Struct gl_MaterialParameters = make(new Symbol.Fix("gl_MaterialParameters"), Type.VEC4,
+            "emission", Type.VEC4, "ambient", Type.VEC4, "diffuse", Type.VEC4, "specular", Type.FLOAT, "shininess");
 }

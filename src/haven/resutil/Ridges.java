@@ -58,7 +58,8 @@ public class Ridges extends MapMesh.Hooks {
         public int[] rn;
         public float[] rh;
 
-        public RPart(Coord lc, Coord gc, Surface.Vertex[] v, float[] tcx, float[] tcy, int[] f, float[] rcx, float[] rcy, int[] rn, float[] rh) {
+        public RPart(Coord lc, Coord gc, Surface.Vertex[] v, float[] tcx, float[] tcy, int[] f, float[] rcx,
+                float[] rcy, int[] rn, float[] rh) {
             super(lc, gc, v, tcx, tcy, f);
             this.rcx = rcx;
             this.rcy = rcy;
@@ -181,8 +182,8 @@ public class Ridges extends MapMesh.Hooks {
             return (new Coord3f(0, m, 0));
     }
 
-    private static final Coord[] tecs = {new Coord(0, -1), new Coord(1, 0), new Coord(0, 1), new Coord(-1, 0)};
-    private static final Coord[] tccs = {new Coord(0, 0), new Coord(1, 0), new Coord(1, 1), new Coord(0, 1)};
+    private static final Coord[] tecs = { new Coord(0, -1), new Coord(1, 0), new Coord(0, 1), new Coord(-1, 0) };
+    private static final Coord[] tccs = { new Coord(0, 0), new Coord(1, 0), new Coord(1, 1), new Coord(0, 1) };
 
     private boolean edgelc(Coord tc, int e) {
         Coord gc = tc.add(m.ul);
@@ -233,10 +234,7 @@ public class Ridges extends MapMesh.Hooks {
         Vertex[] ret;
         if ((ret = edges[o]) == null) {
             ret = edges[o] = makeedge(tc, e);
-            edgec[o] = new Vertex[]{
-                    ms.new Vertex(ret[0]),
-                    ms.new Vertex(ret[ret.length - 1]),
-            };
+            edgec[o] = new Vertex[] { ms.new Vertex(ret[0]), ms.new Vertex(ret[ret.length - 1]), };
         }
         return (ret);
     }
@@ -252,12 +250,7 @@ public class Ridges extends MapMesh.Hooks {
     }
 
     public boolean[] breaks(Coord tc) {
-        return (new boolean[]{
-                breaks[eo(tc, 0)],
-                breaks[eo(tc, 1)],
-                breaks[eo(tc, 2)],
-                breaks[eo(tc, 3)]
-        });
+        return (new boolean[] { breaks[eo(tc, 0)], breaks[eo(tc, 1)], breaks[eo(tc, 2)], breaks[eo(tc, 3)] });
     }
 
     private int[] tczs(Coord tc) {
@@ -308,7 +301,7 @@ public class Ridges extends MapMesh.Hooks {
         float[] rcx = new float[n + m], rcy = new float[n + m];
         int[] rn = new int[n + m];
         float lh = l[n - 1].z - l[0].z, rh = r[m - 1].z - r[0].z;
-        float[] rhs = {lh, rh};
+        float[] rhs = { lh, rh };
         for (int i = 0; i < n; i++) {
             va[i] = l[i];
             tcx[i] = clip((l[i].x - pc.x) / tilesz.x, 0, 1);
@@ -348,20 +341,12 @@ public class Ridges extends MapMesh.Hooks {
 
     private void modelcap(Coord tc, int dir) {
         ensureedge(tc, dir);
-        Coord3f close = ms.fortile(tc.add(tccs[(dir + 2) % 4]))
-                .add(ms.fortile(tc.add(tccs[(dir + 3) % 4])))
-                .div(2);
-        Vertex[] gv = {
-                ms.fortile(tc.add(tccs[dir])),
-                ms.fortile(tc.add(tccs[(dir + 3) % 4])),
-                ms.new Vertex(close),
+        Coord3f close = ms.fortile(tc.add(tccs[(dir + 2) % 4])).add(ms.fortile(tc.add(tccs[(dir + 3) % 4]))).div(2);
+        Vertex[] gv = { ms.fortile(tc.add(tccs[dir])), ms.fortile(tc.add(tccs[(dir + 3) % 4])), ms.new Vertex(close),
                 edgec[eo(tc, dir)][edgelc(tc, dir) ? 0 : 1],
 
-                edgec[eo(tc, dir)][edgelc(tc, dir) ? 1 : 0],
-                ms.new Vertex(close),
-                ms.fortile(tc.add(tccs[(dir + 2) % 4])),
-                ms.fortile(tc.add(tccs[(dir + 1) % 4])),
-        };
+                edgec[eo(tc, dir)][edgelc(tc, dir) ? 1 : 0], ms.new Vertex(close),
+                ms.fortile(tc.add(tccs[(dir + 2) % 4])), ms.fortile(tc.add(tccs[(dir + 1) % 4])), };
         float[] tcx = new float[8], tcy = new float[8];
         Coord pc = tc.mul(tilesz).mul(1, -1);
         for (int i = 0; i < 8; i++) {
@@ -371,29 +356,23 @@ public class Ridges extends MapMesh.Hooks {
         mkfaces(gv, srfi);
         gnd[ms.ts.o(tc)] = new MPart(tc, tc.add(m.ul), gv, tcx, tcy, srfi);
 
-        Vertex[] cls = new Vertex[]{ms.new Vertex(close)};
+        Vertex[] cls = new Vertex[] { ms.new Vertex(close) };
         if (edgelc(tc, dir))
             ridge[ms.ts.o(tc)] = connect(tc, edges[eo(tc, dir)], cls);
         else
             ridge[ms.ts.o(tc)] = connect(tc, cls, edges[eo(tc, dir)]);
     }
 
-    private static final int[] srfi = {0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7};
+    private static final int[] srfi = { 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7 };
 
     private void modelstraight(Coord tc, int dir) {
         ensureedge(tc, dir);
         ensureedge(tc, dir + 2);
-        Vertex[] gv = {
-                ms.fortile(tc.add(tccs[dir])),
-                ms.fortile(tc.add(tccs[(dir + 3) % 4])),
-                edgec[eo(tc, dir + 2)][edgelc(tc, dir + 2) ? 1 : 0],
-                edgec[eo(tc, dir)][edgelc(tc, dir) ? 0 : 1],
+        Vertex[] gv = { ms.fortile(tc.add(tccs[dir])), ms.fortile(tc.add(tccs[(dir + 3) % 4])),
+                edgec[eo(tc, dir + 2)][edgelc(tc, dir + 2) ? 1 : 0], edgec[eo(tc, dir)][edgelc(tc, dir) ? 0 : 1],
 
-                edgec[eo(tc, dir)][edgelc(tc, dir) ? 1 : 0],
-                edgec[eo(tc, dir + 2)][edgelc(tc, dir + 2) ? 0 : 1],
-                ms.fortile(tc.add(tccs[(dir + 2) % 4])),
-                ms.fortile(tc.add(tccs[(dir + 1) % 4])),
-        };
+                edgec[eo(tc, dir)][edgelc(tc, dir) ? 1 : 0], edgec[eo(tc, dir + 2)][edgelc(tc, dir + 2) ? 0 : 1],
+                ms.fortile(tc.add(tccs[(dir + 2) % 4])), ms.fortile(tc.add(tccs[(dir + 1) % 4])), };
         float[] tcx = new float[8], tcy = new float[8];
         Coord pc = tc.mul(tilesz).mul(1, -1);
         for (int i = 0; i < 8; i++) {
@@ -409,22 +388,17 @@ public class Ridges extends MapMesh.Hooks {
             ridge[ms.ts.o(tc)] = connect(tc, edges[eo(tc, dir + 2)], edges[eo(tc, dir)]);
     }
 
-    private static final int[] d1rfi = {0, 1, 2, 3, 4, 7, 7, 4, 6, 6, 4, 5};
+    private static final int[] d1rfi = { 0, 1, 2, 3, 4, 7, 7, 4, 6, 6, 4, 5 };
 
     private void modeldiag1(Coord tc, int dir) {
         ensureedge(tc, dir);
         ensureedge(tc, (dir + 1) % 4);
-        Vertex[] gv = {
-                ms.fortile(tc.add(tccs[(dir + 1) % 4])),
-                edgec[eo(tc, dir)][edgelc(tc, dir) ? 1 : 0],
+        Vertex[] gv = { ms.fortile(tc.add(tccs[(dir + 1) % 4])), edgec[eo(tc, dir)][edgelc(tc, dir) ? 1 : 0],
                 edgec[eo(tc, (dir + 1) % 4)][edgelc(tc, dir) ? 1 : 0],
 
-                ms.fortile(tc.add(tccs[dir])),
-                ms.fortile(tc.add(tccs[(dir + 3) % 4])),
-                ms.fortile(tc.add(tccs[(dir + 2) % 4])),
-                edgec[eo(tc, (dir + 1) % 4)][edgelc(tc, dir) ? 0 : 1],
-                edgec[eo(tc, dir)][edgelc(tc, dir) ? 0 : 1],
-        };
+                ms.fortile(tc.add(tccs[dir])), ms.fortile(tc.add(tccs[(dir + 3) % 4])),
+                ms.fortile(tc.add(tccs[(dir + 2) % 4])), edgec[eo(tc, (dir + 1) % 4)][edgelc(tc, dir) ? 0 : 1],
+                edgec[eo(tc, dir)][edgelc(tc, dir) ? 0 : 1], };
         float[] tcx = new float[8], tcy = new float[8];
         Coord pc = tc.mul(tilesz).mul(1, -1);
         for (int i = 0; i < 8; i++) {
@@ -440,26 +414,20 @@ public class Ridges extends MapMesh.Hooks {
             ridge[ms.ts.o(tc)] = connect(tc, edges[eo(tc, (dir + 1) % 4)], edges[eo(tc, dir)]);
     }
 
-    private static final int[] d2rfi = {0, 1, 2, 3, 4, 5, 6, 7, 11, 7, 8, 11, 11, 8, 10, 8, 9, 10};
+    private static final int[] d2rfi = { 0, 1, 2, 3, 4, 5, 6, 7, 11, 7, 8, 11, 11, 8, 10, 8, 9, 10 };
 
     private void modeldiag2(Coord tc, int dir) {
-        for (int i = 0; i < 4; i++) ensureedge(tc, i);
-        Vertex[] gv = {
-                ms.fortile(tc.add(tccs[dir + 1])),
-                edgec[eo(tc, dir)][edgelc(tc, dir) ? 1 : 0],
+        for (int i = 0; i < 4; i++)
+            ensureedge(tc, i);
+        Vertex[] gv = { ms.fortile(tc.add(tccs[dir + 1])), edgec[eo(tc, dir)][edgelc(tc, dir) ? 1 : 0],
                 edgec[eo(tc, dir + 1)][edgelc(tc, dir) ? 1 : 0],
 
-                ms.fortile(tc.add(tccs[(dir + 3) % 4])),
-                edgec[eo(tc, dir + 2)][edgelc(tc, dir + 2) ? 1 : 0],
+                ms.fortile(tc.add(tccs[(dir + 3) % 4])), edgec[eo(tc, dir + 2)][edgelc(tc, dir + 2) ? 1 : 0],
                 edgec[eo(tc, (dir + 3) % 4)][edgelc(tc, dir + 2) ? 1 : 0],
 
-                ms.fortile(tc.add(tccs[dir])),
-                edgec[eo(tc, (dir + 3) % 4)][edgelc(tc, dir + 2) ? 0 : 1],
-                edgec[eo(tc, dir + 2)][edgelc(tc, dir + 2) ? 0 : 1],
-                ms.fortile(tc.add(tccs[dir + 2])),
-                edgec[eo(tc, dir + 1)][edgelc(tc, dir) ? 0 : 1],
-                edgec[eo(tc, dir)][edgelc(tc, dir) ? 0 : 1],
-        };
+                ms.fortile(tc.add(tccs[dir])), edgec[eo(tc, (dir + 3) % 4)][edgelc(tc, dir + 2) ? 0 : 1],
+                edgec[eo(tc, dir + 2)][edgelc(tc, dir + 2) ? 0 : 1], ms.fortile(tc.add(tccs[dir + 2])),
+                edgec[eo(tc, dir + 1)][edgelc(tc, dir) ? 0 : 1], edgec[eo(tc, dir)][edgelc(tc, dir) ? 0 : 1], };
         float[] tcx = new float[12], tcy = new float[12];
         Coord pc = tc.mul(tilesz).mul(1, -1);
         for (int i = 0; i < 12; i++) {
@@ -531,14 +499,15 @@ public class Ridges extends MapMesh.Hooks {
         return (ret);
     }
 
-    private static final int[] cg1rfi = {0, 1, 2, 0, 2, 3};
-    private static final int[] cg2rfi = {0, 1, 4, 4, 1, 2, 4, 2, 3};
+    private static final int[] cg1rfi = { 0, 1, 2, 0, 2, 3 };
+    private static final int[] cg2rfi = { 0, 1, 4, 4, 1, 2, 4, 2, 3 };
 
     private void modelcomplex(Coord tc, boolean[] breaks) {
         Coord gc = tc.add(m.ul), pc = tc.mul(tilesz).mul(1, -1);
         int[] tczs = tczs(tc);
         int s;
-        for (s = 0; !breaks[s] || !breaks[(s + 3) % 4]; s++) ;
+        for (s = 0; !breaks[s] || !breaks[(s + 3) % 4]; s++)
+            ;
         Coord3f[] col;
         {
             int n = 0;
@@ -559,8 +528,7 @@ public class Ridges extends MapMesh.Hooks {
             float tcx = tc.x * tilesz.x + (tilesz.x / 2.0f), tcy = -(tc.y * tilesz.y + (tilesz.y / 2.0f));
             Random rnd = m.rnd(tc);
             for (int i = 0; i < n; i++) {
-                col[i] = new Coord3f(tcx + ((rnd.nextFloat() - 0.5f) * 5.0f),
-                        tcy + ((rnd.nextFloat() - 0.5f) * 5.0f),
+                col[i] = new Coord3f(tcx + ((rnd.nextFloat() - 0.5f) * 5.0f), tcy + ((rnd.nextFloat() - 0.5f) * 5.0f),
                         Config.disableelev ? 10 : zs[i]);
             }
         }
@@ -572,12 +540,9 @@ public class Ridges extends MapMesh.Hooks {
             if (breaks[d]) {
                 ensureedge(tc, (d + 3) % 4);
                 ensureedge(tc, d);
-                Vertex[] gv = {
-                        ms.fortile(tc.add(tccs[d])),
+                Vertex[] gv = { ms.fortile(tc.add(tccs[d])),
                         edgec[eo(tc, (d + 3) % 4)][edgelc(tc, (d + 3) % 4) ? 1 : 0],
-                        ms.new Vertex(zmatch(col, tczs[d])),
-                        edgec[eo(tc, d)][edgelc(tc, d) ? 0 : 1],
-                };
+                        ms.new Vertex(zmatch(col, tczs[d])), edgec[eo(tc, d)][edgelc(tc, d) ? 0 : 1], };
                 mkfaces(gv, cg1rfi);
                 gnd[n] = new MPart(tc, gc, gv, mktcx(gv, pc), mktcy(gv, pc), cg1rfi);
                 if (edgelc(tc, d))
@@ -591,13 +556,9 @@ public class Ridges extends MapMesh.Hooks {
                 ensureedge(tc, (d + 3) % 4);
                 ensureedge(tc, (d + 1) % 4);
                 float mz = (tczs[d] + tczs[(d + 1) % 4]) / 2.0f;
-                Vertex[] gv = {
-                        ms.fortile(tc.add(tccs[(d + 1) % 4])),
-                        ms.fortile(tc.add(tccs[d])),
-                        edgec[eo(tc, (d + 3) % 4)][edgelc(tc, (d + 3) % 4) ? 1 : 0],
-                        ms.new Vertex(zmatch(col, mz)),
-                        edgec[eo(tc, (d + 1) % 4)][edgelc(tc, (d + 1) % 4) ? 0 : 1],
-                };
+                Vertex[] gv = { ms.fortile(tc.add(tccs[(d + 1) % 4])), ms.fortile(tc.add(tccs[d])),
+                        edgec[eo(tc, (d + 3) % 4)][edgelc(tc, (d + 3) % 4) ? 1 : 0], ms.new Vertex(zmatch(col, mz)),
+                        edgec[eo(tc, (d + 1) % 4)][edgelc(tc, (d + 1) % 4) ? 0 : 1], };
                 mkfaces(gv, cg2rfi);
                 gnd[n] = new MPart(tc, gc, gv, mktcx(gv, pc), mktcy(gv, pc), cg2rfi);
                 if (edgelc(tc, (d + 1) % 4))
@@ -637,19 +598,21 @@ public class Ridges extends MapMesh.Hooks {
             modeldiag2(tc, d);
             return (true);
         } else {
-	    try {
-		modelcomplex(tc, b);
-	    } catch(ArrayIndexOutOfBoundsException e) {
-		/* XXX: Just ignore for now, until I can find the
-		 * cause of this. */
-	    } catch(NegativeArraySizeException e) {
-	    }
+            try {
+                modelcomplex(tc, b);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                /*
+                 * XXX: Just ignore for now, until I can find the cause of this.
+                 */
+            } catch (NegativeArraySizeException e) {
+            }
             return (true);
         }
     }
 
     static final Tiler.MCons testcons = new Tiler.MCons() {
-        GLState mat = GLState.compose(new Material.Colors(new java.awt.Color(255, 255, 255)), States.vertexcolor, Light.deflight);
+        GLState mat = GLState.compose(new Material.Colors(new java.awt.Color(255, 255, 255)), States.vertexcolor,
+                Light.deflight);
 
         public void faces(MapMesh m, MPart mdesc) {
             RPart desc = (RPart) mdesc;
@@ -667,36 +630,36 @@ public class Ridges extends MapMesh.Hooks {
     };
 
     public static class TexCons implements Tiler.MCons {
-	public final GLState mat;
-	public final float texh;
+        public final GLState mat;
+        public final float texh;
 
-	public TexCons(GLState mat, float texh) {
-	    this.mat = mat;
-	    this.texh = texh;
-	}
+        public TexCons(GLState mat, float texh) {
+            this.mat = mat;
+            this.texh = texh;
+        }
 
-	public void faces(MapMesh m, MPart mdesc) {
-	    RPart desc = (RPart)mdesc;
-	    Model mod = Model.get(m, mat);
-	    MeshBuf.Tex tex = mod.layer(MeshBuf.tex);
-	    MeshBuf.Vec3Layer tan = mod.layer(BumpMap.ltan);
-	    MeshBuf.Vec3Layer bit = mod.layer(BumpMap.lbit);
-	    int[] trn = new int[desc.rh.length];
-	    float zf = 1.0f / texh;
-	    for(int i = 0; i < trn.length; i++)
-		trn[i] = Math.max((int)((desc.rh[i] + (texh * 0.5f)) * zf), 1);
-	    MeshVertex[] v = new MeshVertex[desc.v.length];
-	    for(int i = 0; i < desc.v.length; i++) {
-		v[i] = new MeshVertex(mod, desc.v[i]);
-		/* tex.set(v[i], new Coord3f(desc.rcx[i], desc.v[i].z * zf, 0)); */
-		tex.set(v[i], new Coord3f(desc.rcx[i], desc.rcy[i] * trn[desc.rn[i]], 0));
-		tan.set(v[i], Coord3f.zu.cmul(v[i].nrm).norm());
-		bit.set(v[i], Coord3f.zu);
-	    }
-	    int[] f = desc.f;
-	    for(int i = 0; i < f.length; i += 3)
-		mod.new Face(v[f[i]], v[f[i + 1]], v[f[i + 2]]);
-	}
+        public void faces(MapMesh m, MPart mdesc) {
+            RPart desc = (RPart) mdesc;
+            Model mod = Model.get(m, mat);
+            MeshBuf.Tex tex = mod.layer(MeshBuf.tex);
+            MeshBuf.Vec3Layer tan = mod.layer(BumpMap.ltan);
+            MeshBuf.Vec3Layer bit = mod.layer(BumpMap.lbit);
+            int[] trn = new int[desc.rh.length];
+            float zf = 1.0f / texh;
+            for (int i = 0; i < trn.length; i++)
+                trn[i] = Math.max((int) ((desc.rh[i] + (texh * 0.5f)) * zf), 1);
+            MeshVertex[] v = new MeshVertex[desc.v.length];
+            for (int i = 0; i < desc.v.length; i++) {
+                v[i] = new MeshVertex(mod, desc.v[i]);
+                /* tex.set(v[i], new Coord3f(desc.rcx[i], desc.v[i].z * zf, 0)); */
+                tex.set(v[i], new Coord3f(desc.rcx[i], desc.rcy[i] * trn[desc.rn[i]], 0));
+                tan.set(v[i], Coord3f.zu.cmul(v[i].nrm).norm());
+                bit.set(v[i], Coord3f.zu);
+            }
+            int[] f = desc.f;
+            for (int i = 0; i < f.length; i += 3)
+                mod.new Face(v[f[i]], v[f[i + 1]], v[f[i + 2]]);
+        }
     }
 
     public boolean laygnd(Coord tc, Tiler.MCons cons) {

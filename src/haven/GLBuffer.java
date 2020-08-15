@@ -43,7 +43,7 @@ public class GLBuffer extends GLObject implements BGL.ID {
     }
 
     protected void delete(BGL gl) {
-        BGL.ID[] buf = {this};
+        BGL.ID[] buf = { this };
         gl.glDeleteBuffers(1, buf, 0);
     }
 

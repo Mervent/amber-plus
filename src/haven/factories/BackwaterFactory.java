@@ -21,7 +21,8 @@ public class BackwaterFactory implements ItemInfo.InfoFactory {
 
         public Tip(Owner var2, double var3) {
             super(var2);
-            String str = Resource.getLocString(Resource.BUNDLE_LABEL, "Growth speed of onion and lettuce: +%d%%\nQuality of squirrels, moles and badgers: +%d%%");
+            String str = Resource.getLocString(Resource.BUNDLE_LABEL,
+                    "Growth speed of onion and lettuce: +%d%%\nQuality of squirrels, moles and badgers: +%d%%");
             this.tip = RichText.render(String.format(str, Math.round(var3 * 100.0D), Math.round(var3 * 100.0D)), 0);
         }
 

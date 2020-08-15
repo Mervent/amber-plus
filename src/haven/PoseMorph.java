@@ -168,7 +168,8 @@ public class PoseMorph implements Morpher.Factory {
         for (int i = 0; i < xl.length; i++) {
             Skeleton.Bone b = pose.skel().bones.get(nb.names[i]);
             if (b == null)
-                throw (new RuntimeException("Bone \"" + nb.names[i] + "\" in vertex-buf reference does not exist in skeleton " + pose.skel()));
+                throw (new RuntimeException("Bone \"" + nb.names[i]
+                        + "\" in vertex-buf reference does not exist in skeleton " + pose.skel()));
             xl[i] = b.idx;
         }
         for (int i = 0; i < ob.data.capacity(); i++) {

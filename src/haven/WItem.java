@@ -46,9 +46,8 @@ public class WItem extends Widget implements DTarget {
     public final GItem item;
     public static final Color famountclr = new Color(24, 116, 205);
     private static final Color qualitybg = new Color(20, 20, 20, 255 - Config.qualitybgtransparency);
-    public static final Color[] wearclr = new Color[]{
-            new Color(233, 0, 14), new Color(218, 128, 87), new Color(246, 233, 87), new Color(145, 225, 60)
-    };
+    public static final Color[] wearclr = new Color[] { new Color(233, 0, 14), new Color(218, 128, 87),
+            new Color(246, 233, 87), new Color(145, 225, 60) };
 
     private WItemDestroyCallback destroycb;
 
@@ -115,7 +114,7 @@ public class WItem extends Widget implements DTarget {
         double now = Utils.rtime();
         if (prev == this) {
         } else if (prev instanceof WItem) {
-            double ps = ((WItem)prev).hoverstart;
+            double ps = ((WItem) prev).hoverstart;
             if (now - ps < 1.0)
                 hoverstart = now;
             else
@@ -145,54 +144,61 @@ public class WItem extends Widget implements DTarget {
         }
     }
 
-    private List<ItemInfo> info() {return(item.info());}
+    private List<ItemInfo> info() {
+        return (item.info());
+    }
+
     public final AttrCache<Color> olcol = new AttrCache<>(this::info, info -> {
         Color ret = null;
-        for(ItemInfo inf : info) {
-            if(inf instanceof GItem.ColorInfo) {
-                Color c = ((GItem.ColorInfo)inf).olcol();
-                if(c != null)
-                    ret = (ret == null)?c:Utils.preblend(ret, c);
+        for (ItemInfo inf : info) {
+            if (inf instanceof GItem.ColorInfo) {
+                Color c = ((GItem.ColorInfo) inf).olcol();
+                if (c != null)
+                    ret = (ret == null) ? c : Utils.preblend(ret, c);
             }
         }
         Color fret = ret;
-        return(() -> fret);
+        return (() -> fret);
     });
 
     public final AttrCache<GItem.InfoOverlay<?>[]> itemols = new AttrCache<>(this::info, info -> {
         ArrayList<GItem.InfoOverlay<?>> buf = new ArrayList<>();
-        for(ItemInfo inf : info) {
-            if(inf instanceof GItem.OverlayInfo)
-                buf.add(GItem.InfoOverlay.create((GItem.OverlayInfo<?>)inf));
+        for (ItemInfo inf : info) {
+            if (inf instanceof GItem.OverlayInfo)
+                buf.add(GItem.InfoOverlay.create((GItem.OverlayInfo<?>) inf));
         }
         GItem.InfoOverlay<?>[] ret = buf.toArray(new GItem.InfoOverlay<?>[0]);
-        return(() -> ret);
+        return (() -> ret);
     });
-    
-    public final AttrCache<Double> itemmeter = new AttrCache<>(this::info, AttrCache.map1(GItem.MeterInfo.class, minf -> {
-        GItem itm = WItem.this.item;
-        if (minf != null) {
-            double meter = minf.meter();
-            if (itm.studytime > 0 && parent instanceof InventoryStudy) {
-                int timeleft = (int) (itm.studytime * (1.0 - meter));
-                int hoursleft = timeleft / 60;
-                int minutesleft = timeleft - hoursleft * 60;
-                itm.metertex = Text.renderstroked(String.format("%d:%02d", hoursleft, minutesleft), Color.WHITE, Color.BLACK, num10Fnd).tex();
-            } else {
-                itm.metertex = Text.renderstroked(String.format("%d%%", (int) (meter * 100)), Color.WHITE, Color.BLACK, num10Fnd).tex();
-            }
-            return minf::meter;
-        }
-        itm.metertex = null;
-        return minf::meter;
-    }));
+
+    public final AttrCache<Double> itemmeter = new AttrCache<>(this::info,
+            AttrCache.map1(GItem.MeterInfo.class, minf -> {
+                GItem itm = WItem.this.item;
+                if (minf != null) {
+                    double meter = minf.meter();
+                    if (itm.studytime > 0 && parent instanceof InventoryStudy) {
+                        int timeleft = (int) (itm.studytime * (1.0 - meter));
+                        int hoursleft = timeleft / 60;
+                        int minutesleft = timeleft - hoursleft * 60;
+                        itm.metertex = Text.renderstroked(String.format("%d:%02d", hoursleft, minutesleft), Color.WHITE,
+                                Color.BLACK, num10Fnd).tex();
+                    } else {
+                        itm.metertex = Text.renderstroked(String.format("%d%%", (int) (meter * 100)), Color.WHITE,
+                                Color.BLACK, num10Fnd).tex();
+                    }
+                    return minf::meter;
+                }
+                itm.metertex = null;
+                return minf::meter;
+            }));
 
     private GSprite lspr = null;
 
     public void tick(double dt) {
-    /* XXX: This is ugly and there should be a better way to
-     * ensure the resizing happens as it should, but I can't think
-	 * of one yet. */
+        /*
+         * XXX: This is ugly and there should be a better way to ensure the resizing
+         * happens as it should, but I can't think of one yet.
+         */
         GSprite spr = item.spr();
         if ((spr != null) && (spr != lspr)) {
             Coord sz = new Coord(spr.sz());
@@ -215,8 +221,8 @@ public class WItem extends Widget implements DTarget {
             drawmain(g, spr);
             g.defstate();
             GItem.InfoOverlay<?>[] ols = itemols.get();
-            if(ols != null) {
-                for(GItem.InfoOverlay<?> ol : ols)
+            if (ols != null) {
+                for (GItem.InfoOverlay<?> ol : ols)
                     ol.draw(g);
             }
             Double meter = item.meter > 0 ? Double.valueOf(item.meter / 100.0) : itemmeter.get();
@@ -246,7 +252,6 @@ public class WItem extends Widget implements DTarget {
             ItemInfo.Contents cnt = item.getcontents();
             if (cnt != null && cnt.content > 0)
                 drawamountbar(g, cnt.content, cnt.isseeds);
-
 
             try {
                 for (ItemInfo info : item.info()) {
@@ -308,7 +313,8 @@ public class WItem extends Widget implements DTarget {
                     getparent(GameUI.class).error("Could not launch web browser.");
                 }
             } else if (ui.modshift && !ui.modmeta) {
-                // server side transfer all identical: pass third argument -1 (or 1 for single item)
+                // server side transfer all identical: pass third argument -1 (or 1 for single
+                // item)
                 item.wdgmsg("transfer", c);
             } else if (ui.modctrl)
                 item.wdgmsg("drop", c);

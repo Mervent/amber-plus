@@ -60,9 +60,7 @@ public class Projection extends Transform {
 
     public Coord3f toscreen(Coord3f ec, Coord sz) {
         Coord3f n = tonorm(ec);
-        return (new Coord3f(((n.x + 1) / 2) * sz.x,
-                ((-n.y + 1) / 2) * sz.y,
-                n.z));
+        return (new Coord3f(((n.x + 1) / 2) * sz.x, ((-n.y + 1) / 2) * sz.y, n.z));
     }
 
     public Coord get2dCoord(float[] homoc, Coord wndsz) {
@@ -70,10 +68,11 @@ public class Projection extends Transform {
         float d = 1 / o[3];
         float nx = o[0] * d;
         float ny = o[1] * d;
-        return new Coord((int)(((nx + 1) / 2) * wndsz.x), (int)(((-ny + 1) / 2) * wndsz.y));
+        return new Coord((int) (((nx + 1) / 2) * wndsz.x), (int) (((-ny + 1) / 2) * wndsz.y));
     }
 
-    public static Matrix4f makefrustum(Matrix4f d, float left, float right, float bottom, float top, float near, float far) {
+    public static Matrix4f makefrustum(Matrix4f d, float left, float right, float bottom, float top, float near,
+            float far) {
         d.m[0] = (2 * near) / (right - left);
         d.m[5] = (2 * near) / (top - bottom);
         d.m[8] = (right + left) / (right - left);
@@ -81,9 +80,7 @@ public class Projection extends Transform {
         d.m[10] = -(far + near) / (far - near);
         d.m[11] = -1.0f;
         d.m[14] = -(2 * far * near) / (far - near);
-        d.m[1] = d.m[2] = d.m[3] =
-                d.m[4] = d.m[6] = d.m[7] =
-                        d.m[12] = d.m[13] = d.m[15] = 0.0f;
+        d.m[1] = d.m[2] = d.m[3] = d.m[4] = d.m[6] = d.m[7] = d.m[12] = d.m[13] = d.m[15] = 0.0f;
         return (d);
     }
 
@@ -91,7 +88,8 @@ public class Projection extends Transform {
         return (new Projection(makefrustum(new Matrix4f(), left, right, bottom, top, near, far)));
     }
 
-    public static Matrix4f makeortho(Matrix4f d, float left, float right, float bottom, float top, float near, float far) {
+    public static Matrix4f makeortho(Matrix4f d, float left, float right, float bottom, float top, float near,
+            float far) {
         d.m[0] = 2 / (right - left);
         d.m[5] = 2 / (top - bottom);
         d.m[10] = -2 / (far - near);
@@ -99,9 +97,7 @@ public class Projection extends Transform {
         d.m[13] = -(top + bottom) / (top - bottom);
         d.m[14] = -(far + near) / (far - near);
         d.m[15] = 1.0f;
-        d.m[1] = d.m[2] = d.m[3] =
-                d.m[4] = d.m[6] = d.m[7] =
-                        d.m[8] = d.m[9] = d.m[11] = 0.0f;
+        d.m[1] = d.m[2] = d.m[3] = d.m[4] = d.m[6] = d.m[7] = d.m[8] = d.m[9] = d.m[11] = 0.0f;
         return (d);
     }
 

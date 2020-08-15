@@ -191,7 +191,7 @@ public class MappingClient {
                 } finally {
                     connection.disconnect();
                 }
-    
+
             } catch (final Exception ex) { }
         }
     }
@@ -240,7 +240,7 @@ public class MappingClient {
                     mapfile.lock.readLock().unlock();
                 }
                 System.out.println("collected " + markers.size() + " markers");
-                
+
                 scheduler.execute(new ProcessMapper(mapfile, markers));
             } else {
                 if(retries-- > 0) {
@@ -287,7 +287,7 @@ public class MappingClient {
                         Coord gridOffset = md.m.tc.sub(mgc.mul(100));
                         o.put("x", gridOffset.x);
                         o.put("y", gridOffset.y);
-                        
+
                         if(md.m instanceof SMarker) {
                             o.put("type", "shared");
                             o.put("id", ((SMarker) md.m).oid);
@@ -344,7 +344,7 @@ public class MappingClient {
     private class PositionUpdates implements Runnable {
         private PositionUpdates() {
         }
-    
+
         @Override
         public void run() {
             if (trackingEnabled) {
@@ -389,7 +389,7 @@ public class MappingClient {
                     System.out.println(ex);
                     return;
                 }
-                
+
                 try {
                     final HttpURLConnection connection =
                             (HttpURLConnection) new URL(endpoint + "/positionUpdate").openConnection();
@@ -468,7 +468,7 @@ public class MappingClient {
         public void run() {
             if (gridEnabled) {
                 HashMap<String, Object> dataToSend = new HashMap<>();
-                
+
                 dataToSend.put("grids", this.gridUpdate.grids);
                 try {
                     HttpURLConnection connection =
@@ -505,7 +505,7 @@ public class MappingClient {
                             }
                         }
                     }
-                    
+
                 } catch (Exception ex) { }
             }
         }
@@ -515,7 +515,7 @@ public class MappingClient {
         private final String gridID;
         private final WeakReference<MCache.Grid> grid;
         private int retries = 5;
-        
+
         GridUploadTask(String gridID, WeakReference<MCache.Grid> grid) {
             this.gridID = gridID;
             this.grid = grid;
@@ -543,7 +543,7 @@ public class MappingClient {
                         extraData.put("season", glob.ast.is);
 
                         multipart.addFormField("extraData", extraData.toString());
-                        
+
                         MultipartUtility.Response response = multipart.finish();
                         if (response.statusCode != 200) {
                             System.out.println("Upload Error: Code" + response.statusCode + " - " + response.response);

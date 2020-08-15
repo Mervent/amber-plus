@@ -21,19 +21,21 @@ public class Navigation {
     public static final List<String> WATER_TILES = Arrays.asList("gfx/tiles/water", "gfx/tiles/deep");
     private static final Coord2d MAGIC_WISP_POSITION = new Coord2d(-9938.5, -9960.5);
 
-    public enum GridType { UNKNOWN, CAVE, HOUSE, SURFACE, UNKNOWN_WATER, UNKNOWN_PAVING,
-        CHARACTER_GENERATION, CHARACTER_SWITCH }
+    public enum GridType {
+        UNKNOWN, CAVE, HOUSE, SURFACE, UNKNOWN_WATER, UNKNOWN_PAVING, CHARACTER_GENERATION, CHARACTER_SWITCH
+    }
 
     private static class PlayerPartyCoordinates {
-        Coord2d realGridUnitCoordinates;    // Player's real grid TL coordinates in units
-        Coord2d virtualCoordinates = null;  // Player's virtual coordinates
+        Coord2d realGridUnitCoordinates; // Player's real grid TL coordinates in units
+        Coord2d virtualCoordinates = null; // Player's virtual coordinates
 
         PlayerPartyCoordinates(Coord2d realGridUnitCoordinates) {
             this.realGridUnitCoordinates = realGridUnitCoordinates;
         }
 
         boolean isWispPosition() {
-            return MAGIC_WISP_POSITION.equals(realGridUnitCoordinates) && MAGIC_WISP_POSITION.equals(virtualCoordinates);
+            return MAGIC_WISP_POSITION.equals(realGridUnitCoordinates)
+                    && MAGIC_WISP_POSITION.equals(virtualCoordinates);
         }
 
         boolean ready() {
@@ -54,16 +56,15 @@ public class Navigation {
     private static void setSessionType(GridType type) {
         sessionType = type;
         isSessionSetup = true;
-        logMessage("Navigation: Set session type to "  + type);
+        logMessage("Navigation: Set session type to " + type);
     }
 
     /*
-     * Methods call order:
-     * 0. setCharacterName from CharacterList when we select character to login
-     * 1. addPartyCoordinates from Party, fill all party coordinates
-     * 2. setCharacterId from MapView
-     * 3. setPlayerCoordinates (from (2), position also comes from MapView)
-     * 4. receiveGridData from MCache (grids are requested by MapView)
+     * Methods call order: 0. setCharacterName from CharacterList when we select
+     * character to login 1. addPartyCoordinates from Party, fill all party
+     * coordinates 2. setCharacterId from MapView 3. setPlayerCoordinates (from (2),
+     * position also comes from MapView) 4. receiveGridData from MCache (grids are
+     * requested by MapView)
      */
 
     /**
@@ -94,7 +95,8 @@ public class Navigation {
     }
 
     /**
-     * Coordinates of the party players on initial login. Contains both real and virtual coordinates
+     * Coordinates of the party players on initial login. Contains both real and
+     * virtual coordinates
      */
     private static HashMap<Long, PlayerPartyCoordinates> sessionPartyCoordinates = new HashMap<>();
 
@@ -114,10 +116,9 @@ public class Navigation {
     }
 
     /**
-     * Current character id
-     * Process sessionPartyCoordinates when we receive this:
-     *  - Check for the character selection instance by coordinates
-     *  - Calculate absolute coordinates for the player
+     * Current character id Process sessionPartyCoordinates when we receive this: -
+     * Check for the character selection instance by coordinates - Calculate
+     * absolute coordinates for the player
      */
     private static long characterId = -1;
 
@@ -135,7 +136,6 @@ public class Navigation {
      */
     private static Coord2d lastPlayerCoordinates = null;
 
-
     private static ConcurrentHashMap<Coord, Long> virtualGridsCache = new ConcurrentHashMap<>();
 
     public static synchronized void setPlayerCoordinates(Coord2d coordinates) {
@@ -152,13 +152,14 @@ public class Navigation {
             } else {
                 absoluteCoordinates = null;
             }
-        } else absoluteCoordinates = null;
+        } else
+            absoluteCoordinates = null;
     }
 
     public static synchronized void receiveGridData(Coord gridCoordinate, long gridId, GridType gridType) {
         if (lastPlayerCoordinates == null)
             return;
-        
+
         virtualGridsCache.put(gridCoordinate, gridId);
 
         if (gridCoordinate.equals(lastPlayerCoordinates.toGridCoordinate())) {

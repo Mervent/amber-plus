@@ -1,6 +1,5 @@
 package haven.automation;
 
-
 import haven.*;
 
 import static haven.OCache.posres;
@@ -30,10 +29,11 @@ public class PickForageable implements Runnable {
                     else if (itm.selected)
                         hidden = Boolean.TRUE;
 
-                    if (hidden == null && res.name.startsWith("gfx/terobjs/herbs") ||
-                            hidden == Boolean.FALSE && !res.name.startsWith("gfx/terobjs/vehicle")) {
+                    if (hidden == null && res.name.startsWith("gfx/terobjs/herbs")
+                            || hidden == Boolean.FALSE && !res.name.startsWith("gfx/terobjs/vehicle")) {
                         double distFromPlayer = gob.rc.dist(gui.map.player().rc);
-                        if (distFromPlayer <= 20 * 11 && (herb == null || distFromPlayer < herb.rc.dist(gui.map.player().rc)))
+                        if (distFromPlayer <= 20 * 11
+                                && (herb == null || distFromPlayer < herb.rc.dist(gui.map.player().rc)))
                             herb = gob;
                     }
                 }
