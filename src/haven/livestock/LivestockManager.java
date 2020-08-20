@@ -1,7 +1,7 @@
 package haven.livestock;
 
 import haven.*;
-import haven.memoizer.Memoizer;
+import haven.memorizer.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -223,9 +223,17 @@ public class LivestockManager extends Window {
 
             chpanel(p);
 
-            String memoizerTooltip = "Name: " + pendingAnimal.name + "\n";
-            memoizerTooltip += "Quality: " + pendingAnimal.getOrDefault("Quality:", -1);
-            ui.memoizer.set(pendingAnimal.gobid, memoizerTooltip);
+            AnimalFlashback flashback = new AnimalFlashback(pendingAnimal);
+            ui.memorizer.remember(flashback);
+            // if (p == horses) {
+            // memoizerTooltip += "Stamina: " + pendingAnimal.getOrDefault("Stamina:", -1) +
+            // "\n";
+            // memoizerTooltip += "Endurance: " + pendingAnimal.getOrDefault("Endurance:",
+            // -1) + "\n";
+            // memoizerTooltip += "Metabolism: " + pendingAnimal.getOrDefault("Metabolism:",
+            // -1) + "\n";
+            // }
+            // ui.memoizer.set(pendingAnimal.gobid, memoizerTooltip);
 
             pendingAnimal = null;
         }
