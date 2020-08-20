@@ -223,17 +223,13 @@ public class LivestockManager extends Window {
 
             chpanel(p);
 
-            AnimalFlashback flashback = new AnimalFlashback(pendingAnimal);
-            ui.memorizer.remember(flashback);
-            // if (p == horses) {
-            // memoizerTooltip += "Stamina: " + pendingAnimal.getOrDefault("Stamina:", -1) +
-            // "\n";
-            // memoizerTooltip += "Endurance: " + pendingAnimal.getOrDefault("Endurance:",
-            // -1) + "\n";
-            // memoizerTooltip += "Metabolism: " + pendingAnimal.getOrDefault("Metabolism:",
-            // -1) + "\n";
-            // }
-            // ui.memoizer.set(pendingAnimal.gobid, memoizerTooltip);
+            Flashback fb = null;
+            if (p == horses) {
+                fb = new FlashbackHorse(pendingAnimal);
+            } else {
+                fb = new FlashbackAnimal(pendingAnimal);
+            }
+            ui.memorizer.remember(pendingAnimal.gobid, fb);
 
             pendingAnimal = null;
         }

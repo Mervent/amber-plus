@@ -5,18 +5,15 @@ import java.lang.reflect.Field;
 import org.json.JSONObject;
 
 public class Flashback {
-    public Long gobId;
-
     public String asTooltip() {
         return "You vaguely remember that";
     }
 
     public static JSONObject toJSON(Flashback instance) {
         JSONObject json = new JSONObject();
-        Field[] fields = instance.getClass().getDeclaredFields();
+        Field[] fields = instance.getClass().getFields();
         json.put("_class", instance.getClass().getName());
         for (Field field : fields) {
-            field.setAccessible(true);
             try {
                 json.put(field.getName().toString(), field.get(instance));
             } catch (IllegalAccessException ex) {
@@ -30,9 +27,8 @@ public class Flashback {
         try {
             Class<?> cls = Class.forName(json.getString("_class"));
             Object instance = cls.newInstance();
-            Field[] fields = instance.getClass().getDeclaredFields();
+            Field[] fields = instance.getClass().getFields();
             for (Field field : fields) {
-                field.setAccessible(true);
                 try {
                     Object value = json.get(field.getName().toString());
                     field.set(instance, value);

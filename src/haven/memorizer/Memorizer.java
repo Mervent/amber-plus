@@ -11,8 +11,8 @@ public class Memorizer {
     Map<String, Integer> hashMap = new HashMap<String, Integer>();
     Map<Long, Flashback> memory = new HashMap<Long, Flashback>();
 
-    public void remember(Flashback flashback) {
-        memory.put(flashback.gobId, flashback);
+    public void remember(Long gobId, Flashback flashback) {
+        memory.put(gobId, flashback);
         this.save();
     }
 
