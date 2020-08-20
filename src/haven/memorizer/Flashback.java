@@ -6,7 +6,11 @@ import org.json.JSONObject;
 
 public class Flashback {
     public String asTooltip() {
-        return "You vaguely remember that";
+        return "You remember that";
+    }
+
+    public String asOverlay() {
+        return "You remember that";
     }
 
     public static JSONObject toJSON(Flashback instance) {

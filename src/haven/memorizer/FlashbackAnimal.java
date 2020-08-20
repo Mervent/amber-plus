@@ -22,4 +22,8 @@ public class FlashbackAnimal extends Flashback {
         tooltip += "Breeding Quality: " + this.breeding + "\n";
         return tooltip;
     }
+
+    public String asOverlay() {
+        return this.name + " " + this.quality + "/" + this.breeding;
+    }
 }

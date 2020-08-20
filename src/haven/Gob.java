@@ -26,6 +26,8 @@
 
 package haven;
 
+import haven.memorizer.Flashback;
+import haven.memorizer.Memorizer;
 import haven.resutil.BPRadSprite;
 import integrations.mapv4.MappingClient;
 import integrations.map.Navigation;
@@ -629,6 +631,14 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                             }
                         }
                     }
+                }
+            }
+
+            Flashback fb = Memorizer.getInstance().recall(id);
+            if (fb != null) {
+                Overlay ol = findol(Sprite.FLASHBACK_OVERLAY_ID);
+                if (ol == null) {
+                    addol(new Gob.Overlay(Sprite.FLASHBACK_OVERLAY_ID, new FlashbackSprite(fb.asOverlay())));
                 }
             }
 

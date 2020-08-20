@@ -14,7 +14,7 @@ public class FlashbackHorse extends FlashbackAnimal {
         super(animal);
         this.stamina = animal.get("Stamina:");
         this.endrance = animal.get("Endurance:");
-        this.metabolism = animal.get("Endurance:");
+        this.metabolism = animal.get("Metabolism:");
     }
 
     public String asTooltip() {
@@ -22,7 +22,17 @@ public class FlashbackHorse extends FlashbackAnimal {
         tooltip += "Stamina: " + this.stamina + "\n";
         tooltip += "Endurance: " + this.endrance + "\n";
         tooltip += "Metabolism: " + this.metabolism + "\n";
+
         return tooltip;
+    }
+
+    public String asOverlay() {
+        String overlay = super.asOverlay() + " ";
+        overlay += "S" + this.stamina + ";";
+        overlay += "E" + this.endrance + ";";
+        overlay += "M" + this.metabolism + ";";
+
+        return overlay;
     }
 
 }
