@@ -229,7 +229,7 @@ public class LivestockManager extends Window {
             } else {
                 fb = new FlashbackAnimal(pendingAnimal);
             }
-            ui.memorizer.remember(pendingAnimal.gobid, fb);
+            Memorizer.getInstance().remember(pendingAnimal.gobid, fb);
 
             pendingAnimal = null;
         }

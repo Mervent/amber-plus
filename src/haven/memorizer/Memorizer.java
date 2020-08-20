@@ -11,6 +11,16 @@ public class Memorizer {
     Map<String, Integer> hashMap = new HashMap<String, Integer>();
     Map<Long, Flashback> memory = new HashMap<Long, Flashback>();
 
+    public static Memorizer instance = new Memorizer();
+
+    private Memorizer() {
+
+    }
+
+    public static Memorizer getInstance() {
+        return instance;
+    }
+
     public void remember(Long gobId, Flashback flashback) {
         memory.put(gobId, flashback);
         this.save();
@@ -19,6 +29,7 @@ public class Memorizer {
     public Flashback recall(long gobId) {
         if (!initialized) {
             this.load();
+            initialized = true;
         }
         return memory.get(gobId);
     }

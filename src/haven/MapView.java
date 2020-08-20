@@ -29,6 +29,7 @@ package haven;
 import haven.GLProgram.VarID;
 import haven.automation.*;
 import haven.memorizer.Flashback;
+import haven.memorizer.Memorizer;
 import haven.pathfinder.PFListener;
 import haven.pathfinder.Pathfinder;
 import haven.resutil.BPRadSprite;
@@ -2000,7 +2001,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                                 Resource res = inf.gob.getres();
                                 tooltip = String.format("GobId: " + inf.gob.id + "\n");
 
-                                Flashback flashback = ui.memorizer.recall(inf.gob.id);
+                                Flashback flashback = Memorizer.getInstance().recall(inf.gob.id);
                                 if (flashback != null) {
                                     tooltip += flashback.asTooltip() + "\n";
                                 }

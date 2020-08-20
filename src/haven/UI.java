@@ -28,8 +28,6 @@ package haven;
 
 import java.util.*;
 
-import haven.memorizer.Memorizer;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.InputEvent;
@@ -53,7 +51,6 @@ public class UI {
     private final Context uictx;
     public final ActAudio audio = new ActAudio();
     public int beltWndId = -1;
-    public Memorizer memorizer = new Memorizer();
 
     {
         lastevent = lasttick = Utils.rtime();
