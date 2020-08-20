@@ -352,6 +352,27 @@ public class Utils {
         }
     }
 
+    public static void setprefjson(String prefname, JSONObject val) {
+        try {
+            Utils.setpref(prefname, val.toString());
+        } catch (SecurityException e) {
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static JSONObject getprefjson(String prefname, JSONObject defaultValue) {
+        try {
+            String json = Utils.getpref(prefname, null);
+            return new JSONObject(json);
+        } catch (SecurityException e) {
+            return defaultValue;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return defaultValue;
+        }
+    }
+
     static int getprefi(String prefname, int def) {
         try {
             return (prefs().getInt(prefname, def));

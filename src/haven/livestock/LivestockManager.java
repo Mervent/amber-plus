@@ -1,6 +1,7 @@
 package haven.livestock;
 
 import haven.*;
+import haven.memoizer.Memoizer;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -221,6 +222,11 @@ public class LivestockManager extends Window {
             details.sz = new Coord(scrollCont.sz.x, DetailsWdg.HEIGHT);
 
             chpanel(p);
+
+            String memoizerTooltip = "Name: " + pendingAnimal.name + "\n";
+            memoizerTooltip += "Quality: " + pendingAnimal.getOrDefault("Quality:", -1);
+            ui.memoizer.set(pendingAnimal.gobid, memoizerTooltip);
+
             pendingAnimal = null;
         }
     }

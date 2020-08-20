@@ -1997,8 +1997,11 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                             MapView.gobclickargs(inf);
                             if (inf.gob != null) {
                                 Resource res = inf.gob.getres();
+                                tooltip = String.format("GobId: " + inf.gob.id + "\n");
+                                tooltip += String.format(ui.memoizer.get(inf.gob.id) + "\n");
                                 if (res != null) {
-                                    tooltip = res.name;
+                                    tooltip += "\n";
+                                    tooltip += res.name;
                                     return;
                                 }
                             }
@@ -2155,7 +2158,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
             if (selection.tt != null)
                 return (selection.tt);
         } else if (tooltip != null && ui.modshift) {
-            return Text.render(tooltip);
+            return RichText.render(tooltip, 0);
         }
         return (super.tooltip(c, prev));
     }
