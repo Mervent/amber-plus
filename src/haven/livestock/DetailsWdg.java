@@ -41,7 +41,7 @@ public class DetailsWdg extends Widget {
             add(lbl, new Coord(col.x + offx, 5));
         }
 
-        Label del = new Label("\u2718", Text.delfnd, Color.RED) {
+        Label del = new Label(animal.name + " \u2718", Text.delfnd, Color.RED) {
             @Override
             public boolean mousedown(Coord c, int button) {
                 delete();
