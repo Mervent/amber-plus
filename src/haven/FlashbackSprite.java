@@ -19,8 +19,8 @@ public class FlashbackSprite extends Sprite {
     public void draw(GOut g) {
         float[] c = mv.load(camp.fin(Matrix4f.id)).mul1(loc.fin(Matrix4f.id)).homoc();
         Coord sc = proj.get2dCoord(c, wndsz);
-        sc.x -= 8;
-        sc.y -= 20;
+        sc.x -= tex.sz().x / 2;
+        sc.y -= 50;
         g.image(tex, sc);
     }
 
