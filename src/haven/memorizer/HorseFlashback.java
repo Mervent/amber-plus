@@ -2,15 +2,15 @@ package haven.memorizer;
 
 import haven.livestock.Animal;
 
-public class FlashbackHorse extends FlashbackAnimal {
+public class HorseFlashback extends AnimalFlashback {
     public Integer stamina;
     public Integer endrance;
     public Integer metabolism;
 
-    public FlashbackHorse() {
+    public HorseFlashback() {
     }
 
-    public FlashbackHorse(Animal animal) {
+    public HorseFlashback(Animal animal) {
         super(animal);
         this.stamina = animal.get("Stamina:");
         this.endrance = animal.get("Endurance:");

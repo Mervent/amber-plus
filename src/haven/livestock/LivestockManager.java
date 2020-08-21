@@ -225,9 +225,9 @@ public class LivestockManager extends Window {
 
             Flashback fb = null;
             if (p == horses) {
-                fb = new FlashbackHorse(pendingAnimal);
+                fb = new HorseFlashback(pendingAnimal);
             } else {
-                fb = new FlashbackAnimal(pendingAnimal);
+                fb = new AnimalFlashback(pendingAnimal);
             }
             Memorizer.getInstance().remember(pendingAnimal.gobid, fb);
 

@@ -2,15 +2,15 @@ package haven.memorizer;
 
 import haven.livestock.Animal;
 
-public class FlashbackAnimal extends Flashback {
+public class AnimalFlashback extends Flashback {
     public String name;
     public Integer quality;
     public Integer breeding;
 
-    public FlashbackAnimal() {
+    public AnimalFlashback() {
     }
 
-    public FlashbackAnimal(Animal animal) {
+    public AnimalFlashback(Animal animal) {
         this.name = animal.name;
         this.quality = animal.get("Quality:");
         this.breeding = animal.get("Breeding quality:");
@@ -24,6 +24,6 @@ public class FlashbackAnimal extends Flashback {
     }
 
     public String asOverlay() {
-        return this.name + " " + this.quality + "/" + this.breeding;
+        return this.quality + "/" + this.breeding;
     }
 }
