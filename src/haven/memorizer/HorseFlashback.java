@@ -28,9 +28,9 @@ public class HorseFlashback extends AnimalFlashback {
 
     public String asOverlay() {
         String overlay = super.asOverlay() + " ";
-        overlay += "S" + this.stamina + ";";
-        overlay += "E" + this.endrance + ";";
-        overlay += "M" + this.metabolism + ";";
+        overlay += "S" + this.stamina;
+        overlay += "/E" + this.endrance;
+        overlay += "/M" + this.metabolism;
 
         return overlay;
     }
